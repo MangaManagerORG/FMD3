@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools>=43.0.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+dynamic = ["version"]
+name = "example_package_ThePromidius"
+description = "Super secret package :)"
+version = "0.0.1"
+authors = [
+  { name="ThePromidius", email="thepromidiusyt@gmail.com" },git ch
+]
+description = "A small example package"
+readme = "README.md"
+requires-python = ">=3.11"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+
+[project.urls]
+Homepage = "https://github.com/MangaManagerORG/FMD3"
+Issues = "https://github.com/MangaManagerORG/FMD3/issues"

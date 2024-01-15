@@ -1,0 +1,38 @@
+[build-system]
+requires = [
+    "setuptools",
+    "wheel"
+]
+build-backend = "setuptools.build_meta"
+
+[project]
+#dynamic = ["version"]
+name = "FMD3_TestExt"
+description = "Super secret package :)"
+version = "0.0.1"
+authors = [
+  { name="ThePromidius", email="thepromidiusyt@gmail.com" }
+]
+#readme = "README.md"
+requires-python = ">=3.11"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+]
+
+[project.urls]
+Homepage = "https://github.com/MangaManagerORG/FMD3"
+Issues = "https://github.com/MangaManagerORG/FMD3/issues"
+
+[tool.setuptools.packages]
+[tool.setuptools.packages.find]
+# All the following settings are optional:
+where = ["src"]  # ["."] by default
+include = ["FMD3*"]  # ["*"] by default
+
+#[project.scripts]
+#cli-name = "FMD3.Core.hello:hello"
+[project.entry-points."FMD3.Extensions"]
+a = 'FMD3.TestExt.extension:load_extension'
+#disutils

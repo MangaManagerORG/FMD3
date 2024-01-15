@@ -1,16 +1,18 @@
 [build-system]
-requires = ["setuptools>=43.0.0", "wheel"]
+requires = [
+    "setuptools",
+    "wheel"
+]
 build-backend = "setuptools.build_meta"
 
 [project]
-dynamic = ["version"]
+#dynamic = ["version"]
 name = "example_package_ThePromidius"
 description = "Super secret package :)"
-version = "0.0.1"
+version = "0.0.4"
 authors = [
-  { name="ThePromidius", email="thepromidiusyt@gmail.com" },git ch
+  { name="ThePromidius", email="thepromidiusyt@gmail.com" }
 ]
-description = "A small example package"
 readme = "README.md"
 requires-python = ">=3.11"
 classifiers = [
@@ -22,3 +24,12 @@ classifiers = [
 [project.urls]
 Homepage = "https://github.com/MangaManagerORG/FMD3"
 Issues = "https://github.com/MangaManagerORG/FMD3/issues"
+
+[tool.setuptools.packages]
+[tool.setuptools.packages.find]
+# All the following settings are optional:
+where = ["src"]  # ["."] by default
+include = ["FMD3*"]  # ["*"] by default
+
+[project.scripts]
+cli-name = "FMD3.Core.hello:hello"

@@ -7,7 +7,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 #dynamic = ["version"]
-name = "example_package_ThePromidius"
+name = "FMD3_ThePromidius"
 description = "Super secret package :)"
 version = "0.0.4"
 authors = [

@@ -3,13 +3,12 @@ requires = [
     "setuptools",
     "wheel",
     "FMD3-ThePromidius"
-
-
-]
+    ]
 build-backend = "setuptools.build_meta"
 
 [project]
 #dynamic = ["version"]
+dynamic=["entry-points"]
 name = "FMD3_TestExt"
 description = "Super secret package :)"
 version = "0.0.1"
@@ -34,8 +33,12 @@ Issues = "https://github.com/MangaManagerORG/FMD3/issues"
 where = ["src"]  # ["."] by default
 include = ["FMD3*"]  # ["*"] by default
 
+
 #[project.scripts]
 #cli-name = "FMD3.Core.hello:hello"
-[project.entry-points."FMD3.Extensions"]
-a = 'FMD3.TestExt.extension:load_extension'
-#disutils
+
+#[project.entry-points."FMD3.Extensions"]
+#entry-points = "entry_points"
+#console_scripts = [
+#    "load_extension = my_package.load_extension"
+#]

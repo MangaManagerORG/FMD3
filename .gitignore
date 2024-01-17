@@ -1,2 +1,6 @@
 /dist/
 /src/*.egg-info
+/config/log.log
+/data/
+/build/
+/test_download_lib/

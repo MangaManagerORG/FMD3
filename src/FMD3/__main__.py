@@ -15,5 +15,4 @@ ext = get_extension("MangaDex")
 # ]
 # )
 
-for extension in extesion_factory:
-    extension.print_ext_name()
+import FMD3.DumbUI

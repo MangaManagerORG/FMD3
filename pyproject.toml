@@ -9,7 +9,7 @@ build-backend = "setuptools.build_meta"
 #dynamic = ["version"]
 name = "FMD3_ThePromidius"
 description = "Super secret package :)"
-version = "0.0.4"
+version = "0.0.5.dev0+local"
 authors = [
   { name="ThePromidius", email="thepromidiusyt@gmail.com" }
 ]

@@ -4,9 +4,9 @@ from typing import final
 from FMD3.Core.settings import Settings
 
 from FMD3.Core.settings.models.SettingSection import SettingSection
+from FMD3.Models.MangaInfo import MangaInfo
 
 """Module with methods related with extensions"""
-
 
 EXTENSIONS_SECTIONS_PREFIX = "extension_"
 
@@ -31,6 +31,7 @@ class IExtension(abc.ABC):
             for control in section.values:
                 Settings().set_default(EXTENSIONS_SECTIONS_PREFIX + section.key, control.key, control.value)
         Settings().save()
+
     @abc.abstractmethod
     def init_settings(self):
         """

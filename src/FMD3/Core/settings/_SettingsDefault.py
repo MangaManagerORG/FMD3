@@ -1,34 +1,26 @@
 from enum import StrEnum
 
+from FMD3.Core.settings.models.SettingSection import SettingSection
 
-class SettingHeading(StrEnum):
-    Main = "Main",
-    WebpConverter = "Webp Converter",
-    ExternalSources = "External Sources",
-    MessageBox = "Message Box"
+from FMD3.Core.settings.models.SettingControl import SettingControl as SC, SettingControlType
 
+from FMD3.Core.settings.Keys import *
 
-default_settings = {
-    SettingHeading.Main: [
-        {"library_path": ""},
-        {"covers_folder_path": ""},
-        {"cache_cover_images": True},
-        {"create_backup_comicinfo": True},
-        # {"selected_layout": "default"},
-        {"move_to_template": ""},
-        {"remove_old_selection_on_drag_drop":True},
-        {"darkmode_enabled":False}
+# class SettingHeading(StrEnum):
+#     Main = "Main",
+#     WebpConverter = "Webp Converter",
+#     ExternalSources = "External Sources",
+#     MessageBox = "Message Box"
 
-    ],
-    SettingHeading.WebpConverter: [
-        {"default_base_path": ""},
-    ],
-    SettingHeading.ExternalSources: [
-        {"default_metadata_source": "AniList"},
-        {"default_cover_source": "MangaDex"},
-    ],
-    SettingHeading.MessageBox: {}
-}
+#
 
+default_settings = [
+    SettingSection("SaveTo", SaveTo, [
+        SC(SaveTo.DEFAULT_DOWNLOAD_PATH, "Default download path", SettingControlType.Text),
+        SC(SaveTo.DEFAULT_DOWNLOAD_FORMAT, "Default download path", SettingControlType.Radio, values=["CBZ"]),
+        # ,"PDF","EPUB"])
 
-# SettingsKEYS.Main.LIBRARY_PATH
+        SC(SaveTo.SERIES_FOLDER_NAME, "Manga folder name", SettingControlType.Text),
+        SC(SaveTo.CHAPTER_NAME, "Chapter name", SettingControlType.Text)
+    ])
+]

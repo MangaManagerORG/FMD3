@@ -3,7 +3,9 @@ import logging
 import os
 from pathlib import Path
 
+from .Keys import SectionKeys
 from ._SettingsDefault import default_settings
+from FMD3.Core.settings.models.SettingSection import SettingSection
 
 logger = logging.getLogger()
 SETTING_FILE = "settings.ini"
@@ -53,18 +55,27 @@ class Settings:
         self.config_parser.read(override_settings_from or self._config_file)  # migration, change file location
 
         # Ensure all default settings exists, else add them
-        for section in default_settings:
-            if section not in self.config_parser.sections():
-                self.config_parser.add_section(section)
-            for item in default_settings[section]:
-                for (key, value) in item.items():
-                    if key not in self.config_parser[section] or self.config_parser.get(section, key) == "":
-                        self.config_parser.set(section, key, str(value))
+        for i, section in enumerate(default_settings):
+            if str(section) not in self.config_parser.sections():
+                self.config_parser.add_section(str(section))
+            for control in default_settings[i].controls:
+                if control.key not in self.config_parser[str(section)] or self.config_parser.get(str(section), control.key) == "":
+                    self.config_parser.set(str(section), control.key, str(control.value))
 
         self.save()
 
-    def get(self, section, key):
+    def get(self, section: type[SectionKeys], key):
         """Get a key's value, None if not present"""
+
+        ## The idea is that when requesting settings you can do Settings().get(General,General.LANGUAGE)
+        ## Settings will know if the section_name is a subclasss of SectionKey thus returning the get_name value instead of parsing as string
+        ## see Keys.py
+
+        if not section or not key:
+            raise Exception("Missing either section or key parameter")
+        if not isinstance(section,str):
+            section = section.__name__.upper()
+
         if not self.config_parser.has_section(section) or not self.config_parser.has_option(section, key):
             logger.error('Section or Key did not exist in settings: {}.{}'.format(section, key))
             return None
@@ -77,27 +88,36 @@ class Settings:
             case _:
                 return value
 
-    def set_default(self, section, key, value):
-        """Sets a key's value only if it doesn't exist"""
+    def set_default(self, section: SectionKeys, key, value):
+        """
+        Sets a key's value only if it doesn't exist
+        :param section: The section
+        :param key: The key of the setting
+        :param value: The default value of the setting
+        :return:
+        """
+        section = str(section)
         self._create_section(section)
         if key not in self.config_parser[section]:
-            self.config_parser.set(section, key, str(value))
+            self.config_parser.set(str(section), key, str(value))
 
-    def get_default(self, section, key, default_value):
+    def get_default(self, section: SectionKeys, key, default_value):
         """
         Returns default value and creates the key if it doesn't exist
         """
+        # section = str(section)
         self.set_default(section, key, default_value)
         return self.get(section, key)
 
-    def set(self, section, key, value):
+    def set(self, section: type[SectionKeys], key, value):
         """Sets a key's value. Will Save to disk and reload Settings"""
+        section = section.__name__.upper()
         self._create_section(section)
         self.config_parser.set(section, key, str(value))
         self.save()
         self.load()
 
-    def _create_section(self, section):
+    def _create_section(self, section: str):
         if section not in self.config_parser:
             self.config_parser.add_section(section)
 

@@ -1,8 +1,8 @@
 from FMD3.Core.settings.models.SettingSection import SettingSection
-from FMD3.Extensions import IExtension, add_extension
+from FMD3.Sources import ISource, add_extension
 
 
-class TestExt(IExtension):
+class TestExt(ISource):
 
     def init_settings(self):
         self.settings: list[SettingSection] = []

@@ -37,7 +37,7 @@ include = ["FMD3*"]  # ["*"] by default
 #[project.scripts]
 #cli-name = "FMD3.Core.hello:hello"
 
-#[project.entry-points."FMD3.Extensions"]
+#[project.entry-points."FMD3.Sources"]
 #entry-points = "entry_points"
 #console_scripts = [
 #    "load_extension = my_package.load_extension"

@@ -1,4 +1,4 @@
-from FMD3.Extensions.Extensions import IExtension
+from FMD3.Sources.Sources import ISource
 
 
 def do_something():
@@ -10,7 +10,7 @@ def test():
     return "Ok"
 
 
-class TestExt(IExtension):
+class TestExt(ISource):
     def print_ext_name(self):
         print(f"My Extension name isssssss: {self.extension_name}")
 
@@ -18,4 +18,4 @@ class TestExt(IExtension):
 
 
 def load_extension():
-    FMD3.Extensions.add_Extension(TestExt())
+    FMD3.Sources.add_source(TestExt())

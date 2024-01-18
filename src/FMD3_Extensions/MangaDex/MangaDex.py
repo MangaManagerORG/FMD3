@@ -6,7 +6,7 @@ from pathlib import Path
 import requests
 
 from FMD3.Core.settings.models.SettingSection import SettingSection
-from FMD3.Extensions import IExtension, add_extension
+from FMD3.Sources import ISource, add_extension
 from FMD3.Models.Chapter import Chapter
 from FMD3.Models.MangaInfo import MangaInfo
 
@@ -25,11 +25,11 @@ _MAPPING_FILE = 'mangadex_v5_mapping.txt'
 api_mapping = {}
 
 
-class MangaDex(IExtension):
+class MangaDex(ISource):
     ID = 'd07c9c2425764da8ba056505f57cf40c'
-    Name = 'MangaDex'
-    RootURL = 'https://mangadex.org'
-    Category = 'English'
+    NAME = 'MangaDex'
+    ROOT_URL = 'https://mangadex.org'
+    CATEGORY = 'English'
     # OnGetInfo = 'GetInfo'
     MaxTaskLimit = 1
 

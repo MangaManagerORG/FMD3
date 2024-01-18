@@ -17,7 +17,7 @@ class Keys(StrEnum):
 
 controls = [
 
-    SettingControl(Keys.SelectedLanguage, "Selected Language",SettingControlType.Text, "en"),
+    SettingControl(Keys.SelectedLanguage.value, "Selected Language",SettingControlType.Text, "en"),
     SettingControl(Keys.MDEX_DELAY, "Delay (s) between requests", SettingControlType.Number),
     SettingControl(Keys.REMOVE_TITLE,"Remove title from chapter",SettingControlType.Bool),
     SettingControl(Keys.DATA_SAVER,"Use data saver", SettingControlType.Bool)

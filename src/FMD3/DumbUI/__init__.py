@@ -2,7 +2,7 @@ import io
 import tkinter
 from urllib import request
 from PIL import Image, ImageTk
-from FMD3.Extensions import extesion_factory, IExtension, list_extension, get_extension
+from FMD3.Sources import extesion_factory, ISource, list_extension, get_extension
 from FMD3.Models.MangaInfo import MangaInfo
 
 
@@ -10,7 +10,7 @@ def load_data():
     url = var.get()
     sel_ext = clicked.get()
 
-    ext:IExtension = get_extension(sel_ext)
+    ext:ISource = get_extension(sel_ext)
     mi:MangaInfo = ext.on_get_info(url)
 
     res = f"""

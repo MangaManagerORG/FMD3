@@ -8,28 +8,39 @@ from FMD3.Models.MangaInfo import MangaInfo
 
 """Module with methods related with extensions"""
 
-EXTENSIONS_SECTIONS_PREFIX = "extension_"
+SOURCES_SECTIONS_PREFIX = "source_"
 
 
-class IExtension(abc.ABC):
+class ISource(abc.ABC):
     ...
-    extension_name = None
+    ID = None
+    NAME = None
+    Name = None
+    ROOT_URL = None
+    CATEGORY = None
+    # OnGetInfo = None
+    MaxTaskLimit = None
 
     @final
     def get_setting(self, setting_key):
-        return Settings().get(EXTENSIONS_SECTIONS_PREFIX + self.__class__.__name__, setting_key)
+        return Settings().get(SOURCES_SECTIONS_PREFIX + self.__class__.__name__, setting_key)
 
     @final
     def set_setting(self, setting_key, value):
-        return Settings().set(EXTENSIONS_SECTIONS_PREFIX + self.__class__.__name__, setting_key, value)
+        return Settings().set(SOURCES_SECTIONS_PREFIX + self.__class__.__name__, setting_key, value)
 
     @final
     def __init__(self):
+        for source_heading_data in [self.ID, self.NAME,self.ROOT_URL,self.CATEGORY]:
+            if source_heading_data is None:
+                raise Exception(f"Failed to load source, missing {source_heading_data=} attribute")
+
+
         self.settings: list[SettingSection] | None = []
         self.init_settings()
         for section in self.settings:
             for control in section.values:
-                Settings().set_default(EXTENSIONS_SECTIONS_PREFIX + section.key, control.key, control.value)
+                Settings().set_default(SOURCES_SECTIONS_PREFIX + section.key, control.key, control.value)
         Settings().save()
 
     @abc.abstractmethod
@@ -70,24 +81,27 @@ class IExtension(abc.ABC):
         ...
 
 
-extesion_factory: list[IExtension] = []
+extesion_factory: list[ISource] = []
 
 
 @abc.abstractmethod
-def load_extension(extension: IExtension):
+def load_extension(extension: ISource):
+    ...
+@abc.abstractmethod
+def load_source(source: ISource):
     ...
 
-
-def get_extension(name) -> IExtension:
+def get_extension(name) -> ISource:
     for ext in extesion_factory:
         if ext.__class__.__name__ == name:
             return ext
 
-
-def list_extension() -> str:
+def get_extension_list() -> list[ISource]:
+    return extesion_factory
+def list_extension() -> list[str]:
     return [ext.__class__.__name__ for ext in extesion_factory]
 
 
-def add_extension(extension: IExtension):
+def add_extension(extension: ISource):
     # extension.init_settings()
     extesion_factory.append(extension)

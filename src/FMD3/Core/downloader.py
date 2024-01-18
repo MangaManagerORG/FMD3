@@ -12,7 +12,7 @@ from FMD3.Core.StringTemplates import get_chapter_name, get_series_folder_name
 from FMD3.Core.database.models import DLDChapters, Series
 from FMD3.Core.database.predefined import create_db_chapter
 from FMD3.Core.settings.Keys import General
-from FMD3.Extensions import IExtension
+from FMD3.Sources import ISource
 from FMD3.Models.Chapter import Chapter
 from FMD3.Models.MangaInfo import MangaInfo
 

@@ -40,20 +40,23 @@ class IExtension(abc.ABC):
         :return:
         """
 
-
     # Hooks
     @abc.abstractmethod
-    def on_get_info(self):
+    def on_get_info(self, url) -> MangaInfo:
         ...
 
     @abc.abstractmethod
-    def on_get_page_number(self, url) -> tuple[str, str]:
+    def on_get_pages_list(self, chapter_id) -> list[str]:
+        """
+        Called when the core requests the list of pages (images url)
+        :param chapter_id:
+        :return:
+        """
         ...
 
     @abc.abstractmethod
     def on_get_name_and_link(self):
         ...
-
 
     def on_get_directory_page_number(self):
         ...
@@ -74,13 +77,17 @@ extesion_factory: list[IExtension] = []
 def load_extension(extension: IExtension):
     ...
 
+
 def get_extension(name) -> IExtension:
     for ext in extesion_factory:
         if ext.__class__.__name__ == name:
             return ext
+
+
 def list_extension() -> str:
     return [ext.__class__.__name__ for ext in extesion_factory]
+
+
 def add_extension(extension: IExtension):
     # extension.init_settings()
     extesion_factory.append(extension)
-

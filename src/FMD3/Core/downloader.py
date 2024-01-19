@@ -1,17 +1,14 @@
 import queue
 from zipfile import ZipFile
 
-from FMD3.Core.TaskManager import TaskManager
-from FMD3.Core.settings import Settings
 import logging
 import os
 from pathlib import Path
 from ComicInfo import ComicInfo
 import urllib.request
 
-from FMD3.Core.StringTemplates import get_chapter_name, get_series_folder_name
-from FMD3.Core.database.models import DLDChapters, Series
-from FMD3.Core.settings.Keys import General
+
+from FMD3.Core.database.models import DLDChapters
 from FMD3.Sources.ISource import ISource
 from FMD3.Models.Chapter import Chapter
 from FMD3.Models.MangaInfo import MangaInfo
@@ -80,48 +77,3 @@ def make_cinfo(data: MangaInfo, chapter: Chapter):
     # Eventually call enrichers here
     cinfo: ComicInfo = data.to_comicinfo_with_chapter_data(chapter)
     return cinfo
-
-
-def download_missing_chapters_from_series(ext: ISource, series: Series, chapter_list: list[Chapter]):
-    # futures = []
-    for chapter in chapter_list:
-        download_single_chapter(ext, series, chapter)
-
-
-def download_single_chapter(ext: ISource, series: Series, chapter: Chapter):
-    """
-        Downloads a single chapter from a remote source and saves it to the user preferences' location.
-
-        Parameters:
-            ext (ISource): The source object for downloading the chapter.
-            series (Series): The series to which the chapter belongs.
-            chapter (Chapter): The chapter to be downloaded.
-
-        Returns:
-            bool: `False` if the chapter exists in db.
-        """
-
-    if chapter_exists(series.series_id, chapter.id):
-        logger.info(f"Chapter id {chapter.id}, number {chapter.number} is registered in db. Skipping")
-        return False
-
-    # Get filenames and output file
-    root_folder = Settings().get(General, General.LIBRARY_PATH)
-    manga_folder_name = get_series_folder_name(manga=series.title)
-    cbz_filename = get_chapter_name(manga=series.title,
-                                    chapter=chapter.number)  # fm.make_filename(chapter, series.title)
-
-    # Create folders
-    parent_folder = Path(root_folder, manga_folder_name)
-    parent_folder.mkdir(parents=True, exist_ok=True)
-
-    output_file_path = Path(root_folder, manga_folder_name, cbz_filename)
-
-    TaskManager().submit(download_series_chapter,
-                         ext, series.series_id, chapter, output_file_path)
-
-
-
-
-
-"""Defining thread pool"""

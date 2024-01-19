@@ -1,3 +1,4 @@
+import os
 from enum import StrEnum
 
 from FMD3.Core.settings.models.SettingSection import SettingSection
@@ -15,6 +16,9 @@ from FMD3.Core.settings.Keys import *
 #
 
 default_settings = [
+    SettingSection("General",General,[
+        SC(General.LIBRARY_PATH, "Root downloads path",SettingControlType.Text,value=os.getcwd())
+    ]),
     SettingSection("SaveTo", SaveTo, [
         SC(SaveTo.DEFAULT_DOWNLOAD_PATH, "Default download path", SettingControlType.Text),
         SC(SaveTo.DEFAULT_DOWNLOAD_FORMAT, "Default download path", SettingControlType.Radio, values=["CBZ"]),

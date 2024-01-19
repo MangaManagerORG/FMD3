@@ -1,32 +1,22 @@
 import logging
-import threading
-import time
-from string import Template
 
-import schedule
-
-from FMD3.Core.database.predefined import chapter_exists
-from FMD3.Core.downloader import download_missing_chapters_from_series
-from FMD3.Core.scheduler import start_fav_scan_schedule, run_scheduler
-from FMD3.Core.settings import Settings
 from FMD3.Core import database as db
-from FMD3.Core.database.Session import Session
+from FMD3.Core.settings import Settings
 from FMD3.Core.settings.Keys import SaveTo
 from FMD3.Core.updater import new_chapters_finder
-from FMD3.Enrichers import iterate_enrichers
-from FMD3.Models.Chapter import Chapter
 from FMD3.Sources import get_extension, load_sources, get_source
-
-#
-# for extension in extesion_factory:
-#     extension.print_ext_name()fr
 from FMD3.Core.logging import setup_logging, TRACE
 
 setup_logging("config/log.log", TRACE)
 load_sources()
 
+Settings()
+Settings().set(SaveTo,SaveTo.CHAPTER_NAME,"Ch.${CHAPTER}")
+
+
+
 ext = get_extension("MangaDex")
-import FMD3.DumbUI
+# import FMD3.DumbUI
 # Check if Flask is installed
 # if 'Flask' in sys.modules:
 # Run the web UI if Flask is installed
@@ -38,7 +28,7 @@ serie_url = "https://mangadex.org/title/41aea7f6-5ede-45d9-b7e6-7729acad4ea2/fur
 
 def insert_default_series(serie_url):
     # user adds serie to favs
-    data = ext.on_get_info(serie_url)
+    data = ext.get_info(serie_url)
 
     # MM processes the data and adds series to favs
     try:
@@ -53,31 +43,35 @@ def insert_default_series(serie_url):
 
 
 insert_default_series(serie_url)
-# new_chapters_finder()
-print("sadsada")
+insert_default_series("https://sandbox.mangadex.dev/title/f9c33607-9180-4ba6-b85c-e4b5faee7192/official-test-manga")
+# insert_default_series("https://sandbox.mangadex.dev/title/d8323b7b-9a7a-462b-90f0-2759fed52511/hokkaido-gals-are-super-adorable")
 
-start_fav_scan_schedule()
-scheduler_thread = threading.Thread(target=run_scheduler)
-scheduler_thread.start()
 
-# User wants to download TheNewGate
-url = "https://mangadex.org/chapter/229db249-914b-4ee1-a71b-b03894c481af"
-
-# Source fetches info about it:
-series_info = ext.get_info(url)
-
-# Source fetches chapters in it:
-manga_chapters: list[Chapter] = ext.get_chapters(series_info.id)
-
-# Filter downloaded chapters]
-manga_chapters = list(filter(lambda chapter: chapter_exists(series_info.id, chapter.id),
-                             manga_chapters))
-
-final_series_info = []
-
-for chapter in manga_chapters:
-    final_series_info = iterate_enrichers(series_info, chapter)
-
+new_chapters_finder()
+# print("sadsada")
+#
+# start_fav_scan_schedule()
+# scheduler_thread = threading.Thread(target=run_scheduler)
+# scheduler_thread.start()
+#
+# # User wants to download TheNewGate
+# url = "https://mangadex.org/chapter/229db249-914b-4ee1-a71b-b03894c481af"
+#
+# # Source fetches info about it:
+# series_info = ext.get_info(url)
+#
+# # Source fetches chapters in it:
+# manga_chapters: list[Chapter] = ext.get_chapters(series_info.id)
+#
+# # Filter downloaded chapters]
+# manga_chapters = list(filter(lambda chapter: chapter_exists(series_info.id, chapter.id),
+#                              manga_chapters))
+#
+# final_series_info = []
+#
+# for chapter in manga_chapters:
+#     final_series_info = iterate_enrichers(series_info, chapter)
+#
 
 
 

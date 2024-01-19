@@ -75,9 +75,12 @@ class Settings:
             raise Exception("Missing either section or key parameter")
         if not isinstance(section,str):
             section = section.__name__.upper()
-
+        try:
+            key = key.value
+        except:
+            ...
         if not self.config_parser.has_section(section) or not self.config_parser.has_option(section, key):
-            logger.error('Section or Key did not exist in settings: {}.{}'.format(section, key))
+            logger.error(f'Section or Key did not exist in settings: {section}.{key}')
             return None
         value = self.config_parser.get(section, key).strip()
         match value.lower():
@@ -88,7 +91,7 @@ class Settings:
             case _:
                 return value
 
-    def set_default(self, section: SectionKeys, key, value):
+    def set_default(self, section:type[SectionKeys], key, value):
         """
         Sets a key's value only if it doesn't exist
         :param section: The section
@@ -101,7 +104,7 @@ class Settings:
         if key not in self.config_parser[section]:
             self.config_parser.set(str(section), key, str(value))
 
-    def get_default(self, section: SectionKeys, key, default_value):
+    def get_default(self, section: type[SectionKeys], key, default_value):
         """
         Returns default value and creates the key if it doesn't exist
         """
@@ -111,7 +114,8 @@ class Settings:
 
     def set(self, section: type[SectionKeys], key, value):
         """Sets a key's value. Will Save to disk and reload Settings"""
-        section = section.__name__.upper()
+        if not isinstance(section, str):
+            section = section.__name__.upper()
         self._create_section(section)
         self.config_parser.set(section, key, str(value))
         self.save()

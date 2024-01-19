@@ -6,12 +6,12 @@ from sqlalchemy.orm import sessionmaker, relationship
 from sqlalchemy.orm import scoped_session
 
 from .base import Base
-from .models import *
+from .engine import engine
+from .models import Series, DLDChapters
 
 # Create the engine and the Session class
 
 # engine = create_engine('sqlite:////home/pi/DATA/my_database.db')
-_engine = create_engine('sqlite:///test.db',isolation_level="SERIALIZABLE")
 
 # Define a many-to-many relationship between "Doors" and "Usuarios"
 # doors_usuarios = Table('doors_usuarios', Base.metadata,
@@ -20,7 +20,7 @@ _engine = create_engine('sqlite:///test.db',isolation_level="SERIALIZABLE")
 # )
 
 # Create the tables
-Base.metadata.create_all(_engine)
+Base.metadata.create_all(engine)
 
 
 # Create an instance of the scoped_session class

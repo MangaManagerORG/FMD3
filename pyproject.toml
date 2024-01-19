@@ -5,6 +5,11 @@ requires = [
 ]
 build-backend = "setuptools.build_meta"
 
+
+
+[requires]
+sqlalchemy=">=1.4.33"
+
 [project]
 #dynamic = ["version"]
 name = "FMD3_ThePromidius"

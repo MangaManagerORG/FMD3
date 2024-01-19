@@ -33,3 +33,9 @@ class SaveTo(SectionKeys):
     SERIES_FOLDER_NAME = "series_folder_name"
     REMOVE_MANGA_NAME_FROM_CHAPTER_NAME = "remove_manga_name_from_chapter_name"
     CHAPTER_NAME = "chapter_name"
+
+class Updates(SectionKeys):
+    AUTO_CHECK_VERSION = "auto_check_version"
+    CHECK_NEW_FAV_CHAPTERS = "check_new_fav_chapters"
+    CHECK_NEW_FAV_CHAPTERS_ON_INTERVAL = "check_new_fav_chapters_on_interval"
+    CHECK_NEW_FAV_CHAPTERS_INTERVAL_MINUTES = "check_new_fav_chapters_interval_minutes"

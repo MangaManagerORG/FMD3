@@ -1,5 +1,7 @@
 import dataclasses
 
+from ComicInfo import ComicInfo
+
 
 @dataclasses.dataclass
 class Page():

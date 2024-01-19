@@ -1,18 +1,18 @@
+import queue
 from zipfile import ZipFile
 
+from FMD3.Core.TaskManager import TaskManager
 from FMD3.Core.settings import Settings
 import logging
 import os
 from pathlib import Path
 from ComicInfo import ComicInfo
 import urllib.request
-from concurrent.futures import ThreadPoolExecutor, as_completed
 
 from FMD3.Core.StringTemplates import get_chapter_name, get_series_folder_name
 from FMD3.Core.database.models import DLDChapters, Series
-from FMD3.Core.database.predefined import create_db_chapter
 from FMD3.Core.settings.Keys import General
-from FMD3.Sources import ISource
+from FMD3.Sources.ISource import ISource
 from FMD3.Models.Chapter import Chapter
 from FMD3.Models.MangaInfo import MangaInfo
 
@@ -34,7 +34,7 @@ def download_image(zout, img_url, new_filename):
         logging.getLogger(__name__).exception("Exception downloading")
 
 
-def append_cinfo(cbz_path: Path|str, cinfo: ComicInfo):
+def append_cinfo(cbz_path: Path | str, cinfo: ComicInfo):
     with ZipFile(cbz_path, mode="a") as zf:
         zf.writestr("ComicInfo.xml", str(cinfo.to_xml()))
 
@@ -49,7 +49,7 @@ def download_n_pack_pages(cbz_path, images_url_list):
             download_image(zf, img_url, new_filename)
 
 
-def download_series_chapter(module: IExtension, series, data: MangaInfo, chapter: Chapter) -> DLDChapters|None:
+def download_series_chapter(module: ISource, series_id, chapter, output_file_path, cinfo):
     """
     Assigns zipfile filename from series data
     Makes cinfo
@@ -62,28 +62,18 @@ def download_series_chapter(module: IExtension, series, data: MangaInfo, chapter
     :param chapter:
     :return:
     """
-    image_url_list = module.on_get_pages_list(chapter.id)
-    series_folder = Path(f"{os.getcwd()}/test_download_lib/{series.save_to or series.title}")
-    series_folder.mkdir(exist_ok=True, parents=True)
-
-    root_folder = Settings().get(General,General.LIBRARY_PATH)
-
-    manga_folder_name = get_series_folder_name(manga=series.title)
-
-    cbz_filename = get_chapter_name(manga=series.title,chapter=chapter.number)  # fm.make_filename(chapter, series.title)
-
-    output_file_path = Path(root_folder,manga_folder_name, cbz_filename)
-
+    image_url_list = module.get_page_urls_for_chapter(chapter.id)
     try:
         download_n_pack_pages(output_file_path, image_url_list)
 
-        append_cinfo(output_file_path, make_cinfo(data, chapter))
+        append_cinfo(output_file_path, cinfo)
     except Exception:
         logger.exception("Unhandled exception. Cleanin up files")
         os.remove(output_file_path)
         return None
-
-    return create_db_chapter(chapter, series)
+    Session.add(DLDChapters.from_chapter(chapter, series_id))
+    Session.commit()
+    return True
 
 
 def make_cinfo(data: MangaInfo, chapter: Chapter):
@@ -92,29 +82,46 @@ def make_cinfo(data: MangaInfo, chapter: Chapter):
     return cinfo
 
 
-def download_missing_chapters_from_series(ext: IExtension, series: Series, data: MangaInfo):
-    futures = []
-    for chapter in data.chapters:
-        if chapter_exists(chapter.id):
-            logger.info(f"Chapter id {chapter.id}, number {chapter.number} is registered in db. Skipping")
-            continue
-        futures.append(pool.submit(download_series_chapter, ext, series, data, chapter))
-    for future in as_completed(futures):
-        result = future.result()
-        if result is None:
-            continue
-        if isinstance(result, DLDChapters):
-            Session.add(result)
-    pool.shutdown(wait=True)
-    Session.commit()
+def download_missing_chapters_from_series(ext: ISource, series: Series, chapter_list: list[Chapter]):
+    # futures = []
+    for chapter in chapter_list:
+        download_single_chapter(ext, series, chapter)
 
 
-def chapter_exists(chapter_id):
-    # return False
-    return bool(Session.query(DLDChapters).filter_by(chapter_id=chapter_id).all())
+def download_single_chapter(ext: ISource, series: Series, chapter: Chapter):
+    """
+        Downloads a single chapter from a remote source and saves it to the user preferences' location.
+
+        Parameters:
+            ext (ISource): The source object for downloading the chapter.
+            series (Series): The series to which the chapter belongs.
+            chapter (Chapter): The chapter to be downloaded.
+
+        Returns:
+            bool: `False` if the chapter exists in db.
+        """
+
+    if chapter_exists(series.series_id, chapter.id):
+        logger.info(f"Chapter id {chapter.id}, number {chapter.number} is registered in db. Skipping")
+        return False
+
+    # Get filenames and output file
+    root_folder = Settings().get(General, General.LIBRARY_PATH)
+    manga_folder_name = get_series_folder_name(manga=series.title)
+    cbz_filename = get_chapter_name(manga=series.title,
+                                    chapter=chapter.number)  # fm.make_filename(chapter, series.title)
+
+    # Create folders
+    parent_folder = Path(root_folder, manga_folder_name)
+    parent_folder.mkdir(parents=True, exist_ok=True)
+
+    output_file_path = Path(root_folder, manga_folder_name, cbz_filename)
+
+    TaskManager().submit(download_series_chapter,
+                         ext, series.series_id, chapter, output_file_path)
+
+
 
 
 
 """Defining thread pool"""
-
-pool = ThreadPoolExecutor(max_workers=NUM_THREADS)

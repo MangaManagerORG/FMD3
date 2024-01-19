@@ -4,7 +4,6 @@ from FMD3.Core.settings import Settings
 from FMD3.Core.settings.Keys import SaveTo
 
 Settings().set(SaveTo, SaveTo.SERIES_FOLDER_NAME, "manga_name: {manga} author: {author}")
-s =
 
 
 def get_series_folder_name(website=None, manga=None, author=None, artist=None):

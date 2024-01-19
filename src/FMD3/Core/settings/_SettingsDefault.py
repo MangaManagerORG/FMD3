@@ -22,5 +22,8 @@ default_settings = [
 
         SC(SaveTo.SERIES_FOLDER_NAME, "Manga folder name", SettingControlType.Text),
         SC(SaveTo.CHAPTER_NAME, "Chapter name", SettingControlType.Text)
+    ]),
+    SettingSection("Updates",Updates,[
+        SC(Updates.CHECK_NEW_FAV_CHAPTERS_INTERVAL_MINUTES, "interval minutes",SettingControlType.Number,value=1)
     ])
 ]

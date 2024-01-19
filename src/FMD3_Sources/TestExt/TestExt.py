@@ -1,5 +1,6 @@
 from FMD3.Core.settings.models.SettingSection import SettingSection
-from FMD3.Sources import ISource, add_extension
+from FMD3.Sources import add_extension
+from FMD3.Sources.ISource import ISource
 
 
 class TestExt(ISource):

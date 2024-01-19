@@ -1,3 +1,5 @@
+import logging
+
 groups = [
     "4f1de6a2-f0c5-4ac5-bce5-02c7dbb67deb",  # "MangaPlus",
     "8d8ecf83-8d42-4f8c-add8-60963f9f28d9",  # "Comikey",
@@ -191,3 +193,5 @@ def check_group_id(relationships: filter):
         if relation["id"] in groups:
             return False
     return True
+
+

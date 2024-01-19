@@ -1,4 +1,4 @@
-from FMD3.Sources.Sources import ISource
+from FMD3.Sources.ISource import ISource
 
 
 def do_something():

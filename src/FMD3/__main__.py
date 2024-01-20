@@ -5,7 +5,7 @@ from FMD3.Core.settings import Settings
 from FMD3.Core.settings.Keys import SaveTo
 from FMD3.Core.updater import new_chapters_finder
 from FMD3.Sources import get_extension, load_sources, get_source
-from FMD3.Core.logging import setup_logging, TRACE
+from FMD3 import setup_logging, TRACE
 
 setup_logging("config/log.log", TRACE)
 load_sources()

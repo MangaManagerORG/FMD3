@@ -31,7 +31,7 @@ def make_download_task_missing_chapters(ext: ISource, series: Series, chapter_li
     for chapter in chapter_list:
         if chapter_exists(series.series_id, chapter.id):
             logger.info(f"Chapter id {chapter.id}, number {chapter.number} is registered in db. Skipping")
-            return False
+            continue
 
         output_file_path = make_output_path(series, chapter)
 

@@ -142,6 +142,12 @@ class TestSource(ISource):
                 )
                     for chapter in test_data[series]["chapters"]]
 
+    def _debug_get_chapter(self,series_id, chapter_id) -> Chapter|None:
+
+        filtered_chapter = list(filter(lambda x:x.id == chapter_id, self.get_chapters(series_id=series_id)))
+        if filtered_chapter:
+            return filtered_chapter[0]
+        return None
     ID = "TESTSOURCE"
     NAME = "TESTSOURCE"
     ROOT_URL = ""

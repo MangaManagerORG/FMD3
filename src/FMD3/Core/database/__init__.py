@@ -27,6 +27,3 @@ Base.metadata.create_all(engine)
 from .Session import Session
 
 session = Session
-def get_session():
-    return session
-# def init_database():

@@ -39,6 +39,7 @@ def make_download_task_missing_chapters(ext: ISource, series: Series, chapter_li
 
 
 def new_chapters_finder():
+    logging.getLogger(__name__).debug("Initiating chapter finder")
     init_time = time.time()
     for source in get_sources_list():
         # get all series in favourites that are from this extension

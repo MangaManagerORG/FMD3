@@ -68,7 +68,7 @@ class _SeriesMethods(IBaseSource):
         """
 
     @abc.abstractmethod
-    def get_info(url) -> MangaInfo:
+    def get_info(self,url) -> MangaInfo:
         """
         Method that retrieves only basic series data.
         Args:

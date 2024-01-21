@@ -23,7 +23,7 @@ def make_output_path(series: Series, chapter: Chapter):
     root_folder = Settings().get(SaveTo, SaveTo.DEFAULT_DOWNLOAD_PATH)
     manga_folder_name = get_series_folder_name(manga=series.title)
     cbz_filename = get_chapter_name(manga=series.title,
-                                    chapter=chapter.number)  # fm.make_filename(chapter, series.title)
+                                    chapter=chapter.number) + ".cbz" # fm.make_filename(chapter, series.title)
 
     # Create folders
     parent_folder = Path(root_folder, manga_folder_name)
@@ -62,7 +62,8 @@ def get_chapter_name(website=None, manga=None, chapter=None, author=None, artist
     user_pref_template = Settings().get(SaveTo, SaveTo.CHAPTER_NAME)
     if not "${CHAPTER}" in user_pref_template and not "${NUMBERING}" in user_pref_template:
         raise TemplateMissingTag("Atleast ${CHAPTER} or ${NUMBERING} is required in chapter template")
-
+    if chapter % 1 == 0:
+        chapter = int(chapter)
     # raise Exception("Chapter folder name must have atleast ${CHAPTER} or ${NUMBERING}")
     t = Template(user_pref_template)
     assert t.is_valid()

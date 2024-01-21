@@ -1,10 +1,11 @@
 from datetime import datetime
 
 from sqlalchemy import create_engine, Column, Integer, String, ForeignKey, Table, DateTime, Boolean, Float
-from sqlalchemy.orm import sessionmaker, relationship
+from sqlalchemy.orm import sessionmaker, relationship, scoped_session
 # Import the scoped_session class
 from sqlalchemy.orm import scoped_session
 
+from . import engine
 from .base import Base
 from .engine import engine
 from .models import Series, DLDChapters
@@ -24,6 +25,5 @@ Base.metadata.create_all(engine)
 
 
 # Create an instance of the scoped_session class
-from .Session import Session
-
-session = Session
+session_factory = sessionmaker(bind=engine)
+Session = scoped_session(session_factory)

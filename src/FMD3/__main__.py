@@ -59,3 +59,8 @@ series = Session.query(db.Series).filter_by(series_id="3d269f6e-10e1-4e4c-b453-4
 # # db.session.commit()
 # print(db.Session().query(db.DLDChapters).all())
 # print("sada")
+
+from FMD3.webui import ui
+if __name__ == '__main__':
+
+    ui.run(reload=False)

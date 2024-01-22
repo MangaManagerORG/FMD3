@@ -1,28 +1,39 @@
 """
 Contains interface to configure source net settings
 """
-
-from aiohttp import ClientSession, TCPConnector
+import requests
+# from aiohttp import ClientSession, TCPConnector
 import asyncio
 
 
 class ISourceNet:
-    _session: ClientSession | None = None
+    _session = None
 
+    # @property
+    # def session(self) -> ClientSession:
+    #     if self._session is None:
+    #         self._session = self.create_session()
+    #     return self._session
+
+    # def create_session(self) -> ClientSession:
+    #     """
+    #     Override this method to configure the session and connection settings more specifically.
+    #     """
+    #     connector = TCPConnector(limit=5)  # Example: Setting connection limit to 5
+    #     session = ClientSession(connector=connector)
+    #     return session
     @property
-    def session(self) -> ClientSession:
+    def session(self):
         if self._session is None:
             self._session = self.create_session()
         return self._session
 
-    def create_session(self) -> ClientSession:
+    @staticmethod
+    def create_session():
         """
         Override this method to configure the session and connection settings more specifically.
         """
-        connector = TCPConnector(limit=5)  # Example: Setting connection limit to 5
-        session = ClientSession(connector=connector)
-        return session
-
+        return requests.Session()
         # Make sure to close the session when the instance is destroyed
 
     def __del__(self):

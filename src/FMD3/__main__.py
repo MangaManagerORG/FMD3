@@ -4,7 +4,6 @@ from FMD3.Core import database as db
 from FMD3.Core.database import Session
 from FMD3.Core.settings import Settings
 from FMD3.Core.settings.Keys import SaveTo
-from FMD3.Core.updater import new_chapters_finder
 from FMD3.Sources import get_extension, load_sources, get_source
 
 load_sources()

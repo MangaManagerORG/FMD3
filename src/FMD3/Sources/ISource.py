@@ -1,86 +1,20 @@
+"""
+Contains interfaces to configure and integrate sources into the core
+"""
 import abc
 from typing import final
 
 from FMD3.Core.settings import Settings
-from FMD3.Core.database.models import Series
 from FMD3.Core.settings.models.SettingSection import SettingSection
-from FMD3.Models.Chapter import Chapter
-from FMD3.Models.MangaInfo import MangaInfo
+
+from FMD3.Sources.ISourceMethods import ISourceMethods
+from FMD3.Sources.ISourceNet import ISourceNet
 
 SOURCES_SECTIONS_PREFIX = "source_"
 
 
-class IBaseSource(metaclass=abc.ABCMeta):
-    ...
 
-
-class _ChapterMethods(IBaseSource):
-    def get_max_chapter(self, series_id: str) -> float:
-        """
-        Convenience method. uses get_chapters and sorts them
-        Args:
-            series_id:
-
-        Returns:
-        """
-
-        chapters = self.get_chapters(series_id)
-        last_chapter = list(filter(lambda x: x.number == max(chapter.number for chapter in chapters),
-                                   chapters))
-        if last_chapter:
-            return last_chapter[0].number
-
-    def get_new_chapters(self, series_id:str , last_chapter_in_db: float) -> list[Chapter]:
-        """
-        Convenience method. Uses get_chapters and sorts them.
-        Gets all the chapters continuing last downloaded
-        Args:
-            series_id:
-            last_chapter_in_db: Last chapter saved as downloaded in the database
-
-        Returns: List of Chapters that have not been downloaded.
-        """
-        chapters = self.get_chapters(series_id)
-        return list(filter(lambda x: x.number > last_chapter_in_db, chapters))
-
-    @abc.abstractmethod
-    def get_chapters(self, series_id:str) -> list[Chapter]:
-        """
-        Gets all the chapters from a series
-        Args:
-            series_id:
-
-        Returns:
-
-        """
-
-
-class _SeriesMethods(IBaseSource):
-    @staticmethod
-    @abc.abstractmethod
-    def get_all_series() -> list[tuple[str, str]]:
-        """
-        Returns all the series available in the source.
-        Args:
-
-        Returns:
-
-        """
-
-    @abc.abstractmethod
-    def get_info(self,url) -> MangaInfo:
-        """
-        Method that retrieves only basic series data.
-        Args:
-            url:
-
-        Returns:
-
-        """
-        ...
-
-
-class ISource(_SeriesMethods, _ChapterMethods):
+class ISource(ISourceMethods,ISourceNet):
     ...
     ID = None
     NAME = None
@@ -119,11 +53,3 @@ class ISource(_SeriesMethods, _ChapterMethods):
         :return:
         """
 
-    @abc.abstractmethod
-    def get_page_urls_for_chapter(self, chapter_id) -> list[str]:
-        """
-        Called when the core requests the list of pages (images url)
-        :param chapter_id:
-        :return:
-        """
-        ...

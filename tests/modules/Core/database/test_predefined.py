@@ -29,4 +29,4 @@ class TestPredefined(unittest.TestCase):
         except Exception:
             database.Session().rollback()
         print("sdasds")
-        self.assertTrue(chapter_exists("ser1","cha1"))
+        self.assertTrue(chapter_exists("ser1","cha1",database.Session()))

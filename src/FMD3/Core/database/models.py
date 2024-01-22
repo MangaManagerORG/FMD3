@@ -41,8 +41,13 @@ class DLDChapters(Base):
 
     @staticmethod
     def from_chapter(chapter: Chapter, series_id: str):
-
-        return
+        ret = DLDChapters()
+        ret.chapter_id = chapter.id
+        ret.series_id = series_id
+        ret.number = chapter.number
+        ret.title = chapter.title
+        ret.volume = chapter.volume
+        return ret
     # series_id = Column(Integer, ForeignKey('series.chapter_id'))
     # series = orm.relationship('Series', backref='dld_chapters')
 

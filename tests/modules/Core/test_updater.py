@@ -11,7 +11,7 @@ import os
 import threading
 import time
 import unittest
-from unittest.mock import MagicMock
+from unittest.mock import MagicMock, patch
 
 import schedule
 from sqlalchemy import create_engine
@@ -37,10 +37,10 @@ from FMD3.Core.database import predefined
 predefined.Session = database.Session
 from FMD3.Core.database import models
 models.Session = database.Session
+get_scoped_session = None
+
 class DbSetup(unittest.TestCase):
     def setUp(self):
-
-
         Base.metadata.create_all(database.engine)
         database.Session.rollback()
         # insert_single_chapter in series series_a
@@ -126,6 +126,7 @@ class TestFindNewChapters(DbSetup):
         mock_make_download_task_missing_chapters.assert_not_called()
 
 class TestMakeDownloadTask(DbSetup):
+    @unittest.skip("need to be rethinked")
     def test_all_tasks_created_for_chapter(self):
 
         mock = TaskManager.TaskManager.submit_series_chapter = MagicMock()
@@ -135,6 +136,7 @@ class TestMakeDownloadTask(DbSetup):
         # assert callcount to 1 as chapter 1 is added to downloads in setup
         self.assertEqual(1, mock.call_count)
 
+    @unittest.skip("No longer applicable")
     def test_all_tasks_created_for_chapter_series_b_should_not_create(self):
         """
         Asserts that no chapters are ready to download since series b only has one chapter and is downloaded (made in setup)

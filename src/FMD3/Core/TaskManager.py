@@ -1,8 +1,10 @@
 import logging
 import threading
 
-from concurrent.futures import ThreadPoolExecutor
+from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor
 
+from FMD3.Core import database
+from FMD3.Core.database import DLDChapters
 from FMD3.Core.downloader import download_series_chapter
 
 
@@ -21,7 +23,8 @@ class TaskManager:
     def __new__(cls):
         if TaskManager.__instance is None:
             TaskManager.__instance = object.__new__(cls)
-            TaskManager.__TPE = ThreadPoolExecutor(max_workers=10)
+            # TaskManager.__TPE = ThreadPoolExecutor(max_workers=10)
+            TaskManager.__TPE = ProcessPoolExecutor(max_workers=10)
         return TaskManager.__instance
 
     def __init__(self):
@@ -32,16 +35,26 @@ class TaskManager:
         task.add_done_callback(self.commit)
 
     def commit(self, future):
-        # if a:=future.result():
-        #     try:
-        #         Session().add(a)
-        #         Session().commit()
-        #     except:
-        #         Session.rollback()
-        #         logging.getLogger().exception("Error submitting chapter")
-        #         raise
-        # logging.error("task did not return chapter")
+        series_id, chapter_id = future.result()
+        logging.getLogger(__name__).info("Marking chapter as done")
+        database.Session().query(database.DLDChapters).filter(DLDChapters.chapter_id==chapter_id,DLDChapters.series_id==series_id).one().status = 1
+        database.Session().commit()
         ...
 
-    def submit_series_chapter(self, *args, **kwargs):
-        self.__done_list.append(self.__TPE.submit(exception_handler, download_series_chapter, *args, **kwargs))
+    def submit_series_chapter(self, source, series_id, chapter, path, cinfo,*args, **kwargs):
+
+        ret = database.DLDChapters()
+        ret.chapter_id = chapter.id
+        ret.series_id = series_id
+        ret.number = chapter.number
+        ret.title = chapter.title
+        ret.volume = chapter.volume
+        ret.status = 2
+        ret.path = str(path)
+        if not bool(database.Session().query(DLDChapters).filter_by(chapter_id=chapter.id, series_id=series_id, status=0).all()):
+            database.Session().add(ret)
+            database.Session().commit()
+            future = self.__TPE.submit(exception_handler, download_series_chapter, source, series_id, chapter, path, cinfo, *args, **kwargs)
+            future.add_done_callback(self.commit)
+        else:
+            ...

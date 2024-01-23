@@ -38,7 +38,7 @@ def get_sources_list() -> list[ISource]:
     return extesion_factory
 
 
-def list_extension() -> list[str]:
+def list_sources() -> list[str]:
     return [ext.__class__.__name__ for ext in extesion_factory]
 
 

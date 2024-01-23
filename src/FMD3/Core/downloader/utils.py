@@ -3,7 +3,6 @@ import urllib
 from pathlib import Path
 from zipfile import ZipFile
 
-import aiofiles
 from ComicInfo import ComicInfo
 
 from FMD3.Models.Chapter import Chapter

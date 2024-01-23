@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, Boolean, String, DateTime, Text, ForeignKey, SmallInteger
+from sqlalchemy import Column, Integer, Boolean, String, DateTime, Text, ForeignKey, SmallInteger, func
 from sqlalchemy.orm import relationship
 
 
@@ -36,7 +36,9 @@ class DLDChapters(Base):
     number = Column(SmallInteger)
     volume = Column(SmallInteger)
     title = Column(Text)
-
+    status = Column(Integer) # 0 not downloaded, 1 downloaded, 2 added to queue
+    path = Column(Text)
+    downloaded_at = Column(DateTime,server_default=func.now())
     # series = relationship("Series",back_populates="DLDChapters")
 
     @staticmethod

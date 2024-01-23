@@ -2,23 +2,18 @@ import asyncio
 import logging
 import os
 import random
-import re
 import time
 from io import BytesIO
 from zipfile import ZipFile
 
-import aiofiles
 import aiohttp
 from PIL import Image, ImageStat
-from sqlalchemy.orm import scoped_session
-
-from FMD3.Core.database import DLDChapters, session_factory
-from FMD3.Core.database.predefined import chapter_exists
 from FMD3.Core.downloader.utils import append_cinfo
 from FMD3.Sources import ISource
 
 logger = logging.getLogger(__name__)
-max_dimensions=(16383, 16383)
+max_dimensions = (16383, 16383)
+
 
 async def convert_image(image_raw_data):
     """
@@ -56,6 +51,7 @@ async def convert_image(image_raw_data):
         logger.error(f"Exception converting image: {e}")
         raise
 
+
 async def download_image(session, img_url):
     """
     Download image from the given URL asynchronously.
@@ -75,6 +71,7 @@ async def download_image(session, img_url):
     except Exception:
         logger.exception(f"Exception downloading from '{img_url}'")
         raise
+
 
 async def download_and_save(session, cbz_path, img_url, index, is_convert):
     """
@@ -109,6 +106,7 @@ async def download_and_save(session, cbz_path, img_url, index, is_convert):
     except Exception as e:
         logger.error(f"Exception processing '{img_url}': {e}")
         raise
+
 
 async def download_n_pack_pages(cbz_path, images_url_list, is_convert=True):
     """
@@ -145,21 +143,9 @@ def download_series_chapter(module: ISource, series_id, chapter, output_file_pat
     Returns:
         bool: True if the download was successful, False otherwise.
     """
-    Session = scoped_session(session_factory)
-    if chapter_exists(series_id, chapter.id, session=Session):
-        logger.info(f"Aborting download of chapter {chapter.number}. Chapter already in database -> downloaded")
-        return False
 
     try:
-        ret = DLDChapters()
-        ret.chapter_id = chapter.id
-        ret.series_id = series_id
-        ret.number = chapter.number
-        ret.title = chapter.title
-        ret.volume = chapter.volume
-        Session.add(ret)
-        Session.commit()
-        time.sleep(random.randint(1,20))
+        time.sleep(random.randint(1, 20))
         image_url_list = module.get_page_urls_for_chapter(chapter.id)
         try:
             tasks = asyncio.run(download_n_pack_pages(output_file_path, image_url_list))
@@ -181,6 +167,4 @@ def download_series_chapter(module: ISource, series_id, chapter, output_file_pat
         # "statement" : e.statement})
         # logger.error(f"Failed to execute sql: {e.orig.args[0]}\n{param}")
         logger.exception("sigh")
-
-    Session.remove()
-    return True
+    return series_id, chapter.id

@@ -132,18 +132,52 @@ async def download_n_pack_pages(cbz_path, images_url_list, is_convert=True):
         # Use gather to run tasks concurrently and obtain their results
         return await asyncio.gather(*tasks)
 
+
 def cleanup_files(path):
     try:
         os.remove(path)
     except:
         logger.exception("Faile to cleanup files")
-def download_series_chapter(module: ISource, series_id, chapter: Chapter, output_file_path, cinfo) -> tuple[
+
+
+def analyze_archive(output_file_path, series_id, chapter:Chapter) -> bool:
+    """
+        Analyzes an archive file to determine if it exists and has the correct number of files.
+
+        Parameters:
+        - output_file_path (str): The path to the archive file to be analyzed.
+        - series_id (str): The identifier of the series.
+        - chapter (Chapter): The Chapter object representing the chapter information.
+
+        Returns:
+        - bool: True if the file exists and has the correct number of files, indicating that it has already been downloaded;
+                False otherwise, indicating that the file needs to be processed.
+
+        The function checks if the specified archive file exists. If it exists, it reads the contents of the archive to
+        determine the number of image files (".webp", ".jpg", ".png") and chapter information files (".xml"). If the count
+        matches the expected number of pages in the chapter plus one (for the chapter information file), it logs a warning
+        message indicating that the file is already downloaded and returns True. Otherwise, it returns False, indicating
+        that the file needs to be processed further.
+        """
+    if Path(output_file_path).exists():
+
+        with ZipFile(output_file_path, "r") as zf:
+            n_images_and_cinfo = len([file for file in zf.namelist() if
+                                      os.path.splitext(file)[1].lower() in [".webp", ".jpg", ".png", ".xml"]])
+            if n_images_and_cinfo == chapter.pages + 1:
+                logger.warning(
+                    f"File '{output_file_path}' - series '{series_id}' chapter number '{chapter.number}' chapter id '{chapter.id}' is apparently already downloaded. Skipping with status 4")
+                return True
+    return False
+
+
+def download_series_chapter(source: ISource, series_id, chapter: Chapter, output_file_path, cinfo) -> tuple[
     str, str, DLDChaptersStatus]:
     """
     Download a chapter of a series.
 
     Args:
-        module: Source module.
+        source: Source module.
         series_id: ID of the series.
         chapter: Chapter object.
         output_file_path: Output path for the ZIP file.
@@ -155,22 +189,15 @@ def download_series_chapter(module: ISource, series_id, chapter: Chapter, output
 
     try:
         # Check file is not downloaded:
-        if Path(output_file_path).exists():
-            with ZipFile(output_file_path, "r") as zf:
-                n_images_and_cinfo = len([file for file in zf.namelist() if
-                                          os.path.splitext(file)[1].lower() in [".webp", ".jpg", ".png", ".xml"]])
-                if n_images_and_cinfo == chapter.pages + 1:
-                    logger.warning(
-                        f"File '{output_file_path}' - series '{series_id}' chapter number '{chapter.number}' chapter id '{chapter.id}' is apparently already downloaded. Skipping with status 4")
-                    return series_id, chapter.id, DLDChaptersStatus.SKIPPED
+        if analyze_archive(output_file_path, series_id, chapter):
+            return series_id, chapter.id, DLDChaptersStatus.SKIPPED
 
-        image_url_list = module.get_page_urls_for_chapter(chapter.id)
+        image_url_list = source.get_page_urls_for_chapter(chapter.id)
         try:
             tasks = asyncio.run(download_n_pack_pages(output_file_path, image_url_list))
             with ZipFile(output_file_path, "w") as zout:
                 for filename, data in tasks:
                     zout.writestr(filename, data)
-            #     for filename, image_data in results:
 
             append_cinfo(output_file_path, cinfo)
         except Exception as e:
@@ -179,11 +206,6 @@ def download_series_chapter(module: ISource, series_id, chapter: Chapter, output
             return series_id, chapter.id, DLDChaptersStatus.ERRORED
 
     except Exception as e:
-        #
-        # param = str({"params" : list(e.params),
-        # "sql_error" : e.orig.sqlite_errorname,
-        # "statement" : e.statement})
-        # logger.error(f"Failed to execute sql: {e.orig.args[0]}\n{param}")
         logger.exception(f"Unhandled exception. Cleaning up files: {e}")
         cleanup_files(output_file_path)
 

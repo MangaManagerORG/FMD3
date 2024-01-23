@@ -1,6 +1,11 @@
+from datetime import datetime, timedelta
+
+from sqlalchemy import or_, and_
+
 from FMD3.Core.database import DLDChapters, Series, Session
 
-def chapter_exists(series_id, chapter_id, session=Session,):
+
+def chapter_exists(series_id, chapter_id, session=Session, ):
     """
         Check if a chapter with the specified `series_id` and `chapter_id` exists in the database.
 
@@ -14,11 +19,26 @@ def chapter_exists(series_id, chapter_id, session=Session,):
 
     # return False
     session.flush()
-    return bool(session.query(DLDChapters).filter_by(chapter_id=chapter_id, series_id=series_id).all())
+    return bool(session.query(DLDChapters).filter(
+        and_(
+            DLDChapters.chapter_id == chapter_id, DLDChapters.series_id == series_id,
+            or_(
+                DLDChapters.status == 0,
+                # Only allow if added more than 30 minutes ago. Changed for active list in task manager
+                # and_(
+                #     DLDChapters.status == 2,
+                #     DLDChapters.downloaded_at + timedelta(minutes=30) < datetime.now()
+                # )
+            ))
+    ).all())
+
+
+def is_chapter_downloaded(series_id, chapter_id, session=Session):
+    ...
+
 
 def max_chapter_number(series_id):
     # Retrieve the max number from the DLDChapters table
-
 
     max_number = Session().query(DLDChapters.number).filter(
         DLDChapters.series_id == series_id).order_by(

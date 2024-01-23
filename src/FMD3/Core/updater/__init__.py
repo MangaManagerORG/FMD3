@@ -12,33 +12,37 @@ from FMD3.Sources import get_sources_list, ISource
 logger = logging.getLogger(__name__)
 
 
-
-
-
-def make_download_task_missing_chapters(ext: ISource, series: Series, chapter_list: list[Chapter]):
+def download_missing_chapters(source: ISource, series: Series, chapters: list[Chapter]):
     """
-            Downloads a single chapter from a remote source and saves it to the user preferences' location.
+    Downloads and saves a list of chapters from a given source to the user's preferred location,
+    only if the chapters do not already exist in the database.
 
-            Parameters:
-                ext (ISource): The source object for downloading the chapter.
-                series (Series): The series to which the chapter belongs.
-                chapter_list (Chapter): The chapters to be downloaded.
+    Parameters:
+        source (ISource): The source object for downloading the chapters.
+        series (Series): The series to which the chapters belong.
+        chapters (list[Chapter]): The list of chapters to be downloaded.
 
-            Returns:
-                bool: `False` if the chapter exists in db.
-            """
-    # futures = []
-    for chapter in chapter_list:
-
-        if chapter_exists(series.series_id, chapter.id):
-            logger.info(f"Chapter id {chapter.id}, number {chapter.number} is registered in db. Skipping")
-            continue
-        cinfo = ext.get_info(series.series_id).to_comicinfo_with_chapter_data(chapter)
+    Returns:
+        bool: False if any of the chapters already exist in the database.
+    """
+    for chapter in chapters:
+        cinfo = source.get_info(series.series_id).to_comicinfo_with_chapter_data(chapter)
         output_file_path = make_output_path(series, chapter)
-        logger.info(f"Adding download task for {series.title} . Ch.{chapter.number}")
-        TaskManager().submit_series_chapter(ext, series.series_id, chapter, output_file_path,cinfo)
+
+        TaskManager().submit_series_chapter(source, series.series_id, chapter, output_file_path, cinfo)
+
 
 def new_chapters_finder():
+    """
+       Initiates the process of finding and downloading new chapters for all series in the user's favorites.
+
+       This function iterates through all sources, retrieves series from the user's favorites for each source,
+       and identifies new chapters to download. It then calls the make_download_task_missing_chapters function
+       to download the new chapters.
+
+       Returns:
+           None
+       """
     logging.getLogger(__name__).debug("Initiating chapter finder")
     init_time = time.time()
     for source in get_sources_list():
@@ -54,7 +58,7 @@ def new_chapters_finder():
                 print("No new chapters found")
                 continue
 
-            make_download_task_missing_chapters(source, series, new_chapter_list)
+            download_missing_chapters(source, series, new_chapter_list)
 
             # print("DONWLOADING NEW CHAPTERS")
     final_time = time.time() - init_time

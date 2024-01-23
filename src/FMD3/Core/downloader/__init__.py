@@ -4,11 +4,15 @@ import os
 import random
 import time
 from io import BytesIO
+from pathlib import Path
 from zipfile import ZipFile
 
 import aiohttp
 from PIL import Image, ImageStat
+
+from FMD3.Core.database.models import DLDChaptersStatus
 from FMD3.Core.downloader.utils import append_cinfo
+from FMD3.Models.Chapter import Chapter
 from FMD3.Sources import ISource
 
 logger = logging.getLogger(__name__)
@@ -73,7 +77,7 @@ async def download_image(session, img_url):
         raise
 
 
-async def download_and_save(session, cbz_path, img_url, index, is_convert):
+async def download_and_convert(session, img_url, index, is_convert):
     """
     Download an image, optionally convert it, and save it to a ZIP file.
 
@@ -123,13 +127,18 @@ async def download_n_pack_pages(cbz_path, images_url_list, is_convert=True):
     tasks = []
     async with aiohttp.ClientSession() as session:
         for i, img_url in enumerate(images_url_list, start=1):
-            tasks.append(download_and_save(session, cbz_path, img_url, i, is_convert))
+            tasks.append(download_and_convert(session, img_url, i, is_convert))
 
         # Use gather to run tasks concurrently and obtain their results
         return await asyncio.gather(*tasks)
 
-
-def download_series_chapter(module: ISource, series_id, chapter, output_file_path, cinfo):
+def cleanup_files(path):
+    try:
+        os.remove(path)
+    except:
+        logger.exception("Faile to cleanup files")
+def download_series_chapter(module: ISource, series_id, chapter: Chapter, output_file_path, cinfo) -> tuple[
+    str, str, DLDChaptersStatus]:
     """
     Download a chapter of a series.
 
@@ -145,7 +154,16 @@ def download_series_chapter(module: ISource, series_id, chapter, output_file_pat
     """
 
     try:
-        time.sleep(random.randint(1, 20))
+        # Check file is not downloaded:
+        if Path(output_file_path).exists():
+            with ZipFile(output_file_path, "r") as zf:
+                n_images_and_cinfo = len([file for file in zf.namelist() if
+                                          os.path.splitext(file)[0].lower() in [".webp", ".jpg", ".png", ".xml"]])
+                if n_images_and_cinfo == chapter.pages + 1:
+                    logger.warning(
+                        f"File '{output_file_path}' - series '{series_id}' chapter number '{chapter.number}' chapter id '{chapter.id}' is apparently already downloaded. Skipping with status 4")
+                    return series_id, chapter.id, DLDChaptersStatus.SKIPPED
+
         image_url_list = module.get_page_urls_for_chapter(chapter.id)
         try:
             tasks = asyncio.run(download_n_pack_pages(output_file_path, image_url_list))
@@ -157,8 +175,8 @@ def download_series_chapter(module: ISource, series_id, chapter, output_file_pat
             append_cinfo(output_file_path, cinfo)
         except Exception as e:
             logger.exception(f"Unhandled exception. Cleaning up files: {e}")
-            os.remove(output_file_path)
-            return False
+            cleanup_files(output_file_path)
+            return series_id, chapter.id, DLDChaptersStatus.ERRORED
 
     except Exception as e:
         #
@@ -166,5 +184,8 @@ def download_series_chapter(module: ISource, series_id, chapter, output_file_pat
         # "sql_error" : e.orig.sqlite_errorname,
         # "statement" : e.statement})
         # logger.error(f"Failed to execute sql: {e.orig.args[0]}\n{param}")
-        logger.exception("sigh")
-    return series_id, chapter.id
+        logger.exception(f"Unhandled exception. Cleaning up files: {e}")
+        cleanup_files(output_file_path)
+
+        return series_id, chapter.id, DLDChaptersStatus.ERRORED
+    return series_id, chapter.id, DLDChaptersStatus.DOWNLOADED

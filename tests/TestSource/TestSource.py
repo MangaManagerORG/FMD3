@@ -1,3 +1,4 @@
+from FMD3.Core.database import DLDChapters
 from FMD3.Models.Chapter import Chapter
 from FMD3.Models.MangaInfo import MangaInfo
 from FMD3.Sources import ISource
@@ -142,12 +143,16 @@ class TestSource(ISource):
                 )
                     for chapter in test_data[series]["chapters"]]
 
-    def _debug_get_chapter(self,series_id, chapter_id) -> Chapter|None:
+    def _debug_get_chapter(self, series_id, chapter_id) -> Chapter | None:
 
-        filtered_chapter = list(filter(lambda x:x.id == chapter_id, self.get_chapters(series_id=series_id)))
+        filtered_chapter = list(filter(lambda x: x.id == chapter_id, self.get_chapters(series_id=series_id)))
         if filtered_chapter:
             return filtered_chapter[0]
         return None
+
+    def get_queried_chapters(self, series_id, chapters_ids: list[DLDChapters]):
+        return list(filter(lambda x: x.id in chapters_ids, self.get_chapters(series_id)))
+
     ID = "TESTSOURCE"
     NAME = "TESTSOURCE"
     ROOT_URL = ""

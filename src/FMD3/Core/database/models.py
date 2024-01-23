@@ -46,8 +46,7 @@ class DLDChapters(Base):
     number = Column(SmallInteger)
     volume = Column(SmallInteger)
     title = Column(Text)
-    status = Column(
-        Integer)
+    status = Column(Integer, default=DLDChaptersStatus.NOT_DOWNLOADED.value)
     path = Column(Text)
     downloaded_at = Column(DateTime, server_default=func.now())
 
@@ -107,7 +106,7 @@ class SeriesCache(Base):
         mi = SeriesCache()
         mi.series_id = manga_info.id
         mi.title = manga_info.title
-        mi.alt_titles = ",".join(manga_info.alt_titles) if manga_info.alt_titles else []
+        mi.alt_titles = ",".join(manga_info.alt_titles) if manga_info.alt_titles else None
         mi.description = manga_info.description
         mi.authors = ",".join(manga_info.authors) if manga_info.authors else None
         mi.artists = ",".join(manga_info.artists) if manga_info.artists else None

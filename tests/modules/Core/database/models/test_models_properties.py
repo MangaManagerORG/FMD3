@@ -1,7 +1,7 @@
 import unittest
 
 from FMD3.Core.database import DLDChapters
-from tests.TestSource import TestSource
+from tests.TestSource.TestSource import TestSource
 
 class TestModelsProperties(unittest.TestCase):
     def test_DDL_creates_valid_chapter(self):

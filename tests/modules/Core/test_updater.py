@@ -18,14 +18,11 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, scoped_session
 
 from FMD3.Core.database import Base, Series
-from FMD3.Core.scheduler import start_fav_scan_schedule, run_scheduler
-from FMD3.Core.settings import Settings
-from FMD3.Core.settings.Keys import Updates
-from FMD3.Core.updater import new_chapters_finder, make_download_task_missing_chapters
+from FMD3.Core.updater import new_chapters_finder, create_download_task
 from FMD3.Sources import ISource, get_source
 from FMD3.Core import updater, TaskManager
 from FMD3 import Sources
-from TestSource import TestSource
+from tests.TestSource.TestSource import TestSource
 from FMD3.Core import database, scheduler
 Sources.extesion_factory = [TestSource()]
 
@@ -131,7 +128,7 @@ class TestMakeDownloadTask(DbSetup):
 
         mock = TaskManager.TaskManager.submit_series_chapter = MagicMock()
         chapters = TestSource().get_chapters("series_a")
-        make_download_task_missing_chapters(TestSource(),self.series_a, chapters)
+        create_download_task(TestSource(), self.series_a, chapters)
 
         # assert callcount to 1 as chapter 1 is added to downloads in setup
         self.assertEqual(1, mock.call_count)

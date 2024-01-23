@@ -4,7 +4,7 @@ from FMD3.Core import database as db
 from FMD3.Core.database import Session
 from FMD3.Core.settings import Settings
 from FMD3.Core.settings.Keys import SaveTo
-from FMD3.Core.updater import make_download_task_missing_chapters
+from FMD3.Core.updater import download_missing_chapters
 from FMD3.Sources import get_extension, load_sources, get_source
 
 load_sources()
@@ -44,7 +44,7 @@ insert_default_series("https://mangadex.org/title/3d269f6e-10e1-4e4c-b453-48b388
 
 series = Session.query(db.Series).filter_by(series_id="3d269f6e-10e1-4e4c-b453-48b38814494a").one()
 
-make_download_task_missing_chapters(ext, series, ext.get_chapters(series.series_id))
+download_missing_chapters(ext, series, ext.get_chapters(series.series_id))
 #
 #
 # thread = threading.Thread(target=thread_function)

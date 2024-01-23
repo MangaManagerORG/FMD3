@@ -20,6 +20,7 @@ class MangaInfo:
     status: str
     chapters: list[Chapter]
     def __init__(self):
+        self.title: str = None
         self.alt_titles: list = None
         self.description: str = None
         self.authors: list[str] = None

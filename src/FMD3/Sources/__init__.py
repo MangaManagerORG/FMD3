@@ -34,6 +34,12 @@ def get_source(name) -> ISource:
         if ext.__class__.__name__ == name:
             return ext
 
+def get_source_by_id(source_id) -> ISource:
+    for ext in extesion_factory:
+        if ext.ID == source_id:
+            return ext
+
+
 def get_sources_list() -> list[ISource]:
     return extesion_factory
 

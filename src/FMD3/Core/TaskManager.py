@@ -5,6 +5,7 @@ from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor
 
 from FMD3.Core import database
 from FMD3.Core.database import DLDChapters
+from FMD3.Core.database.models import DLDChaptersStatus as DLDCS
 from FMD3.Core.database.predefined import chapter_exists
 from FMD3.Core.downloader import download_series_chapter
 
@@ -26,11 +27,11 @@ class TaskManager:
             TaskManager.__instance = object.__new__(cls)
             # TaskManager.__TPE = ThreadPoolExecutor(max_workers=10)
             TaskManager.__TPE = ProcessPoolExecutor(max_workers=10)
+            TaskManager.active_tasks = set()
         return TaskManager.__instance
 
     def __init__(self):
         self.__done_list = []
-        self.active_tasks = set()
 
     def submit(self, func, *args, **kwargs):
         task = self.__TPE.submit(exception_handler, func, *args, **kwargs)
@@ -38,30 +39,39 @@ class TaskManager:
 
     def commit(self, future):
         series_id, chapter_id, status = future.result()
+        status: DLDCS
         logging.getLogger(__name__).info("Marking chapter as done")
         database.Session().query(database.DLDChapters).filter(DLDChapters.chapter_id == chapter_id,
-                                                              DLDChapters.series_id == series_id).one().status = status
+                                                              DLDChapters.series_id == series_id).one().status = status.value
         database.Session().commit()
         self.active_tasks.remove(f"{series_id}/{chapter_id}")
         ...
 
     def submit_series_chapter(self, source, series_id, chapter, path, cinfo, *args, **kwargs):
-
-        ret = database.DLDChapters()
-        ret.chapter_id = chapter.id
-        ret.series_id = series_id
-        ret.number = chapter.number
-        ret.title = chapter.title
-        ret.volume = chapter.volume
-        ret.status = 2
-        ret.path = str(path)
         # Check chapter is not fully downloaded
         # Check if chapter is not in active tasks
-        if not chapter_exists(series_id,chapter.id) and f"{series_id}/{chapter.id}" not in self.active_tasks:
+        if f"{series_id}/{chapter.id}" not in self.active_tasks:
+            if not chapter_exists(series_id, chapter.id):
+                ret = database.DLDChapters()
+                ret.chapter_id = chapter.id
+                ret.series_id = series_id
+                ret.number = chapter.number
+                ret.title = chapter.title
+                ret.volume = chapter.volume
+                ret.status = 2
+                ret.path = str(path)
+                database.Session().add(ret)
+                database.Session().commit()
+            elif dbchapter := database.Session().query(DLDChapters).filter_by(series_id=series_id,
+                                                                      chapter_id=chapter.id).one():
+                if dbchapter:
+                    chapter_status = DLDCS(dbchapter.status)
+                    if chapter_status in [DLDCS.DOWNLOADED, DLDCS.SKIPPED, DLDCS.ERRORED]:
+                        # Assume chapter is already downloaded, skipped or failed
+                        logging.getLogger(__name__).debug(f"Aborting task -> '{chapter_status}' chapter id: '{chapter.id}'")
+                        return
 
             logging.getLogger(__name__).info(f"Adding download task for {series_id} . Ch.{chapter.number}")
-            database.Session().add(ret)
-            database.Session().commit()
             self.active_tasks.add(f"{series_id}/{chapter.id}")
             future = self.__TPE.submit(exception_handler, download_series_chapter, source, series_id, chapter, path,
                                        cinfo, *args, **kwargs)

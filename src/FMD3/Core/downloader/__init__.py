@@ -158,7 +158,7 @@ def download_series_chapter(module: ISource, series_id, chapter: Chapter, output
         if Path(output_file_path).exists():
             with ZipFile(output_file_path, "r") as zf:
                 n_images_and_cinfo = len([file for file in zf.namelist() if
-                                          os.path.splitext(file)[0].lower() in [".webp", ".jpg", ".png", ".xml"]])
+                                          os.path.splitext(file)[1].lower() in [".webp", ".jpg", ".png", ".xml"]])
                 if n_images_and_cinfo == chapter.pages + 1:
                     logger.warning(
                         f"File '{output_file_path}' - series '{series_id}' chapter number '{chapter.number}' chapter id '{chapter.id}' is apparently already downloaded. Skipping with status 4")

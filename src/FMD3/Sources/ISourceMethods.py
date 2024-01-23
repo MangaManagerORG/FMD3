@@ -48,6 +48,9 @@ class ISourceMethods:
 
         """
 
+    def get_queried_chapters(self, series_id, chapters_ids: list[str]):
+        return list(filter(lambda x: x.id in chapters_ids, self.get_chapters(series_id)))
+
     # @staticmethod
     # @abstractmethod
     # async def get_all_series() -> list[tuple[str, str]]:
@@ -81,5 +84,5 @@ class ISourceMethods:
         ...
 
     @abstractmethod
-    def find_series(self, query:str):
+    def find_series(self, query: str):
         ...

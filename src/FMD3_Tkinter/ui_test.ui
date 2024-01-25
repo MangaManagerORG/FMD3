@@ -97,6 +97,7 @@
                             <property name="state">readonly</property>
                             <property name="textvariable">string:selected_source_name</property>
                             <property name="values">Select a source</property>
+                            <bind sequence="&lt;&lt;ComboboxSelected&gt;&gt;" handler="on_source_selected" add="" />
                             <layout manager="pack">
                               <property name="expand">true</property>
                               <property name="fill">x</property>

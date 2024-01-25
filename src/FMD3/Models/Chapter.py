@@ -10,7 +10,7 @@ class Page():
 
 @dataclasses.dataclass
 class Chapter():
-    id:str
+    chapter_id:str
     volume:float|None
     number:float
     title:str

@@ -3,7 +3,7 @@ import tkinter
 from urllib import request
 from PIL import Image, ImageTk
 from FMD3.Sources import ISource,  get_source
-from FMD3.Models.MangaInfo import MangaInfo
+from FMD3.Models.SeriesInfo import SeriesInfo
 
 
 def load_data():
@@ -11,7 +11,7 @@ def load_data():
     sel_ext = clicked.get()
 
     ext: ISource = get_source(sel_ext)
-    mi: MangaInfo = ext.on_get_info(url)
+    mi: SeriesInfo = ext.on_get_info(url)
 
     res = f"""
     Series name: {mi.title}

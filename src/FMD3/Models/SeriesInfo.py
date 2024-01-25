@@ -4,7 +4,7 @@ from FMD3.Models.Chapter import Chapter
 
 
 @dataclasses.dataclass(init=False)
-class MangaInfo:
+class SeriesInfo:
     """Class to store values of a series info"""
     id: str
 

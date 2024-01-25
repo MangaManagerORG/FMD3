@@ -3,7 +3,7 @@ from typing import final
 from ComicInfo import ComicInfo
 
 from FMD3.Models.Chapter import Chapter
-from FMD3.Models.MangaInfo import MangaInfo
+from FMD3.Models.SeriesInfo import SeriesInfo
 
 
 class IEnricher(abc.ABC):
@@ -14,5 +14,5 @@ class IEnricher(abc.ABC):
         ...
 
     @abc.abstractmethod
-    def process(self, series_data: MangaInfo, chapters: Chapter, comicinfo: ComicInfo) -> tuple[MangaInfo, Chapter, ComicInfo]:
+    def process(self, series_data: SeriesInfo, chapters: Chapter, comicinfo: ComicInfo) -> tuple[SeriesInfo, Chapter, ComicInfo]:
         ...

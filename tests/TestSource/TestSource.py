@@ -1,6 +1,6 @@
 from FMD3.Core.database import DLDChapters
 from FMD3.Models.Chapter import Chapter
-from FMD3.Models.MangaInfo import MangaInfo
+from FMD3.Models.SeriesInfo import SeriesInfo
 from FMD3.Sources import ISource
 
 test_data = {
@@ -103,8 +103,8 @@ test_data = {
 
 class TestSource(ISource):
     @staticmethod
-    def get_info(url) -> MangaInfo:
-        mi = MangaInfo()
+    def get_info(url) -> SeriesInfo:
+        mi = SeriesInfo()
         mi.title = test_data.get(url).get("name")
         mi.id = url
         return mi

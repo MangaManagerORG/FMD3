@@ -9,7 +9,6 @@ from .ISource import ISource
 sources_factory: list[ISource] = []
 
 
-
 def load_sources():
     display_eps = entry_points(group='FMD3_Sources')
     for entry in display_eps:
@@ -63,9 +62,11 @@ def list_sources() -> list[str]:
 def add_extension(extension: ISource):
     ...
 
+
 def add_source(extension: ISource):
     # extension.init_settings()
     sources_factory.append(extension)
+
 
 @abc.abstractmethod
 def load_source():
@@ -74,4 +75,3 @@ def load_source():
     :param source:
     :return:
     """
-

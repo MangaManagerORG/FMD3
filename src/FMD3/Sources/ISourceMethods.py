@@ -5,7 +5,7 @@ Contains interfaces that the core will use to fetch info from the source
 from abc import abstractmethod
 
 from FMD3.Models.Chapter import Chapter
-from FMD3.Models.MangaInfo import MangaInfo
+from FMD3.Models.SeriesInfo import SeriesInfo
 
 
 class ISourceMethods:
@@ -63,7 +63,7 @@ class ISourceMethods:
     #     """
 
     @abstractmethod
-    def get_info(self, url) -> MangaInfo:
+    def get_info(self, url) -> SeriesInfo:
         """
         Method that retrieves only basic series data.
         Args:

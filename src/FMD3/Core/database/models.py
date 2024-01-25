@@ -6,7 +6,7 @@ from sqlalchemy.orm import relationship
 
 from .base import Base
 from ...Models.Chapter import Chapter
-from ...Models.MangaInfo import MangaInfo
+from ...Models.SeriesInfo import SeriesInfo
 
 
 class Series(Base):
@@ -23,7 +23,7 @@ class Series(Base):
     currentchapter = Column(Integer)
     save_to = Column(Text)
 
-    dateadded = Column(DateTime, server_default=func.now)
+    dateadded = Column(DateTime, server_default=func.now())
     datelastchecked = Column(DateTime)
     datelastupdated = Column(DateTime)
 
@@ -87,8 +87,8 @@ class SeriesCache(Base):
 
     @property
     def manga_info(self):
-        """Return a MangaInfo object from the SeriesCache data."""
-        mi = MangaInfo()
+        """Return a SeriesInfo object from the SeriesCache data."""
+        mi = SeriesInfo()
         mi.id = self.series_id
         mi.title = self.title
         mi.alt_titles = ",".join(self.alt_titles) if self.alt_titles else []
@@ -118,7 +118,7 @@ class SeriesCache(Base):
         self.status = manga_info.status
     @classmethod
     def from_manga_info(cls, manga_info):
-        """Create a SeriesCache instance from a MangaInfo object."""
+        """Create a SeriesCache instance from a SeriesInfo object."""
         mi = SeriesCache()
         mi.series_id = manga_info.id
         mi.title = manga_info.title

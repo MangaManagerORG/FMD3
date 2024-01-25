@@ -83,17 +83,3 @@ class Favourites:
 
 
 
-# def show_selected_in_series_tab(self, *_):
-#     tree = self.builder.get_object("favourites_treeview")
-#     if tree.selection():
-#         values = tree.item(tree.selection()[0], "values")
-#         if not source:
-#             return
-#         data = get_series_info(values[8], tree.selection()[0])
-#         if data:
-#             series_detail_widget = self.builder.get_object("series_detail")
-#             add_series_detail(series_detail_widget, data)
-#             series_result_tree = self.builder.get_object("series_result")
-#             series_result_tree.delete(*series_result_tree.get_children())
-#     self.load_queried_data(tree.selection()[0], data)
-#     self.builder.get_object("notebook_widget").select(1)

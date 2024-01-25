@@ -86,7 +86,7 @@ class Series:
         if dld_chapters := get_chapters(series_id):
             last_in_db = max(dld_chapters, key=lambda x: x["number"])
             list_chapters_treeview(chapters_treeview, dld_chapters, ("downloaded",))
-            chapters = get_source_chapters(series_id, last_in_db.get("number"))
+            chapters = get_source_chapters(self.selected_source_id,series_id, last_in_db.get("number"))
             list_chapters_treeview(chapters_treeview, chapters, ("not_downloaded",))
         else:
             chapters = get_source_chapters(self.selected_source_id,series_id)

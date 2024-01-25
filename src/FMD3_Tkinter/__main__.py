@@ -2,7 +2,7 @@ import pathlib
 import tkinter as tk
 import pygubu
 
-from FMD3.api import get_sources
+from FMD3.api import get_sources, get_series_info
 from FMD3_Tkinter.app import App
 
 PROJECT_PATH = pathlib.Path(__file__).parent
@@ -49,6 +49,22 @@ class TkinterUI(App):
         source = sources[selected_index]
         self.selected_source_id = source.get("id")
         # selected_value = values[selected_index][1]  # Extract the second element of the tuple
+
+    # Cross tabs methods
+    def show_selected_in_series_tab(self, *_):
+        tree = self.builder.get_object("favourites_treeview")
+
+        if tree.selection():
+            series_id = tree.selection()[0]
+            values = tree.item(series_id, "values")
+            if not self.selected_source_id:
+                self.selected_source_id = values[7]
+            data = get_series_info(values[7], tree.selection()[0])
+            if data:
+                series_result_tree = self.builder.get_object("series_result")
+                series_result_tree.delete(*series_result_tree.get_children())
+                self.load_queried_data(series_id, data)
+                self.builder.get_object("notebook_widget").select(1)
     def run(self):
         self.mainwindow.mainloop()
 if __name__ == "__main__":

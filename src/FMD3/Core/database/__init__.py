@@ -8,7 +8,7 @@ from sqlalchemy.orm import scoped_session
 from . import engine
 from .base import Base
 from .engine import engine
-from .models import Series, DLDChapters
+from .models import Series, DLDChapters, SeriesCache, DLDChaptersStatus
 
 # Create the engine and the Session class
 

@@ -1,4 +1,5 @@
 import enum
+from datetime import datetime
 
 from sqlalchemy import Column, Integer, Boolean, String, DateTime, Text, ForeignKey, SmallInteger, func
 from sqlalchemy.orm import relationship
@@ -21,7 +22,8 @@ class Series(Base):
     status = Column(SmallInteger)
     currentchapter = Column(Integer)
     save_to = Column(Text)
-    dateadded = Column(DateTime)
+
+    dateadded = Column(DateTime, server_default=func.now)
     datelastchecked = Column(DateTime)
     datelastupdated = Column(DateTime)
 
@@ -100,6 +102,19 @@ class SeriesCache(Base):
         mi.chapters = []  # Assuming you don't have a direct Chapter relationship in SeriesCache
         return mi
 
+    def update(self, manga_info):
+        self.cached_date = datetime.now()
+
+        self.title = manga_info.title
+        self.alt_titles = ",".join(manga_info.alt_titles) if manga_info.alt_titles else None
+        self.description = manga_info.description
+        self.authors = ",".join(manga_info.authors) if manga_info.authors else None
+        self.artists = ",".join(manga_info.artists) if manga_info.artists else None
+        self.cover_url = manga_info.cover_url
+        self.genres = ",".join(manga_info.genres) if manga_info.genres else None
+        self.demographic = manga_info.demographic
+        self.rating = manga_info.rating
+        self.status = manga_info.status
     @classmethod
     def from_manga_info(cls, manga_info):
         """Create a SeriesCache instance from a MangaInfo object."""

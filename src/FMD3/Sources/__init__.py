@@ -23,14 +23,14 @@ def get_extension(name) -> ISource:
             return ext
 
 
-def get_source(name=None, id=None) -> ISource:
-    if name is None and id is None:
+def get_source(name=None, source_id=None) -> ISource:
+    if name is None and source_id is None:
         raise ValueError("At least one parameter needs to be fulfilled: name or id. None provided")
 
-    if id is not None:
+    if source_id is not None:
         # Using next with a generator expression to find the extension by ID
         try:
-            return next(ext for ext in sources_factory if ext.ID == id)
+            return next(ext for ext in sources_factory if ext.ID == source_id)
         except StopIteration:
             pass
 
@@ -42,7 +42,7 @@ def get_source(name=None, id=None) -> ISource:
             pass
 
     # If no extension is found, you might want to return a default value or raise an exception
-    raise ValueError(f"No extension found with name='{name}' and id='{id}'")
+    raise ValueError(f"No extension found with name='{name}' and id='{source_id}'")
 
 
 def get_source_by_id(source_id) -> ISource:

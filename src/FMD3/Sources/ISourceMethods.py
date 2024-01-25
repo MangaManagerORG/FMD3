@@ -49,7 +49,7 @@ class ISourceMethods:
         """
 
     def get_queried_chapters(self, series_id, chapters_ids: list[str]):
-        return list(filter(lambda x: x.id in chapters_ids, self.get_chapters(series_id)))
+        return list(filter(lambda x: x.chapter_id in chapters_ids, self.get_chapters(series_id)))
 
     # @staticmethod
     # @abstractmethod

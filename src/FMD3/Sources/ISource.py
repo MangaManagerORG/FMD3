@@ -2,11 +2,13 @@
 Contains interfaces to configure and integrate sources into the core
 """
 import abc
+import logging
 from typing import final
 from datetime import timedelta, datetime
 from FMD3.Core.settings import Settings
 from FMD3.Core.settings.models.SettingSection import SettingSection
 from FMD3.Core import database as db
+from FMD3.Models.SeriesInfo import SeriesInfo
 
 from FMD3.Sources.ISourceMethods import ISourceMethods
 from FMD3.Sources.ISourceNet import ISourceNet
@@ -47,25 +49,30 @@ class ISource(ISourceMethods,ISourceNet):
         Settings().save()
 
     @final
-    def get_series(self, series_id):
+    def get_series_info(self, series_id) -> SeriesInfo|None:
         series = db.Session().query(db.SeriesCache).filter_by(series_id=series_id).one_or_none()
         if not series:
             data = self.get_info(series_id)
+            if not data:
+                return data
             try:
-                dbseries = db.SeriesCache.from_manga_info(data)
-                db.Session().add(dbseries)
+                series = db.SeriesCache.from_manga_info(data)
+                db.Session().add(series)
                 db.Session().flush()
                 db.Session().commit()
+                return series.series_info
             except:
-                # logging.getLogger().error("Error creating series")
+                logging.getLogger().exception("Exception introducing cached serie")
                 db.Session().rollback()
+                return None
         # Check cache date
-        if series.cached_date + timedelta(days=5) < datetime.now():
-            # renew cache
-            data = self.get_info(series_id)
-            series.update(data)
-            db.Session().flush()
-            db.Session().commit()
-        return series.manga_info
+        else:
+            if series.cached_date + timedelta(days=5) < datetime.now():
+                # renew cache
+                data = self.get_info(series_id)
+                series.update(data)
+                db.Session().flush()
+                db.Session().commit()
+        return series.series_info
 
 

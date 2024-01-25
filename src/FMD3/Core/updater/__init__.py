@@ -36,7 +36,7 @@ def create_download_task(source: ISource, series: Series, chapters: list[Chapter
         Session().commit()
     else:
         logger.info("Using cache for series-info")
-        series_info = series_info.manga_info
+        series_info = series_info.series_info
 
     for chapter in chapters:
         cinfo = series_info.to_comicinfo_with_chapter_data(chapter)

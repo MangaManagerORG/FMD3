@@ -58,7 +58,7 @@ class DLDChapters(Base):
     @staticmethod
     def from_chapter(chapter: Chapter, series_id: str):
         ret = DLDChapters()
-        ret.chapter_id = chapter.id
+        ret.chapter_id = chapter.chapter_id
         ret.series_id = series_id
         ret.number = chapter.number
         ret.title = chapter.title
@@ -86,17 +86,21 @@ class SeriesCache(Base):
     status = Column(Text)
 
     @property
-    def manga_info(self):
+    def series_info(self):
         """Return a SeriesInfo object from the SeriesCache data."""
         mi = SeriesInfo()
         mi.id = self.series_id
         mi.title = self.title
-        mi.alt_titles = ",".join(self.alt_titles) if self.alt_titles else []
+        if self.alt_titles:
+            mi.alt_titles = self.alt_titles.split(",")
         mi.description = self.description
-        mi.authors = ",".join(self.authors) if self.authors else []
-        mi.artists = ",".join(self.artists) if self.artists else []
+        mi.authors = self.authors.split(",")
+        if self.artists:
+            mi.artists = self.artists.split(",")
+
         mi.cover_url = self.cover_url
-        mi.genres = ",".join(self.genres) if self.genres else []
+        if self.genres:
+            mi.genres = self.genres.split(",")
         mi.demographic = self.demographic
         mi.rating = self.rating
         mi.status = self.status
@@ -109,10 +113,10 @@ class SeriesCache(Base):
         self.title = manga_info.title
         self.alt_titles = ",".join(manga_info.alt_titles) if manga_info.alt_titles else None
         self.description = manga_info.description
-        self.authors = ",".join(manga_info.authors) if manga_info.authors else None
-        self.artists = ",".join(manga_info.artists) if manga_info.artists else None
+        self.authors = ",".join(manga_info.authors or []) if manga_info.authors else None
+        self.artists = ",".join(manga_info.artists or []) if manga_info.artists else None
         self.cover_url = manga_info.cover_url
-        self.genres = ",".join(manga_info.genres) if manga_info.genres else None
+        self.genres = ",".join(manga_info.genres or []) if manga_info.genres else None
         self.demographic = manga_info.demographic
         self.rating = manga_info.rating
         self.status = manga_info.status
@@ -124,10 +128,10 @@ class SeriesCache(Base):
         mi.title = manga_info.title
         mi.alt_titles = ",".join(manga_info.alt_titles) if manga_info.alt_titles else None
         mi.description = manga_info.description
-        mi.authors = ",".join(manga_info.authors) if manga_info.authors else None
-        mi.artists = ",".join(manga_info.artists) if manga_info.artists else None
+        mi.authors = ",".join(manga_info.authors or []) if manga_info.authors else None
+        mi.artists = ",".join(manga_info.artists or []) if manga_info.artists else None
         mi.cover_url = manga_info.cover_url
-        mi.genres = ",".join(manga_info.genres) if manga_info.genres else None
+        mi.genres = ",".join(manga_info.genres or []) if manga_info.genres else None
         mi.demographic = manga_info.demographic
         mi.rating = manga_info.rating
         mi.status = manga_info.status

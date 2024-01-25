@@ -35,7 +35,3 @@ class ISourceNet:
         """
         return requests.Session()
         # Make sure to close the session when the instance is destroyed
-
-    def __del__(self):
-        if self._session:
-            asyncio.ensure_future(self._session.close())

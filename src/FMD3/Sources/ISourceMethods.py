@@ -86,3 +86,11 @@ class ISourceMethods:
     @abstractmethod
     def find_series(self, query: str):
         ...
+
+    @abstractmethod
+    def init_settings(self):
+        """
+        Method called in extension initialization to load custom settings into main app
+        -- Grabs extension settings and loads it to the base setting controller
+        :return:
+        """

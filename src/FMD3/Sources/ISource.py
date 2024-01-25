@@ -3,9 +3,10 @@ Contains interfaces to configure and integrate sources into the core
 """
 import abc
 from typing import final
-
+from datetime import timedelta, datetime
 from FMD3.Core.settings import Settings
 from FMD3.Core.settings.models.SettingSection import SettingSection
+from FMD3.Core import database as db
 
 from FMD3.Sources.ISourceMethods import ISourceMethods
 from FMD3.Sources.ISourceNet import ISourceNet
@@ -45,11 +46,26 @@ class ISource(ISourceMethods,ISourceNet):
                 Settings().set_default(SOURCES_SECTIONS_PREFIX + section.key, control.key, control.value)
         Settings().save()
 
-    @abc.abstractmethod
-    def init_settings(self):
-        """
-        Method called in extension initialization to load custom settings into main app
-        -- Grabs extension settings and loads it to the base setting controller
-        :return:
-        """
+    @final
+    def get_series(self, series_id):
+        series = db.Session().query(db.SeriesCache).filter_by(series_id=series_id).one_or_none()
+        if not series:
+            data = self.get_info(series_id)
+            try:
+                dbseries = db.SeriesCache.from_manga_info(data)
+                db.Session().add(dbseries)
+                db.Session().flush()
+                db.Session().commit()
+            except:
+                # logging.getLogger().error("Error creating series")
+                db.Session().rollback()
+        # Check cache date
+        if series.cached_date + timedelta(days=5) < datetime.now():
+            # renew cache
+            data = self.get_info(series_id)
+            series.update(data)
+            db.Session().flush()
+            db.Session().commit()
+        return series.manga_info
+
 

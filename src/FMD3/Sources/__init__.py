@@ -6,7 +6,7 @@ from .ISource import ISource
 
 """Module with methods related with extensions"""
 
-extesion_factory: list[ISource] = []
+sources_factory: list[ISource] = []
 
 
 
@@ -18,43 +18,54 @@ def load_sources():
             module()
 
 
-@abc.abstractmethod
-def load_extension(extension: ISource):
-    ...
-
-
-
-
 def get_extension(name) -> ISource:
-    for ext in extesion_factory:
+    for ext in sources_factory:
         if ext.__class__.__name__ == name:
             return ext
-def get_source(name) -> ISource:
-    for ext in extesion_factory:
-        if ext.__class__.__name__ == name:
-            return ext
+
+
+def get_source(name=None, id=None) -> ISource:
+    if name is None and id is None:
+        raise ValueError("At least one parameter needs to be fulfilled: name or id. None provided")
+
+    if id is not None:
+        # Using next with a generator expression to find the extension by ID
+        try:
+            return next(ext for ext in sources_factory if ext.ID == id)
+        except StopIteration:
+            pass
+
+    if name is not None:
+        # Using next with a generator expression to find the extension by class name
+        try:
+            return next(ext for ext in sources_factory if ext.__class__.__name__ == name)
+        except StopIteration:
+            pass
+
+    # If no extension is found, you might want to return a default value or raise an exception
+    raise ValueError(f"No extension found with name='{name}' and id='{id}'")
+
 
 def get_source_by_id(source_id) -> ISource:
-    for ext in extesion_factory:
+    for ext in sources_factory:
         if ext.ID == source_id:
             return ext
 
 
 def get_sources_list() -> list[ISource]:
-    return extesion_factory
+    return sources_factory
 
 
 def list_sources() -> list[str]:
-    return [ext.__class__.__name__ for ext in extesion_factory]
+    return [ext.__class__.__name__ for ext in sources_factory]
 
 
 def add_extension(extension: ISource):
     ...
-    # extension.init_settings()
-    # extesion_factory.append(extension)
+
 def add_source(extension: ISource):
     # extension.init_settings()
-    extesion_factory.append(extension)
+    sources_factory.append(extension)
 
 @abc.abstractmethod
 def load_source():

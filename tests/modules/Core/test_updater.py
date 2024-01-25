@@ -24,7 +24,7 @@ from FMD3.Core import updater, TaskManager
 from FMD3 import Sources
 from tests.TestSource.TestSource import TestSource
 from FMD3.Core import database, scheduler
-Sources.extesion_factory = [TestSource()]
+Sources.sources_factory = [TestSource()]
 
 database.engine = create_engine('sqlite:///', isolation_level="SERIALIZABLE")
 

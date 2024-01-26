@@ -4,8 +4,25 @@ from FMD3.Models.Chapter import Chapter
 from FMD3.Sources import get_source as sup_get_source, ISource, get_sources_list
 
 
-def get_series() -> list[db.Series]:
-    return db.Session().query(db.Series).all()
+def get_series():
+    return [
+        {
+            "series_id": series.series_id,
+            "order": series.order,
+            "enabled": series.enabled,
+            "source_id": series.source_id,
+            "link": series.link,
+            "title": series.title,
+            "status": series.status,
+            "max_chapter": None if not series.chapters else max(series.chapters, key=lambda x: x.number,default=0).number,
+            "save_to": series.save_to,
+            "dateadded": series.dateadded,
+            "datelastchecked": series.datelastchecked,
+            "datelastupdated": series.datelastupdated,
+
+        }
+        for series in db.Session().query(db.Series).all()
+    ]
 
 
 def get_source(name=None, source_id=None):
@@ -23,6 +40,7 @@ def get_chapters(series_id):
     chapters = [
         {
             "chapter_id": chapter.chapter_id,
+            "series_id": chapter.series_id,
             "volume": chapter.volume,
             "number": chapter.number,
             "title": chapter.title,
@@ -36,7 +54,7 @@ def get_chapters(series_id):
     return chapters
 
 
-def get_source_chapters(source_id, series_id, filter: int=None):
+def get_source_chapters(source_id, series_id, filter: int = None):
     """
     Returns the chapters from the source. Will only return sources bigger than filter number
     Args:
@@ -106,7 +124,8 @@ def get_sources():
         for source in get_sources_list()
     ]
 
-def get_cover(source_id,request_url):
+
+def get_cover(source_id, request_url):
     source = sup_get_source(source_id=source_id)
     return source.session.get(request_url)
 
@@ -119,7 +138,7 @@ def download_chapters(source_id: str, series_id: str, chapter_ids: list[str]):
     if not series:
         data = source.get_info(series_id)
         try:
-            series = db.Series(series_id=data.id, title=data.title) # todo add missing data
+            series = db.Series(series_id=data.id, title=data.title)  # todo add missing data
             series.source_id = source_id
             db.Session().add(series)
             db.Session().flush()

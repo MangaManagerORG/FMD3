@@ -426,7 +426,7 @@
                         <property name="text" translatable="yes">Title</property>
                         <property name="tree_column">true</property>
                         <property name="visible">true</property>
-                        <property name="width">450</property>
+                        <property name="width">400</property>
                       </object>
                     </child>
                     <child>
@@ -434,9 +434,10 @@
                         <property name="column_anchor">w</property>
                         <property name="heading_anchor">w</property>
                         <property name="stretch">true</property>
-                        <property name="text" translatable="yes">Current chapter</property>
+                        <property name="text" translatable="yes">Max chapter</property>
                         <property name="tree_column">false</property>
                         <property name="visible">true</property>
+                        <property name="width">75</property>
                       </object>
                     </child>
                     <child>
@@ -448,7 +449,7 @@
                         <property name="text" translatable="yes">Website</property>
                         <property name="tree_column">false</property>
                         <property name="visible">true</property>
-                        <property name="width">200</property>
+                        <property name="width">170</property>
                       </object>
                     </child>
                     <child>
@@ -527,6 +528,11 @@
                 </child>
               </object>
             </child>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Notebook.Tab" id="settings_tab" named="True">
+            <property name="text" translatable="yes">Settings</property>
           </object>
         </child>
       </object>

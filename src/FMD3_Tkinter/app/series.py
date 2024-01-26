@@ -1,9 +1,9 @@
 from io import BytesIO
+from tkinter import END, NW
 
 from PIL import ImageTk, Image
 
 from FMD3.api import get_series_info, query_series, get_chapters, get_source_chapters, get_cover, download_chapters
-from tkinter import END, NW
 
 
 def add_detail_entry(widget,data, title, data_key, tag=""):
@@ -100,7 +100,7 @@ class Series:
         response = get_cover(self.selected_source_id,cover_url)
         image_ = BytesIO(response.content)
         image = Image.open(image_)
-        image = image.resize((90, 160), Image.NEAREST)
+        image = image.resize((130, 200), Image.NEAREST)
         self.mainwindow.series_detail_cover_image = ImageTk.PhotoImage(image)
         print("image_loaded")
 

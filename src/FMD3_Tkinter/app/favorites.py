@@ -17,21 +17,17 @@ class Favourites:
         self.favourites_treeview.bind('<Button-1>', self.child_opened_fav_treeview)
         self.favourites_treeview.tag_configure('favourites_child_chapters', background='#B6B7B7')
         for series in series_list:
-            if series.chapters:
-                max_ch = max(series.chapters, key=lambda x: x.number).number
-            else:
-                max_ch = None
-            item_id = self.favourites_treeview.insert('', 'end', series.series_id, text=series.title, values=(max_ch
+            item_id = self.favourites_treeview.insert('', 'end', series.get("series_id"), text=series.get("title"), values=(series.get("max_chapter")
                                                                                                               ,
                                                                                                               get_source(
-                                                                                                                  source_id=series.source_id).get(
+                                                                                                                  source_id=series.get("source_id")).get(
                                                                                                                   "name"),
                                                                                                               "",
-                                                                                                              series.status,
-                                                                                                              series.dateadded,
-                                                                                                              series.datelastchecked,
-                                                                                                              series.datelastupdated,
-                                                                                                              series.source_id))
+                                                                                                              series.get("status"),
+                                                                                                              series.get("dateadded"),
+                                                                                                              series.get("datelastchecked"),
+                                                                                                              series.get("datelastupdated"),
+                                                                                                              series.get("source_id")))
             # self.favourites_treeview.insert('', 'end', f"{series.series_id}.chapters", values=(series.title, series.currentchapter))
             self.fav_tree_loaded_parents[item_id] = False
         self._detached_fav_filter = set()
@@ -61,14 +57,13 @@ class Favourites:
                 tree.detach(item_id)
 
     def child_opened_fav_treeview(self, *_):
-        item_id = self.favourites_treeview.focus()
-
+        series_id = self.favourites_treeview.focus()
         # Check if the item has been loaded
-        if not self.fav_tree_loaded_parents.get(item_id, False):
+        if not self.fav_tree_loaded_parents.get(series_id, False):
             # Load the children of the parent item
-            self.load_children(item_id)
+            self.load_children(series_id,)
             # Mark the parent as loaded
-            self.fav_tree_loaded_parents[item_id] = True
+            self.fav_tree_loaded_parents[series_id] = True
 
     def load_children(self, parent_id):
         # Simulate loading children from a data source

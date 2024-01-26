@@ -1,9 +1,9 @@
 import pathlib
 import tkinter as tk
 import pygubu
-
-from FMD3.api import get_sources, get_series_info
 from FMD3_Tkinter.app import App
+from FMD3.api import get_sources, get_series_info
+
 
 PROJECT_PATH = pathlib.Path(__file__).parent
 PROJECT_UI = PROJECT_PATH / "ui_test.ui"
@@ -40,6 +40,7 @@ class TkinterUI(App):
         chapters_treeview.tag_configure('downloaded', background='lime')
         chapters_treeview.tag_configure('not_downloaded', background='grey')
         self.series_detail_cover_image = None
+        self.mainwindow.state('zoomed')
         super().__init__()
 
     def on_source_selected(self,*_):

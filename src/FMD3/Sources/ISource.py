@@ -10,7 +10,6 @@ import FMD3.Core.database.models.SeriesCache
 from FMD3.Core.settings import Settings, SettingControl
 from FMD3.Core import database as db
 from FMD3.Models.SeriesInfo import SeriesInfo
-
 from FMD3.Sources.ISourceMethods import ISourceMethods
 from FMD3.Sources.ISourceNet import ISourceNet
 
@@ -48,14 +47,13 @@ class ISource(ISourceMethods, ISourceNet):
 
     @final
     def get_series_info(self, series_id) -> SeriesInfo | None:
-        series = db.Session().query(
-            FMD3.Core.database.models.SeriesCache.SeriesCache).filter_by(series_id=series_id).one_or_none()
+        series = db.Session().query(db.SeriesCache).filter_by(series_id=series_id).one_or_none()
         if not series:
             data = self.get_info(series_id)
             if not data:
                 return data
             try:
-                series = FMD3.Core.database.models.SeriesCache.SeriesCache.from_manga_info(data)
+                series = db.SeriesCache.from_manga_info(data)
                 db.Session().add(series)
                 db.Session().flush()
                 db.Session().commit()

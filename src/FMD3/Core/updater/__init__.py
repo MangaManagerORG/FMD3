@@ -41,7 +41,8 @@ def create_download_task(source: ISource, series: Series, chapters: list[Chapter
     for chapter in chapters:
         cinfo = series_info.to_comicinfo_with_chapter_data(chapter)
         output_file_path = make_output_path(series, chapter)
-
+        # output_file_path = series.save_to
+        # todo: get outputfile path from db series
         TaskManager().submit_series_chapter(source, series.series_id, chapter, output_file_path, cinfo)
 
 

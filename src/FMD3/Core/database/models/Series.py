@@ -15,15 +15,12 @@ class Series(Base):
     __tablename__ = 'series'
 
     # id = Column(Integer, autoincrement=True)
-    series_id = Column(Text, nullable=False, primary_key=True)
-    order = Column(Integer)
-    enabled = Column(Boolean)
-    source_id = Column(String(255))
-    link = Column(String(255))
-    title = Column(Text)
-    status = Column(SmallInteger)
-    currentchapter = Column(Integer)
-    save_to = Column(Text)
+    series_id = Column(Text, nullable=False, primary_key=True)  # Used
+    enabled = Column(Boolean)  # Used
+    source_id = Column(String(255),  nullable=False)  # Used
+    title = Column(Text, nullable=False)  # Used
+    status = Column(SmallInteger)  # Used
+    save_to = Column(Text)  # will be used
 
     dateadded = Column(DateTime, server_default=func.now())
     datelastchecked = Column(DateTime)

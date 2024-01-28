@@ -70,6 +70,7 @@ class TestCreateDownloadTask(unittest.TestCase):
         s.series_id = "series_a"
         s.source_id = source.ID
         s.enabled = True
+        s.save_to = "Series a Folder"
         ch_list = [source._debug_get_chapter(s.series_id, "sAcha_1"), source._debug_get_chapter(s.series_id, "sAcha_2")]
         create_download_task(source, s, ch_list)
         mock_submit_series_chapter.assert_called()
@@ -89,6 +90,7 @@ class TestNewChapterFinder(unittest.TestCase):
         s.series_id = "series_a"
         s.source_id = source.ID
         s.enabled = True
+        s.save_to = "Series a Folder"
         mock_session().add(s)
         mock_session().commit()
         # ch_list = [source._debug_get_chapter(s.series_id, "sAcha_1"), source._debug_get_chapter(s.series_id, "sAcha_2")]
@@ -105,6 +107,7 @@ class TestNewChapterFinder(unittest.TestCase):
         s.series_id = "series_b"
         s.source_id = source.ID
         s.enabled = True
+        s.save_to = "Series b Folder"
         mock_session().add(s)
         mock_session().commit()
         # Make chapter as if it were downloaded
@@ -136,6 +139,7 @@ class TestNewChapterFinder(unittest.TestCase):
         s.source_id = source.ID
         s.enabled = True
         s.status = SeriesStatus.FULLY_DOWNLOADED.value
+        s.save_to = "Series b Folder"
         mock_session().add(s)
         mock_session().commit()
         # Make chapter as if it were downloaded

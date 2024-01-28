@@ -20,7 +20,8 @@ def make_output_path(series: Series, chapter: Chapter):
     """
     # Get filenames and output file
     root_folder = Settings().get(Keys.DEFAULT_DOWNLOAD_PATH)
-    manga_folder_name = get_series_folder_name(manga=series.title)
+    # manga_folder_name = get_series_folder_name(manga=series.title)
+    manga_folder_name = series.save_to
     cbz_filename = get_chapter_name(manga=series.title,
                                     chapter=chapter.number) + ".cbz" # fm.make_filename(chapter, series.title)
 

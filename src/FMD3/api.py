@@ -3,6 +3,7 @@ import json
 from FMD3.Core import database as db
 from FMD3.Core.settings import Settings
 from FMD3.Core.updater import create_download_task
+from FMD3.Core.utils import make_output_path, get_series_folder_name
 from FMD3.Models.Chapter import Chapter
 from FMD3.Sources import get_source as sup_get_source, get_sources_list
 
@@ -144,6 +145,8 @@ def download_chapters(source_id: str, series_id: str, chapter_ids: list[str]):
         data = source.get_info(series_id)
         try:
             series = db.Series(series_id=data.id, title=data.title)  # todo add missing data
+            series.enabled = True
+            series.save_to = get_series_folder_name(manga=series.title)
             series.source_id = source_id
             db.Session().add(series)
             db.Session().flush()

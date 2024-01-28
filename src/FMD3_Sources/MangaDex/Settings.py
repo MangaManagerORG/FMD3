@@ -1,9 +1,9 @@
 from enum import StrEnum
 
-from FMD3.Core.settings.models.SettingControl import SettingControl, SettingControlType
+from FMD3.Core.settings import SettingKeys, SettingControl, SettingType
 
 
-class Keys(StrEnum):
+class Keys(SettingKeys):
     SelectedLanguage = "en"
 
     # LastDelay = "lastDelay"
@@ -15,10 +15,32 @@ class Keys(StrEnum):
 
     DATA_SAVER = "luadatasaver"
 
+
 controls = [
 
-    SettingControl(Keys.SelectedLanguage.value, "Selected Language",SettingControlType.Text, "en"),
-    SettingControl(Keys.MDEX_DELAY, "Delay (s) between requests", SettingControlType.Number),
-    SettingControl(Keys.REMOVE_TITLE,"Remove title from chapter",SettingControlType.Bool),
-    SettingControl(Keys.DATA_SAVER,"Use data saver", SettingControlType.Bool)
+    SettingControl.create(
+        key=Keys.SelectedLanguage,
+        name="Selected Language",
+        def_value="en",
+        type_=SettingType.Text
+    ),
+
+    SettingControl.create(
+        key=Keys.MDEX_DELAY,
+        name="Delay (s) between requests",
+        def_value=0,
+        type_=SettingType.Number
+    ),
+    SettingControl.create(
+        key=Keys.REMOVE_TITLE,
+        name="Remove title from chapter",
+        def_value=False,
+        type_=SettingType.Bool,
+    ),
+    SettingControl.create(
+        key=Keys.DATA_SAVER,
+        name="Use data saver",
+        def_value=False,
+        type_=SettingType.Bool
+    )
 ]

@@ -171,6 +171,8 @@ def get_langs():
 
 
 def get_rating(rating):
+    if not rating:
+        return None
     return str(rating).capitalize()
 
 

@@ -1,22 +1,20 @@
-import csv
 import logging
 import re
-import time
 from pathlib import Path
 
 import requests
 
-from FMD3.Core.settings.models.SettingSection import SettingSection
-from FMD3.Sources import add_extension, add_source
+from FMD3.Sources import add_source
+from FMD3.Sources.SearchResult import SearchResult
 from FMD3.Sources.ISource import ISource
 from FMD3.Models.Chapter import Chapter
-from FMD3.Models.MangaInfo import MangaInfo
+from FMD3.Models.SeriesInfo import SeriesInfo
 
 from .utils import get_demographic, get_rating, check_empty_chapters, check_group_id
 from .Settings import Keys, controls
 
 MANGAINFO = {}
-_API_URL = 'https://api.mangadex.dev'  # -- This is the url to the JSON API. Call this url to look at the API documentation.
+_API_URL = 'https://api.mangadex.org'  # -- This is the url to the JSON API. Call this url to look at the API documentation.
 _API_PARAMS = '?includes[]=author&includes[]=artist&includes[]=cover_art'
 _COVER_URL = 'https://uploads.mangadex.org/covers'
 _GUID_PATTERN = re.compile(r'.{8}-.{4}-.{4}-.{4}-.{12}')
@@ -54,6 +52,44 @@ def parse_manga_uuid(url):
     return manga_id
 
 
+# async def get_all_series_async(session: aiohttp.ClientSession) -> list[tuple[str, str]]:
+#     manga_names_link = []
+#     demographics = {1: 'shounen', 2: 'shoujo', 3: 'josei', 4: 'seinen', 5: 'none'}
+#     mangastatus = {1: 'ongoing', 2: 'completed', 3: 'hiatus', 4: 'cancelled'}
+#     contentrating = {1: 'safe', 2: 'suggestive', 3: 'erotica', 4: 'pornographic'}
+#
+#     for _, dg in demographics.items():
+#         for _, ms in mangastatus.items():
+#             for _, cr in contentrating.items():
+#                 total = 1
+#                 offset = 0
+#                 offmaxlimit = 0
+#                 order = 'asc'
+#                 while total > offset:
+#                     await asyncio.sleep(5)
+#                     if total > 10000 and offset >= 10000 and order == 'asc':
+#                         offset = 0
+#                         order = 'desc'
+#                     if offset < 10000:
+#                         async with session.get(
+#                                 f'{_API_URL}/manga?limit=500&offset={offset}&order[createdAt]={order}&publicationDemographic[]={dg}&status[]={ms}&contentRating[]={cr}'
+#                         ) as response:
+#                             if response.status == 200:
+#                                 data = await response.json()
+#                                 total = data["total"]
+#                                 offset = offset + data["limit"]
+#                                 manga_names_link.extend(
+#                                     [(item["attributes"]["title"]["en"], item["id"]) for item in data["data"]]
+#
+#                                 )
+#                     elif offset >= 10000:
+#                         offmaxlimit = total - 10000
+#                         print(f'Total Over Max Limit: {offmaxlimit} are over the max limit!')
+#
+#     # todo: handle errors
+#     return manga_names_link
+
+
 class MangaDex(ISource):
     ID = 'd07c9c2425764da8ba056505f57cf40c'
     NAME = 'MangaDex'
@@ -63,7 +99,7 @@ class MangaDex(ISource):
     MaxTaskLimit = 1
 
     def init_settings(self):
-        self.settings = [SettingSection(self.__class__.__name__, self.__class__.__name__, controls)]
+        self.settings = controls
         if Path(_MAPPING_FILE).exists():
             with open(_MAPPING_FILE, 'r') as mapping_file:
                 for line in mapping_file:
@@ -101,17 +137,19 @@ class MangaDex(ISource):
             data = r.json()
             total = data["total"]
             if not data["data"]:
-                logging.getLogger(__name__).error("Request did not provide data.", extra={"request": r, "request": r.request, "data":r.json()})
+                logging.getLogger(__name__).error("Request did not provide data.",
+                                                  extra={"request": r, "request": r.request, "data": r.json()})
                 return []
 
             for chapter in data["data"]:
                 if check_empty_chapters(chapter["attributes"]) and check_group_id(
                         filter(lambda x: x["type"] == "scanlation_group", chapter["relationships"])):
                     if chapter["attributes"]["chapter"] is None:
-                        logging.getLogger(__name__).warning(f"Skipping chapter '{chapter['id']}' - Mid: '{manga_id}' - Number field is None")
+                        logging.getLogger(__name__).warning(
+                            f"Skipping chapter '{chapter['id']}' - Mid: '{manga_id}' - Number field is None")
                         continue
                     try:
-                        ch = Chapter(id=chapter["id"],
+                        ch = Chapter(chapter_id=chapter["id"],
                                      volume=chapter["attributes"]["volume"],
                                      number=float(chapter["attributes"]["chapter"]),
                                      title=chapter["attributes"]["title"],
@@ -132,68 +170,26 @@ class MangaDex(ISource):
 
     """SeriesMethods"""
 
-    @staticmethod
-    def get_all_series() -> list[tuple[str, str]]:
-        """
-        Gets all series names from a source and their id
-
-        :return: Tuple containing series name and series id
-        """
-        manga_names_link: list[tuple[str, str]] = []
-        demographics = {
-            1: 'shounen',
-            2: 'shoujo',
-            3: 'josei',
-            4: 'seinen',
-            5: 'none'
-        }
-        mangastatus = {
-            1: 'ongoing',
-            2: 'completed',
-            3: 'hiatus',
-            4: 'cancelled'
-        }
-        contentrating = {
-            1: 'safe',
-            2: 'suggestive',
-            3: 'erotica',
-            4: 'pornographic'
-        }
-        # Delay this task if configured:
-        for _, dg in demographics.items():
-            for _, ms in mangastatus.items():
-                for _, cr in contentrating.items():
-                    total = 1
-                    offset = 0
-                    offmaxlimit = 0
-                    order = 'asc'
-                    while total > offset:
-                        time.sleep(5)
-                        if total > 10000 and offset >= 10000 and order == 'asc':
-                            offset = 0
-                            order = 'desc'
-                        if offset < 10000:
-                            response = requests.get(_API_URL + '/manga?limit=200&offset=' + str(
-                                offset) + '&order[createdAt]=' + order + '&publicationDemographic[]=' + dg + '&status[]=' + ms + '&contentRating[]=' + cr)
-                            if response.status_code == 200:
-                                # UPDATELIST.UpdateStatusText('Loading page of ' + dg + '/' + ms + '/' + cr + ' (' + order + ')' or '')
-                                # x = CreateTXQuery(crypto.HTMLEncode(response.text))
-
-                                data = response.json()
-                                total = data["total"]
-                                offset = offset + data["limit"]
-                                manga_names_link.extend(
-                                    [(item["attributes"]["title"]["en"], item["id"]) for item in data["data"]])
-                        elif offset >= 10000:
-                            offmaxlimit = total - 10000
-                            print('Total Over Max Limit: ' + str(offmaxlimit) + ' are over the max limit!')
-
-                        # todo: handle errors
-
-        return manga_names_link
+    # @staticmethod
+    # def get_all_series():
+    #     # Create an event loop for running the asynchronous function
+    #     loop = asyncio.new_event_loop()
+    #     asyncio.set_event_loop(loop)
+    #
+    #     # Create an aiohttp session
+    #     async def run_async():
+    #         async with aiohttp.ClientSession() as session:
+    #             return await get_all_series_async(session)
+    #
+    #     result = loop.run_until_complete(run_async())
+    #
+    #     # Close the event loop
+    #     loop.close()
+    #
+    #     return result
 
     @staticmethod
-    def get_info(url) -> MangaInfo:
+    def get_info(url) -> SeriesInfo | None:
         # # Extract Manga ID which is needed for getting info and chapter list:
         # mid = URL.split('title/')[1] if 'title/' in URL else URL.split('manga/')[1]
 
@@ -206,10 +202,13 @@ class MangaDex(ISource):
         data = r.json()["data"]
 
         attributes = data["attributes"]
-        mi = MangaInfo()
+        mi = SeriesInfo()
         mi.id = manga_id
         mi.title = attributes["title"]["en"]
-        mi.alt_titles = attributes["altTitles"]
+        mi.alt_titles = []
+        for item in attributes["altTitles"]:
+            for key in item:
+                mi.alt_titles.append(item[key])
         mi.description = attributes["description"]["en"]
         mi.authors = list(author_data["attributes"]["name"] for author_data in
                           filter(lambda x: x["type"] == "author", data["relationships"]))
@@ -262,6 +261,25 @@ class MangaDex(ISource):
         # TODO: handle errors
         return links
 
+    def find_series(self, search_title) -> list[SearchResult]:
+        query = f"https://api.mangadex.org/manga?limit=10&title={search_title}&includedTagsMode=AND&excludedTagsMode=OR&contentRating%5B%5D=safe&contentRating%5B%5D=suggestive&contentRating%5B%5D=erotica&order%5BlatestUploadedChapter%5D=desc&includes%5B%5D=manga&includes%5B%5D=cover_art"
+        response = self.session.get(query)
+        if response.status_code == 200:
+            data = response.json()["data"]
+            return [SearchResult(
+                series_id=result["id"],
+                title=result["attributes"]["title"]["en"],
+                loc_title="",
+                year=result["attributes"]["year"],
+                cover_url="https://uploads.mangadex.org/covers/" + result["id"] + "/" +
+                          list(filter(lambda x: x["type"] == "cover_art", result["relationships"]))[0]["attributes"][
+                              "fileName"]
+            )
+                for result in data]
+
+        else:
+            # Handle non-200 status code
+            return []
 
 if __name__ == '__main__':
     MangaDex()

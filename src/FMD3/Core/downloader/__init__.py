@@ -166,7 +166,7 @@ def analyze_archive(output_file_path, series_id, chapter:Chapter) -> bool:
                                       os.path.splitext(file)[1].lower() in [".webp", ".jpg", ".png", ".xml"]])
             if n_images_and_cinfo == chapter.pages + 1:
                 logger.warning(
-                    f"File '{output_file_path}' - series '{series_id}' chapter number '{chapter.number}' chapter id '{chapter.id}' is apparently already downloaded. Skipping with status 4")
+                    f"File '{output_file_path}' - series '{series_id}' chapter number '{chapter.number}' chapter id '{chapter.chapter_id}' is apparently already downloaded. Skipping with status 4")
                 return True
     return False
 
@@ -190,9 +190,9 @@ def download_series_chapter(source: ISource, series_id, chapter: Chapter, output
     try:
         # Check file is not downloaded:
         if analyze_archive(output_file_path, series_id, chapter):
-            return series_id, chapter.id, DLDChaptersStatus.SKIPPED
+            return series_id, chapter.chapter_id, DLDChaptersStatus.SKIPPED
 
-        image_url_list = source.get_page_urls_for_chapter(chapter.id)
+        image_url_list = source.get_page_urls_for_chapter(chapter.chapter_id)
         try:
             tasks = asyncio.run(download_n_pack_pages(output_file_path, image_url_list))
             with ZipFile(output_file_path, "w") as zout:
@@ -203,11 +203,11 @@ def download_series_chapter(source: ISource, series_id, chapter: Chapter, output
         except Exception as e:
             logger.exception(f"Unhandled exception. Cleaning up files: {e}")
             cleanup_files(output_file_path)
-            return series_id, chapter.id, DLDChaptersStatus.ERRORED
+            return series_id, chapter.chapter_id, DLDChaptersStatus.ERRORED
 
     except Exception as e:
         logger.exception(f"Unhandled exception. Cleaning up files: {e}")
         cleanup_files(output_file_path)
 
-        return series_id, chapter.id, DLDChaptersStatus.ERRORED
-    return series_id, chapter.id, DLDChaptersStatus.DOWNLOADED
+        return series_id, chapter.chapter_id, DLDChaptersStatus.ERRORED
+    return series_id, chapter.chapter_id, DLDChaptersStatus.DOWNLOADED

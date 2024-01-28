@@ -134,7 +134,7 @@ class TestSource(ISource):
         for series in test_data:
             if series == series_id:
                 return [Chapter(
-                    id=chapter["id"],
+                    chapter_id=chapter["id"],
                     title="",
                     number=chapter["number"],
                     volume=chapter["volume"],
@@ -145,13 +145,13 @@ class TestSource(ISource):
 
     def _debug_get_chapter(self, series_id, chapter_id) -> Chapter | None:
 
-        filtered_chapter = list(filter(lambda x: x.id == chapter_id, self.get_chapters(series_id=series_id)))
+        filtered_chapter = list(filter(lambda x: x.chapter_id == chapter_id, self.get_chapters(series_id=series_id)))
         if filtered_chapter:
             return filtered_chapter[0]
         return None
 
     def get_queried_chapters(self, series_id, chapters_ids: list[DLDChapters]):
-        return list(filter(lambda x: x.id in chapters_ids, self.get_chapters(series_id)))
+        return list(filter(lambda x: x.chapter_id in chapters_ids, self.get_chapters(series_id)))
 
     ID = "TESTSOURCE"
     NAME = "TESTSOURCE"

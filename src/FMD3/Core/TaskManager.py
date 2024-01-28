@@ -50,10 +50,10 @@ class TaskManager:
     def submit_series_chapter(self, source, series_id, chapter, path, cinfo, *args, **kwargs):
         # Check chapter is not fully downloaded
         # Check if chapter is not in active tasks
-        if f"{series_id}/{chapter.id}" not in self.active_tasks:
-            if not chapter_exists(series_id, chapter.id):
+        if f"{series_id}/{chapter.chapter_id}" not in self.active_tasks:
+            if not chapter_exists(series_id, chapter.chapter_id):
                 ret = database.DLDChapters()
-                ret.chapter_id = chapter.id
+                ret.chapter_id = chapter.chapter_id
                 ret.series_id = series_id
                 ret.number = chapter.number
                 ret.title = chapter.title
@@ -63,20 +63,20 @@ class TaskManager:
                 database.Session().add(ret)
                 database.Session().commit()
             elif dbchapter := database.Session().query(DLDChapters).filter_by(series_id=series_id,
-                                                                      chapter_id=chapter.id).one():
+                                                                      chapter_id=chapter.chapter_id).one():
                 if dbchapter:
                     chapter_status = DLDCS(dbchapter.status)
                     if chapter_status in [DLDCS.DOWNLOADED, DLDCS.SKIPPED, DLDCS.ERRORED]:
                         # Assume chapter is already downloaded, skipped or failed
-                        logging.getLogger(__name__).debug(f"Aborting task -> '{chapter_status}' chapter id: '{chapter.id}'")
+                        logging.getLogger(__name__).debug(f"Aborting task -> '{chapter_status}' chapter id: '{chapter.chapter_id}'")
                         return
 
             logging.getLogger(__name__).info(f"Adding download task for {series_id} . Ch.{chapter.number}")
-            self.active_tasks.add(f"{series_id}/{chapter.id}")
+            self.active_tasks.add(f"{series_id}/{chapter.chapter_id}")
             future = self.__TPE.submit(exception_handler, download_series_chapter, source, series_id, chapter, path,
                                        cinfo, *args, **kwargs)
             future.add_done_callback(self.commit)
         else:
             logging.getLogger(__name__).info(
-                f"Chapter id {chapter.id}, number {chapter.number} is registered in db. Skipping")
+                f"Chapter id {chapter.chapter_id}, number {chapter.number} is registered in db. Skipping")
             ...

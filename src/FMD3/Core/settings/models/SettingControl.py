@@ -4,10 +4,10 @@ from typing import Callable
 
 
 class SettingControlType(Enum):
-    Bool = 0,
-    Text = 1,
-    Options = 2,
-    Number = 3,
+    Bool = 0
+    Text = 1
+    Options = 2
+    Number = 3
     Radio = 4
 
 

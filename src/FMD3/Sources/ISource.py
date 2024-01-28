@@ -28,11 +28,11 @@ class ISource(ISourceMethods,ISourceNet):
 
     @final
     def get_setting(self, setting_key):
-        return Settings().get(SOURCES_SECTIONS_PREFIX + self.__class__.__name__, setting_key)
+        return Settings().get(setting_key)
 
     @final
     def set_setting(self, setting_key, value):
-        return Settings().set(SOURCES_SECTIONS_PREFIX + self.__class__.__name__, setting_key, value)
+        return Settings().set(setting_key, value)
 
     @final
     def __init__(self):

@@ -99,7 +99,7 @@ class TkinterUI(App):
     def track_setting(self, key, link_to=None):
         var = self.builder.get_variable(key)
         # Set the StringVar's value to the initial value of the corresponding attribute
-        var.set(self.settings.get(key).get("value"))
+        var.set(self.settings["Core"].get(key).get("value"))
         # Set up the trace on the StringVar to call a callback when it changes
         var.trace_add("write", lambda *args: self.update_attribute(key, var, link_to))
 

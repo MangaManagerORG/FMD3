@@ -840,20 +840,24 @@
                                 </child>
                               </object>
                             </child>
-                            <child>
-                              <object class="ttk.Button" id="button4">
-                                <property name="command" type="command" cbtype="simple">apply_settings</property>
-                                <property name="text" translatable="yes">Apply</property>
-                                <layout manager="pack">
-                                  <property name="anchor">sw</property>
-                                  <property name="side">top</property>
-                                </layout>
-                              </object>
-                            </child>
                           </object>
                         </child>
                       </object>
                     </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="ttk.Button" id="button4">
+                    <property name="command" type="command" cbtype="simple">apply_settings</property>
+                    <property name="text" translatable="yes">Apply</property>
+                    <layout manager="pack">
+                      <property name="anchor">sw</property>
+                      <property name="ipadx">20</property>
+                      <property name="ipady">10</property>
+                      <property name="padx">20</property>
+                      <property name="pady">20</property>
+                      <property name="side">top</property>
+                    </layout>
                   </object>
                 </child>
               </object>

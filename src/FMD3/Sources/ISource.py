@@ -15,8 +15,7 @@ from FMD3.Sources.ISourceNet import ISourceNet
 SOURCES_SECTIONS_PREFIX = "source_"
 
 
-
-class ISource(ISourceMethods,ISourceNet):
+class ISource(ISourceMethods, ISourceNet):
     ...
     ID = None
     NAME = None
@@ -28,11 +27,11 @@ class ISource(ISourceMethods,ISourceNet):
 
     @final
     def get_setting(self, setting_key):
-        return Settings().get(setting_key)
+        return Settings().get_value(self.NAME, setting_key)
 
     @final
     def set_setting(self, setting_key, value):
-        return Settings().set(setting_key, value)
+        return Settings().set_value(self.NAME, setting_key, value)
 
     @final
     def __init__(self):
@@ -43,10 +42,10 @@ class ISource(ISourceMethods,ISourceNet):
         self.settings: list[SettingControl] | None = []
         self.init_settings()
 
-        Settings().load_defaults(self.settings)
+        Settings().load_defaults(self.NAME, self.settings)
 
     @final
-    def get_series_info(self, series_id) -> SeriesInfo|None:
+    def get_series_info(self, series_id) -> SeriesInfo | None:
         series = db.Session().query(db.SeriesCache).filter_by(series_id=series_id).one_or_none()
         if not series:
             data = self.get_info(series_id)
@@ -71,5 +70,3 @@ class ISource(ISourceMethods,ISourceNet):
                 db.Session().flush()
                 db.Session().commit()
         return series.series_info
-
-

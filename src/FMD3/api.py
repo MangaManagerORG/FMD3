@@ -1,4 +1,7 @@
+import json
+
 from FMD3.Core import database as db
+from FMD3.Core.settings import Settings
 from FMD3.Core.updater import create_download_task
 from FMD3.Models.Chapter import Chapter
 from FMD3.Sources import get_source as sup_get_source, get_sources_list
@@ -14,7 +17,8 @@ def get_series():
             "link": series.link,
             "title": series.title,
             "status": series.status,
-            "max_chapter": None if not series.chapters else max(series.chapters, key=lambda x: x.number,default=0).number,
+            "max_chapter": None if not series.chapters else max(series.chapters, key=lambda x: x.number,
+                                                                default=0).number,
             "save_to": series.save_to,
             "dateadded": series.dateadded,
             "datelastchecked": series.datelastchecked,
@@ -117,10 +121,11 @@ def query_series(source_id, series_query):
 
 
 def get_sources():
-    return [{
-        "id": source.ID,
-        "name": source.NAME
-    }
+    return [
+        {
+            "id": source.ID,
+            "name": source.NAME
+        }
         for source in get_sources_list()
     ]
 
@@ -147,3 +152,12 @@ def download_chapters(source_id: str, series_id: str, chapter_ids: list[str]):
             # logging.getLogger().error("Error creating series")
             db.Session().rollback()
     create_download_task(source, series, chapters)
+
+
+def get_settings():
+    return Settings().to_json()
+
+
+def update_settings(new_settings):
+    new_set = json.loads(new_settings)
+    Settings().update(new_set)

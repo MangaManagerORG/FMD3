@@ -59,3 +59,11 @@ class Settings:
             if control.key.value not in self._settings_dict:
                 self.add_control(control)
         self.save()
+
+    def update(self, new_dict):
+        for key in new_dict:
+            if key in self._settings_dict:
+                self._settings_dict[key]["value"] = new_dict[key]["value"]
+        self.save()
+    def to_json(self):
+        return json.dumps(self._settings_dict)

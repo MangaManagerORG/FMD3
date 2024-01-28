@@ -115,4 +115,4 @@ class Series:
         chapters_treeview = self.builder.get_object("selected_series_chapter_treeview")
         to_download_ids = chapters_treeview.selection()
         to_download_series = self.selected_series_id
-        download_chapters(self.selected_source_id, to_download_series, to_download_ids)
+        download_chapters(self.selected_source_id, to_download_series, to_download_ids) # Todo save to

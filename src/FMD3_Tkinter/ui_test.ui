@@ -2,14 +2,14 @@
 <interface version="1.3">
   <object class="tk.Tk" id="tk1">
     <property name="height">200</property>
-    <property name="padx">30</property>
-    <property name="pady">30</property>
+    <property name="padx">2</property>
+    <property name="pady">2</property>
     <property name="resizable">both</property>
     <property name="width">200</property>
     <child>
       <object class="ttk.Notebook" id="notebook_widget" named="True">
-        <property name="height">400</property>
-        <property name="width">600</property>
+        <property name="height">800</property>
+        <property name="width">1000</property>
         <layout manager="pack">
           <property name="expand">true</property>
           <property name="fill">both</property>
@@ -190,6 +190,9 @@
                       <property name="fill">both</property>
                       <property name="side">right</property>
                     </layout>
+                    <containerlayout manager="pack">
+                      <property name="propagate">false</property>
+                    </containerlayout>
                     <child>
                       <object class="ttk.Frame" id="frame14">
                         <property name="height">200</property>
@@ -318,15 +321,54 @@
                         <property name="height">200</property>
                         <property name="width">200</property>
                         <layout manager="pack">
+                          <property name="fill">x</property>
                           <property name="side">top</property>
                         </layout>
                         <child>
-                          <object class="ttk.Button" id="button3">
-                            <property name="command" type="command" cbtype="simple">download_selected_chapters</property>
-                            <property name="text" translatable="yes">Download selected</property>
+                          <object class="ttk.Frame" id="frame22">
+                            <property name="height">200</property>
+                            <property name="width">200</property>
                             <layout manager="pack">
-                              <property name="side">top</property>
+                              <property name="anchor">w</property>
+                              <property name="fill">x</property>
+                              <property name="side">left</property>
                             </layout>
+                            <child>
+                              <object class="ttk.Label" id="label5">
+                                <property name="text" translatable="yes">Save to:	</property>
+                                <layout manager="pack">
+                                  <property name="side">top</property>
+                                </layout>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="ttk.Entry" id="entry5">
+                                <layout manager="pack">
+                                  <property name="expand">true</property>
+                                  <property name="fill">x</property>
+                                  <property name="side">left</property>
+                                </layout>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="ttk.Frame" id="frame21">
+                            <property name="height">200</property>
+                            <property name="width">200</property>
+                            <layout manager="pack">
+                              <property name="anchor">e</property>
+                              <property name="side">right</property>
+                            </layout>
+                            <child>
+                              <object class="ttk.Button" id="button3">
+                                <property name="command" type="command" cbtype="simple">download_selected_chapters</property>
+                                <property name="text" translatable="yes">Download selected</property>
+                                <layout manager="pack">
+                                  <property name="side">right</property>
+                                </layout>
+                              </object>
+                            </child>
                           </object>
                         </child>
                       </object>
@@ -533,6 +575,289 @@
         <child>
           <object class="ttk.Notebook.Tab" id="settings_tab" named="True">
             <property name="text" translatable="yes">Settings</property>
+            <child>
+              <object class="ttk.Frame" id="frame2">
+                <property name="height">200</property>
+                <property name="width">200</property>
+                <layout manager="pack">
+                  <property name="side">top</property>
+                </layout>
+                <child>
+                  <object class="ttk.Notebook" id="notebook1">
+                    <property name="height">200</property>
+                    <property name="width">200</property>
+                    <layout manager="pack">
+                      <property name="expand">true</property>
+                      <property name="fill">both</property>
+                      <property name="side">top</property>
+                    </layout>
+                    <child>
+                      <object class="ttk.Notebook.Tab" id="tab1">
+                        <property name="sticky">new</property>
+                        <property name="text" translatable="yes">General</property>
+                        <child>
+                          <object class="ttk.Frame" id="frame6">
+                            <property name="height">200</property>
+                            <property name="padding">5 10 5 10</property>
+                            <property name="width">200</property>
+                            <layout manager="pack">
+                              <property name="anchor">nw</property>
+                              <property name="side">top</property>
+                            </layout>
+                            <child>
+                              <object class="ttk.Label" id="label2">
+                                <property name="text" translatable="yes">Language</property>
+                                <layout manager="pack">
+                                  <property name="anchor">w</property>
+                                  <property name="side">top</property>
+                                </layout>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="ttk.Combobox" id="combobox1">
+                                <layout manager="pack">
+                                  <property name="anchor">w</property>
+                                  <property name="side">top</property>
+                                </layout>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="ttk.Label" id="label3">
+                                <property name="text" translatable="yes">After download finishes</property>
+                                <layout manager="pack">
+                                  <property name="anchor">w</property>
+                                  <property name="side">top</property>
+                                </layout>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="ttk.Notebook.Tab" id="tab4">
+                        <property name="text" translatable="yes">Save to</property>
+                        <child>
+                          <object class="ttk.Frame" id="frame15">
+                            <property name="height">200</property>
+                            <property name="padding">5 10 5 10</property>
+                            <property name="width">200</property>
+                            <layout manager="pack">
+                              <property name="anchor">nw</property>
+                              <property name="ipady">10</property>
+                              <property name="pady">10</property>
+                              <property name="side">top</property>
+                            </layout>
+                            <child>
+                              <object class="ttk.Label" id="label4">
+                                <property name="text" translatable="yes">Choose the default download path:</property>
+                                <layout manager="pack">
+                                  <property name="anchor">nw</property>
+                                  <property name="side">top</property>
+                                </layout>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="pygubu.builder.widgets.pathchooserinput" id="pathchooserinput1">
+                                <property name="mustexist">true</property>
+                                <property name="textvariable">string:default_downloads_path</property>
+                                <property name="type">directory</property>
+                                <layout manager="pack">
+                                  <property name="anchor">nw</property>
+                                  <property name="expand">false</property>
+                                  <property name="fill">x</property>
+                                  <property name="side">top</property>
+                                </layout>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="ttk.Labelframe" id="labelframe1">
+                                <property name="height">200</property>
+                                <property name="text" translatable="yes">Save downloaded chapters as</property>
+                                <property name="width">200</property>
+                                <layout manager="pack">
+                                  <property name="anchor">nw</property>
+                                  <property name="expand">false</property>
+                                  <property name="fill">x</property>
+                                  <property name="side">top</property>
+                                </layout>
+                                <child>
+                                  <object class="ttk.Radiobutton" id="radiobutton4">
+                                    <property name="text" translatable="yes">CBZ</property>
+                                    <layout manager="pack">
+                                      <property name="anchor">w</property>
+                                      <property name="side">top</property>
+                                    </layout>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="ttk.Labelframe" id="labelframe2">
+                                <property name="height">200</property>
+                                <property name="text" translatable="yes">Renaming</property>
+                                <property name="width">200</property>
+                                <layout manager="pack">
+                                  <property name="anchor">nw</property>
+                                  <property name="expand">false</property>
+                                  <property name="fill">x</property>
+                                  <property name="side">top</property>
+                                </layout>
+                                <child>
+                                  <object class="ttk.Frame" id="frame18">
+                                    <property name="height">200</property>
+                                    <property name="width">200</property>
+                                    <layout manager="pack">
+                                      <property name="anchor">w</property>
+                                      <property name="side">top</property>
+                                    </layout>
+                                    <child>
+                                      <object class="ttk.Checkbutton" id="checkbutton1">
+                                        <property name="text" translatable="yes">Replace all unicode characters with</property>
+                                        <property name="variable">boolean:replace_unicode</property>
+                                        <layout manager="pack">
+                                          <property name="anchor">w</property>
+                                          <property name="side">left</property>
+                                        </layout>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="ttk.Entry" id="replace_unicode_char_with_entry" named="True">
+                                        <property name="textvariable">string:replace_unicode_with</property>
+                                        <layout manager="pack">
+                                          <property name="side">right</property>
+                                        </layout>
+                                      </object>
+                                    </child>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="ttk.Checkbutton" id="checkbutton2">
+                                    <property name="text" translatable="yes">Auto generate folder based on manga's name</property>
+                                    <property name="variable">boolean:generate_series_folder</property>
+                                    <layout manager="pack">
+                                      <property name="anchor">w</property>
+                                      <property name="side">top</property>
+                                    </layout>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="ttk.Label" id="label6">
+                                    <property name="text" translatable="yes">Manga folder name:</property>
+                                    <layout manager="pack">
+                                      <property name="anchor">w</property>
+                                      <property name="side">top</property>
+                                    </layout>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="ttk.Entry" id="manga_folder_name_entry" named="True">
+                                    <property name="textvariable">string:series_folder_name</property>
+                                    <layout manager="pack">
+                                      <property name="anchor">w</property>
+                                      <property name="side">top</property>
+                                    </layout>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="ttk.Label" id="label7">
+                                    <property name="text" translatable="yes">Chapter name:</property>
+                                    <layout manager="pack">
+                                      <property name="anchor">w</property>
+                                      <property name="side">top</property>
+                                    </layout>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="ttk.Entry" id="entry4">
+                                    <property name="textvariable">string:chapter_name</property>
+                                    <layout manager="pack">
+                                      <property name="anchor">w</property>
+                                      <property name="side">top</property>
+                                    </layout>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="ttk.Label" id="label8">
+                                    <property name="text" translatable="yes">Rename digits</property>
+                                    <layout manager="pack">
+                                      <property name="anchor">w</property>
+                                      <property name="side">top</property>
+                                    </layout>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="ttk.Frame" id="frame20">
+                                    <property name="height">200</property>
+                                    <property name="width">200</property>
+                                    <layout manager="pack">
+                                      <property name="anchor">w</property>
+                                      <property name="side">top</property>
+                                    </layout>
+                                    <child>
+                                      <object class="ttk.Checkbutton" id="checkbutton5">
+                                        <property name="text" translatable="yes">Volume</property>
+                                        <property name="variable">boolean:rename_chapter_digits_volume</property>
+                                        <layout manager="pack">
+                                          <property name="side">left</property>
+                                        </layout>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="ttk.Spinbox" id="rename_volume_digits_spinbox" named="True">
+                                        <property name="from_">1</property>
+                                        <property name="increment">1</property>
+                                        <property name="textvariable">int:rename_chapter_digits_volume_value</property>
+                                        <property name="to">4</property>
+                                        <property name="width">5</property>
+                                        <layout manager="pack">
+                                          <property name="side">left</property>
+                                        </layout>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="ttk.Checkbutton" id="checkbutton6">
+                                        <property name="text" translatable="yes">Chapter</property>
+                                        <property name="variable">boolean:rename_chapter_digits_chapter</property>
+                                        <layout manager="pack">
+                                          <property name="side">left</property>
+                                        </layout>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="ttk.Spinbox" id="rename_chapter_digits_spinbox" named="True">
+                                        <property name="from_">1</property>
+                                        <property name="increment">1</property>
+                                        <property name="textvariable">int:rename_chapter_digits_chapter_value</property>
+                                        <property name="to">5</property>
+                                        <property name="width">5</property>
+                                        <layout manager="pack">
+                                          <property name="side">left</property>
+                                        </layout>
+                                      </object>
+                                    </child>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="ttk.Button" id="button4">
+                                <property name="command" type="command" cbtype="simple">apply_settings</property>
+                                <property name="text" translatable="yes">Apply</property>
+                                <layout manager="pack">
+                                  <property name="anchor">sw</property>
+                                  <property name="side">top</property>
+                                </layout>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
           </object>
         </child>
       </object>

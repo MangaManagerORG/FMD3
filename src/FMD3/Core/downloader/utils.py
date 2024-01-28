@@ -1,16 +1,11 @@
 import logging
-import urllib
 from pathlib import Path
 from zipfile import ZipFile
-
 from ComicInfo import ComicInfo
-
-from FMD3.Models.Chapter import Chapter
-from FMD3.Models.SeriesInfo import SeriesInfo
 
 NUM_THREADS = 10
 DL_FOLDER = "test_download_lib"
-from FMD3.Core.database import Session
+
 
 logger = logging.getLogger(__name__)
 

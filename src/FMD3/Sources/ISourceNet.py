@@ -3,7 +3,6 @@ Contains interface to configure source net settings
 """
 import requests
 # from aiohttp import ClientSession, TCPConnector
-import asyncio
 
 
 class ISourceNet:

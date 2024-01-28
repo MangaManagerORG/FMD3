@@ -1,68 +1,12 @@
 import json
-import logging
-from enum import StrEnum, Enum
 from pathlib import Path
+
+from ._SettingsDefault import default_settings
 
 _json_file = Path("config/" + "settings.json")
 
-
-class SettingKeys(StrEnum):
-    ...
-
-
-class SettingType(Enum):
-    Bool = 0
-    Text = 1
-    Options = 2
-    Number = 3
-    Radio = 4
-
-
-class SettingControl:
-
-    def __init__(self):
-        self.key = None
-        self.values = None
-        self.def_value = None
-        self.tooltip = None
-        self.type = None
-        self.name = None
-        self.value = None
-
-    @classmethod
-    def create(cls, key: SettingKeys, name, tooltip, value, def_value, values: list[str], type_: SettingType):
-        ret = cls()
-        ret.key = key
-        ret.name = name
-        ret.value = value or def_value
-        ret.tooltip = tooltip
-        ret.def_value = def_value
-        ret.values = values
-        ret.type = type_
-        return ret
-
-    def to_dict(self):
-        return {
-            "key": self.key,
-            "name": self.name,
-            "value": self.value,
-            "type": self.type.value,
-            "tooltip": self.tooltip,
-            "def_value": self.def_value,
-            "values": self.values
-        }
-
-    @classmethod
-    def from_dict(cls, dict_):
-        ret = cls()
-        ret.key = dict_["key"]
-        ret.name = dict_["name"]
-        ret.value = dict_["value"]
-        ret.type = dict_["type"]
-        ret.tooltip = dict_["tooltip"]
-        ret.def_value = dict_["def_value"]
-        ret.values = dict_["values"]
-        return ret
+from .settings_enums import SettingKeys
+from .setting_control import SettingControl
 
 
 class Settings:
@@ -77,6 +21,7 @@ class Settings:
             if not Settings._config_file.exists():
                 Settings.__instance.save()
             Settings.__instance.load()
+            Settings.__instance.load_defaults(default_settings)
 
         return Settings.__instance
 
@@ -96,6 +41,11 @@ class Settings:
             raise Exception("Control not found")
         self._settings_dict[key.value]["value"] = value
 
+    def get(self, key: SettingKeys):
+        if self._settings_dict.get(key.value, None) is None:
+            raise Exception("Control not found")
+        return self._settings_dict[key.value].get("value", self._settings_dict[key.value].get("def_value", None))
+
     def save(self):
         with open(self._config_file, "w") as f:
             json.dump(self._settings_dict, f)
@@ -108,3 +58,4 @@ class Settings:
         for control in default_controls:
             if control.key.value not in self._settings_dict:
                 self.add_control(control)
+        self.save()

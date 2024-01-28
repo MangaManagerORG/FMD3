@@ -1,7 +1,7 @@
 import logging
 import threading
 
-from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor
+from concurrent.futures import ProcessPoolExecutor
 
 from FMD3.Core import database
 from FMD3.Core.database import DLDChapters

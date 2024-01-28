@@ -2,7 +2,7 @@ import unittest
 from pathlib import Path
 
 from FMD3.Core.settings import Settings
-from FMD3.Core.settings.Keys import General, SaveTo
+from FMD3.Core.settings import Keys
 from FMD3.Core.utils import get_series_folder_name, get_chapter_name
 from FMD3.errors import TemplateMissingTag
 
@@ -13,8 +13,8 @@ class TestTemplatesFolderName(unittest.TestCase):
         Tests that the folder name for a given series is created successfully from the user preferences input
         Returns:
         """
-        Settings().set(SaveTo, SaveTo.DEFAULT_DOWNLOAD_PATH, ".")
-        Settings().set(SaveTo, SaveTo.SERIES_FOLDER_NAME, "${MANGA}")
+        Settings().set(Keys.DEFAULT_DOWNLOAD_PATH, ".")
+        Settings().set(Keys.SERIES_FOLDER_NAME, "${MANGA}")
 
         folder_name = get_series_folder_name(website="website", manga="manga", author="author", artist="artist")
 
@@ -26,8 +26,8 @@ class TestTemplatesFolderName(unittest.TestCase):
         Returns:
 
         """
-        Settings().set(SaveTo, SaveTo.DEFAULT_DOWNLOAD_PATH, ".")
-        Settings().set(SaveTo, SaveTo.SERIES_FOLDER_NAME, "${WEBSITE}")
+        Settings().set(Keys.DEFAULT_DOWNLOAD_PATH, ".")
+        Settings().set(Keys.SERIES_FOLDER_NAME, "${WEBSITE}")
         self.assertRaises(TemplateMissingTag, get_series_folder_name, website="website", manga="manga", author="author",
                           artist="artist")
 
@@ -39,8 +39,8 @@ class TestTemplatesFolderName(unittest.TestCase):
         Returns:
 
         """
-        Settings().set(SaveTo, SaveTo.DEFAULT_DOWNLOAD_PATH, ".")
-        Settings().set(SaveTo, SaveTo.SERIES_FOLDER_NAME, "${WEBSITE}")
+        Settings().set(Keys.DEFAULT_DOWNLOAD_PATH, ".")
+        Settings().set(Keys.SERIES_FOLDER_NAME, "${WEBSITE}")
         self.assertRaises(KeyError, get_series_folder_name, website="website", author="author", artist="artist")
 
 
@@ -50,7 +50,7 @@ class TestTemplatesChapterName(unittest.TestCase):
         Tests that the chapter name for a given chapter is created successfully from the user preferences input
         Returns:
         """
-        Settings().set(SaveTo, SaveTo.CHAPTER_NAME, "${MANGA} ${WEBSITE} [${AUTHOR}] - ${VOLUME} ${CHAPTER}")
+        Settings().set(Keys.CHAPTER_NAME, "${MANGA} ${WEBSITE} [${AUTHOR}] - ${VOLUME} ${CHAPTER}")
 
         attr = {"website": "_website_",
                 "manga": "_manga_",
@@ -68,7 +68,7 @@ class TestTemplatesChapterName(unittest.TestCase):
         Test that if a key between brackets is not present, brackets are cleaned up
         Returns:
         """
-        Settings().set(SaveTo, SaveTo.CHAPTER_NAME, "${MANGA} ${WEBSITE} [${AUTHOR}] - ${VOLUME} ${CHAPTER}")
+        Settings().set(Keys.CHAPTER_NAME, "${MANGA} ${WEBSITE} [${AUTHOR}] - ${VOLUME} ${CHAPTER}")
 
         attr = {"website": "_website_",
                 "manga": "_manga_",
@@ -89,7 +89,7 @@ class TestTemplatesChapterName(unittest.TestCase):
 
         """
 
-        Settings().set(SaveTo, SaveTo.CHAPTER_NAME, "${MANGA} - ${VOLUME}")
+        Settings().set(Keys.CHAPTER_NAME, "${MANGA} - ${VOLUME}")
         attr = {"website": None,
                 "manga": None,
                 "chapter": 3,
@@ -107,7 +107,7 @@ class TestTemplatesChapterName(unittest.TestCase):
         """
         # Settings().set(SaveTo, SaveTo.DEFAULT_DOWNLOAD_PATH, ".")
         # Settings().set(SaveTo, SaveTo.SERIES_FOLDER_NAME, "${WEBSITE}")
-        Settings().set(SaveTo, SaveTo.CHAPTER_NAME, "${MANGA} - ${VOLUME} ${CHAPTER}")
+        Settings().set(Keys.CHAPTER_NAME, "${MANGA} - ${VOLUME} ${CHAPTER}")
         attr = {"website": None,
                 "manga": None,
                 # "chapter":None,
@@ -122,7 +122,7 @@ class TestTemplatesChapterName(unittest.TestCase):
         Returns:
 
         """
-        Settings().set(SaveTo, SaveTo.CHAPTER_NAME, "${MANGA} - ${VOLUME} ${CHAPTER}")
+        Settings().set(Keys.CHAPTER_NAME, "${MANGA} - ${VOLUME} ${CHAPTER}")
         attr = {"website": None,
                 "manga": "_manga_name_",
                 "chapter": 3,

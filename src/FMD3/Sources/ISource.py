@@ -5,8 +5,7 @@ import abc
 import logging
 from typing import final
 from datetime import timedelta, datetime
-from FMD3.Core.settings import Settings
-from FMD3.Core.settings.models.SettingSection import SettingSection
+from FMD3.Core.settings import Settings, SettingControl
 from FMD3.Core import database as db
 from FMD3.Models.SeriesInfo import SeriesInfo
 
@@ -41,12 +40,10 @@ class ISource(ISourceMethods,ISourceNet):
             if source_heading_data is None:
                 raise Exception(f"Failed to load source, missing {source_heading_data=} attribute")
 
-        self.settings: list[SettingSection] | None = []
+        self.settings: list[SettingControl] | None = []
         self.init_settings()
-        for section in self.settings:
-            for control in section.values:
-                Settings().set_default(SOURCES_SECTIONS_PREFIX + section.key, control.key, control.value)
-        Settings().save()
+
+        Settings().load_defaults(self.settings)
 
     @final
     def get_series_info(self, series_id) -> SeriesInfo|None:

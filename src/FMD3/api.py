@@ -1,7 +1,7 @@
 from FMD3.Core import database as db
 from FMD3.Core.updater import create_download_task
 from FMD3.Models.Chapter import Chapter
-from FMD3.Sources import get_source as sup_get_source, ISource, get_sources_list
+from FMD3.Sources import get_source as sup_get_source, get_sources_list
 
 
 def get_series():

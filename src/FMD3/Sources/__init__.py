@@ -1,5 +1,5 @@
 import abc
-from typing import final
+
 from importlib.metadata import entry_points
 
 from .ISource import ISource

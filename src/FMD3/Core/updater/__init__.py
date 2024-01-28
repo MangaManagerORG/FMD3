@@ -5,8 +5,8 @@ from datetime import timedelta, datetime
 from sqlalchemy import and_
 
 from FMD3.Core.TaskManager import TaskManager
-from FMD3.Core.database import Series, DLDChapters, Session
-from FMD3.Core.database.models import DLDChaptersStatus, SeriesCache
+from FMD3.Core.database import Series, DLDChapters, Session, SeriesCache
+from FMD3.Core.database.models import DLDChaptersStatus, SeriesStatus
 from FMD3.Core.database.predefined import chapter_exists, max_chapter_number
 from FMD3.Core.utils import make_output_path
 from FMD3.Models.Chapter import Chapter
@@ -81,11 +81,13 @@ def scan_hanging_tasks():
                 create_download_task(source, series, new_chapter_list)
         # TODO: testing
 
+
 def __no_new_chapters():
     """
     Unittest callback when no more chapters to download
     :return:
     """
+
 
 def scan_new_chapters():
     logging.getLogger(__name__).debug("Initiating chapter finder")
@@ -96,13 +98,28 @@ def scan_new_chapters():
         logger.debug(f"Found source: {source.NAME}")
         series_list: list[Series] = s.query(Series).filter_by(source_id=source.ID).all()
         for series in series_list:
-            logger.debug(f"Found series: {series.title}")
+            if series.status == SeriesStatus.FULLY_DOWNLOADED.value:
+                logger.debug(f"Skipping chapter check for '{series.title}' (series is fully downloaded)")
+                continue
+            if not series.enabled:
+                logger.debug(f"Skipping chapter check for '{series.title}' (series is disabled)")
+                continue
+            if series.datelastchecked:
+                if series.datelastchecked + timedelta(hours=23) > datetime.now():
+                    logger.debug(f"Skipping chapter check for '{series.title}' (checked less than 24 hours ago)")
+                    continue
+
             last_db_chapter = max_chapter_number(series.series_id)
             new_chapter_list = source.get_new_chapters(series.series_id, last_db_chapter or -1)
-            if not new_chapter_list:
-                print("No new chapters found")
-                __no_new_chapters()
+            if source.get_max_chapter(series.series_id, new_chapter_list) == last_db_chapter:
+                logger.debug(f"Marking series '{series.title}' as fully downloaded (source max chapter is the same as "
+                             f"last chapter in db and series is marked as complete)")
+                series.status = SeriesStatus.FULLY_DOWNLOADED.value
+                s.commit()
                 continue
+
+            series.datelastchecked = datetime.now()
+            s.commit()
 
             create_download_task(source, series, new_chapter_list)
 

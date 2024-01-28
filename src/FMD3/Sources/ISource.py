@@ -5,6 +5,8 @@ import abc
 import logging
 from typing import final
 from datetime import timedelta, datetime
+
+import FMD3.Core.database.models.SeriesCache
 from FMD3.Core.settings import Settings, SettingControl
 from FMD3.Core import database as db
 from FMD3.Models.SeriesInfo import SeriesInfo
@@ -46,13 +48,14 @@ class ISource(ISourceMethods, ISourceNet):
 
     @final
     def get_series_info(self, series_id) -> SeriesInfo | None:
-        series = db.Session().query(db.SeriesCache).filter_by(series_id=series_id).one_or_none()
+        series = db.Session().query(
+            FMD3.Core.database.models.SeriesCache.SeriesCache).filter_by(series_id=series_id).one_or_none()
         if not series:
             data = self.get_info(series_id)
             if not data:
                 return data
             try:
-                series = db.SeriesCache.from_manga_info(data)
+                series = FMD3.Core.database.models.SeriesCache.SeriesCache.from_manga_info(data)
                 db.Session().add(series)
                 db.Session().flush()
                 db.Session().commit()

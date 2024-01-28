@@ -9,16 +9,19 @@ from FMD3.Models.SeriesInfo import SeriesInfo
 
 
 class ISourceMethods:
-    def get_max_chapter(self, series_id: str) -> float:
+    def get_max_chapter(self, series_id: str, chapter_list: list[Chapter] | None = None) -> float:
         """
         Convenience method. uses get_chapters and sorts them
         Args:
+            chapter_list:
             series_id:
 
         Returns:
         """
-
-        chapters = self.get_chapters(series_id)
+        if chapter_list:
+            chapters = chapter_list
+        else:
+            chapters = self.get_chapters(series_id)
         last_chapter = list(filter(lambda x: x.number == max(chapter.number for chapter in chapters),
                                    chapters))
         if last_chapter:

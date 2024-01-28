@@ -2,7 +2,7 @@ import unittest
 from datetime import datetime, timedelta
 from unittest.mock import patch, MagicMock
 
-from FMD3.Core.database import Series, DLDChapters
+from FMD3.Core.database import Series, DLDChapters, SeriesStatus
 from FMD3.Core.database.models import DLDChaptersStatus
 from FMD3.Core.updater import create_download_task, scan_hanging_tasks, scan_new_chapters, new_chapters_finder
 from TestSource.TestSource import TestSource
@@ -49,6 +49,7 @@ class TestScanNewChapters(unittest.TestCase):
         s.title = "Series A"
         s.series_id = "series_a"
         s.source_id = source.ID
+        s.enabled = True
         mock_session().add(s)
         mock_session().commit()
 
@@ -68,6 +69,7 @@ class TestCreateDownloadTask(unittest.TestCase):
         s.title = "Series A"
         s.series_id = "series_a"
         s.source_id = source.ID
+        s.enabled = True
         ch_list = [source._debug_get_chapter(s.series_id, "sAcha_1"), source._debug_get_chapter(s.series_id, "sAcha_2")]
         create_download_task(source, s, ch_list)
         mock_submit_series_chapter.assert_called()
@@ -86,20 +88,23 @@ class TestNewChapterFinder(unittest.TestCase):
         s.title = "Series A"
         s.series_id = "series_a"
         s.source_id = source.ID
+        s.enabled = True
         mock_session().add(s)
         mock_session().commit()
         # ch_list = [source._debug_get_chapter(s.series_id, "sAcha_1"), source._debug_get_chapter(s.series_id, "sAcha_2")]
 
         new_chapters_finder()
         mock_submit_series_chapter.assert_called()
+    @patch("FMD3.Core.updater.create_download_task")
     @patch("FMD3.Core.updater.max_chapter_number",return_value=1)
     @patch("FMD3.Core.updater.__no_new_chapters")
-    def test_new_chapters_finder_should_have_no_more_chapters(self,mock_no_new_chapters:MagicMock,mock_max_ch_num, mock_submit_series_chapter: MagicMock, mock_session, *_):
+    def test_new_chapters_finder_should_have_no_more_chapters(self,mock_no_new_chapters:MagicMock,mock_max_ch_num, mock_create_download_task:MagicMock ,mock_submit_series_chapter: MagicMock, mock_session, *_):
         source = TestSource()
         s = Series()
         s.title = "Series B"
         s.series_id = "series_b"
         s.source_id = source.ID
+        s.enabled = True
         mock_session().add(s)
         mock_session().commit()
         # Make chapter as if it were downloaded
@@ -116,5 +121,37 @@ class TestNewChapterFinder(unittest.TestCase):
         # ch_list = [source._debug_get_chapter(s.series_id, "sAcha_1"), source._debug_get_chapter(s.series_id, "sAcha_2")]
 
         new_chapters_finder()
-        mock_no_new_chapters.assert_called()
+        # Assert not called. new logic determines that the chapter max chapter is the same as source max chapter thus not needing one extra call
+        mock_create_download_task.assert_not_called()
+        # mock_submit_series_chapter.assert_called()
+
+    @patch("FMD3.Core.updater.create_download_task")
+    @patch("FMD3.Core.updater.max_chapter_number",return_value=1)
+    @patch("FMD3.Core.updater.__no_new_chapters")
+    def test_new_chapters_finder_should_skip_fully_downloaded_series(self,mock_no_new_chapters:MagicMock,mock_max_ch_num, mock_create_download_task:MagicMock ,mock_submit_series_chapter: MagicMock, mock_session, *_):
+        source = TestSource()
+        s = Series()
+        s.title = "Series B"
+        s.series_id = "series_b"
+        s.source_id = source.ID
+        s.enabled = True
+        s.status = SeriesStatus.FULLY_DOWNLOADED.value
+        mock_session().add(s)
+        mock_session().commit()
+        # Make chapter as if it were downloaded
+        c = DLDChapters()
+        c.status = DLDChaptersStatus.DOWNLOADED.value
+        c.series_id = s.series_id
+        c.chapter_id = "sBcha_1"
+        c.number = 5
+        c.volume = 1
+        c.downloaded_at = datetime.now() - timedelta(hours=3)
+        mock_session.add(c)
+        mock_session.commit()
+
+        # ch_list = [source._debug_get_chapter(s.series_id, "sAcha_1"), source._debug_get_chapter(s.series_id, "sAcha_2")]
+
+        new_chapters_finder()
+        # Assert not called. new logic determines that the chapter max chapter is the same as source max chapter thus not needing one extra call
+        mock_create_download_task.assert_not_called()
         # mock_submit_series_chapter.assert_called()

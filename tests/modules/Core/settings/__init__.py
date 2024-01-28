@@ -69,11 +69,11 @@ class TestSettingsDefaults(unittest.TestCase):
                                   SettingType.Text
                                   )
         ]
-        self.settings.load_defaults(defaults)
+        self.settings.load_defaults("Core",defaults)
         value = "definitely not a default value"
         # Asuming a file was read and has different value
         self.settings.set(customkeys.test1, value)
 
-        self.settings.load_defaults(defaults)
+        self.settings.load_defaults("Core",defaults)
 
-        self.assertEqual(self.settings.get_control(customkeys.test1).value, value)
+        self.assertEqual(self.settings.get(customkeys.test1), value)

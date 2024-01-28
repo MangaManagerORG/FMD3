@@ -4,8 +4,7 @@ from sqlalchemy.orm import scoped_session
 from . import engine
 from .base import Base
 from .engine import engine
-from .models import Series, DLDChapters, SeriesCache, DLDChaptersStatus
-
+from .models import *
 
 # Create the tables
 Base.metadata.create_all(engine)

@@ -51,7 +51,7 @@ class Settings:
         self.check_key(section, key)
 
         return self._settings_dict[section][key.value].get("value",
-                                                           self._settings_dict[key.value].get("def_value", None))
+                                                           self._settings_dict[section][key.value].get("def_value", None))
 
     def set(self, key: SettingKeys, value):
         """
@@ -90,9 +90,10 @@ class Settings:
         self.save()
 
     def update(self, new_dict):
-        for key in new_dict:
-            if key in self._settings_dict:
-                self._settings_dict[key]["value"] = new_dict[key]["value"]
+        for section in new_dict:
+            for key in new_dict[section]:
+                if key in self._settings_dict:
+                    self._settings_dict[section][key]["value"] = new_dict[section][key]["value"]
         self.save()
 
     def to_json(self):

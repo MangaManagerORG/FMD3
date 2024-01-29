@@ -1,9 +1,11 @@
 import json
 import pathlib
 import tkinter as tk
+from tkinter import ttk
+
 import pygubu
 from FMD3_Tkinter.app import App
-from FMD3.api import get_sources, get_series_info, get_settings, update_settings
+from FMD3.api import get_sources, get_series_info, get_settings, update_settings, update_save_to
 
 PROJECT_PATH = pathlib.Path(__file__).parent
 PROJECT_UI = PROJECT_PATH / "ui_test.ui"
@@ -24,6 +26,45 @@ class Source_():
 
 
 class TkinterUI(App):
+    def test(self,*args):
+        print("asdas")
+    def do_popup(self,event):
+        m = self.builder.get_object("fav_treeview_ctx_menu")
+
+        try:
+            selected_item = self.favourites_treeview.identify_row(event.y)
+            if selected_item in self.fav_tree_loaded_parents:
+                self.favourites_treeview.selection_set(selected_item)
+                # m.selection = self.favourites_treeview.set(self.favourites_treeview.identify_row(event.y))
+                # m.post(event.x_root, event.y_root)
+                m.tk_popup(event.x_root, event.y_root)
+        finally:
+            m.grab_release()
+    def show_edit_save_to(self,*args):
+        "series_destination_path_edit"
+        "top_level_edit_save_to"
+        top_level = self.builder.get_object('top_level_edit_save_to', self.mainwindow)
+        self.builder.connect_callbacks(self)
+        series_id = self.favourites_treeview.selection()
+        vals = self.favourites_treeview.item(series_id, "values")
+
+        toplevel_entry_val = self.builder.get_variable("series_destination_path_edit")
+        toplevel_entry_val.set(vals[2])
+        top_level.deiconify()
+
+    def update_series_destination_path_submit(self,*args):
+        top_level = self.builder.get_object('top_level_edit_save_to')
+        series_id = self.favourites_treeview.selection()[0]
+        vals = list(self.favourites_treeview.item(series_id, "values"))
+
+        toplevel_entry_val = self.builder.get_variable("series_destination_path_edit")
+        vals[2] = toplevel_entry_val.get()
+        self.favourites_treeview.item(series_id,values=vals)
+        update_save_to(series_id,toplevel_entry_val.get())
+        print("edited")
+
+        top_level.withdraw()
+
 
     def __init__(self, master=None, translator=None):
 
@@ -35,6 +76,18 @@ class TkinterUI(App):
         # Main widget
         self.mainwindow: tk.Tk = builder.get_object("tk1", master)
         self.favourites_treeview = self.builder.get_object("favourites_treeview")
+        self.favourites_treeview.bind("<Button-3>",self.do_popup)
+        self.favourites_treeview: ttk.Treeview
+        self.favourites_treeview.focus()
+
+        self.builder.get_object("fav_treeview_ctx_menu",master)
+        # self.builder.get_object("command2")
+
+        # top2 = tk.Toplevel(self.mainwindow)
+
+
+
+
         builder.connect_callbacks(self)
         s = get_sources()
         builder.get_object("source_selector_combobox").config(values=[s["name"] for s in sources])
@@ -88,6 +141,7 @@ class TkinterUI(App):
                 self.selected_source_id = values[7]
             data = get_series_info(values[7], tree.selection()[0])
             if data:
+                self.selected_series_id = series_id
                 series_result_tree = self.builder.get_object("series_result")
                 series_result_tree.delete(*series_result_tree.get_children())
                 self.load_queried_data(series_id, data)

@@ -72,7 +72,7 @@ class TaskManager:
                                                                       chapter_id=chapter.chapter_id).one():
                 if dbchapter:
                     chapter_status = DLDCS(dbchapter.status)
-                    if chapter_status in [DLDCS.DOWNLOADED, DLDCS.SKIPPED, DLDCS.ERRORED]:
+                    if chapter_status in [DLDCS.DOWNLOADED, DLDCS.SKIPPED]:
                         # Assume chapter is already downloaded, skipped or failed
                         logging.getLogger(__name__).debug(f"Aborting task -> '{chapter_status}' chapter id: '{chapter.chapter_id}'")
                         return

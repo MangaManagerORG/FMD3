@@ -1,0 +1,9 @@
+pygubu
+sqlalchemy
+sv_ttk
+ComicInfo
+requests
+pillow
+aiohttp
+pathvalidate
+schedule

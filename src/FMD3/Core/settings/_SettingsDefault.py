@@ -90,7 +90,7 @@ default_settings = [
     SettingControl.create(
         key=Keys.CHAPTER_NAME,
         name="Chapter name",
-        def_value="${CHAPTER}",
+        def_value="${CHAPTER} ${VOLUME}",
         type_=SettingType.Text
     ),
     SettingControl.create(

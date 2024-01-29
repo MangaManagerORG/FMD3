@@ -9,7 +9,7 @@ import aiohttp
 from PIL import Image, ImageStat
 
 from FMD3.Core.database.models import DLDChaptersStatus
-from FMD3.Core.downloader.utils import append_cinfo
+from .utils import append_cinfo
 from FMD3.Models.Chapter import Chapter
 from FMD3.Sources import ISource
 

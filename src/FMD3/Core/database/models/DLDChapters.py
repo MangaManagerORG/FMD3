@@ -2,7 +2,7 @@ import enum
 
 from sqlalchemy import Column, String, ForeignKey, SmallInteger, Text, Integer, DateTime, func
 
-from FMD3.Core.database import Base
+from ...database import Base
 from FMD3.Models.Chapter import Chapter
 
 

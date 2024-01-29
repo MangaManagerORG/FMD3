@@ -476,6 +476,26 @@
                         </layout>
                       </object>
                     </child>
+                    <child>
+                      <object class="ttk.Button" id="button6">
+                        <property name="command" type="command" cbtype="simple">reload_all_opened_fav_treeview_children</property>
+                        <property name="text" translatable="yes">Reload all opened</property>
+                        <layout manager="pack">
+                          <property name="anchor">e</property>
+                          <property name="side">right</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="ttk.Button" id="button5">
+                        <property name="command" type="command" cbtype="simple">reload_fav_treeview_children</property>
+                        <property name="text" translatable="yes">Reload selected</property>
+                        <layout manager="pack">
+                          <property name="anchor">e</property>
+                          <property name="side">right</property>
+                        </layout>
+                      </object>
+                    </child>
                   </object>
                 </child>
                 <child>
@@ -890,6 +910,65 @@
                 </child>
               </object>
             </child>
+          </object>
+        </child>
+      </object>
+    </child>
+  </object>
+  <object class="tk.Menu" id="fav_treeview_ctx_menu" named="True">
+    <property name="tearoff">false</property>
+    <child>
+      <object class="tk.Menuitem.Command" id="command2">
+        <property name="command" type="command" cbtype="simple">show_edit_save_to</property>
+        <property name="label" translatable="yes">Edit Save to</property>
+      </object>
+    </child>
+  </object>
+  <object class="tk.Toplevel" id="top_level_edit_save_to" named="True">
+    <property name="height">200</property>
+    <property name="width">200</property>
+    <child>
+      <object class="ttk.Frame" id="frame23">
+        <property name="height">80</property>
+        <property name="width">650</property>
+        <layout manager="pack">
+          <property name="anchor">center</property>
+          <property name="expand">true</property>
+          <property name="fill">both</property>
+          <property name="padx">7</property>
+          <property name="pady">7</property>
+          <property name="side">bottom</property>
+        </layout>
+        <containerlayout manager="pack">
+          <property name="propagate">false</property>
+        </containerlayout>
+        <child>
+          <object class="ttk.Label" id="label9">
+            <property name="text" translatable="yes">Save to:</property>
+            <layout manager="pack">
+              <property name="anchor">center</property>
+              <property name="side">top</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Entry" id="entry1">
+            <property name="textvariable">string:series_destination_path_edit</property>
+            <layout manager="pack">
+              <property name="anchor">center</property>
+              <property name="expand">true</property>
+              <property name="fill">x</property>
+              <property name="side">top</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Button" id="button7">
+            <property name="command" type="command" cbtype="simple">update_series_destination_path_submit</property>
+            <property name="text" translatable="yes">Apply</property>
+            <layout manager="pack">
+              <property name="side">top</property>
+            </layout>
           </object>
         </child>
       </object>

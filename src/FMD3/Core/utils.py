@@ -4,6 +4,7 @@ from string import Template
 
 import pathvalidate
 
+from FMD3 import get_source
 from FMD3.Models.Chapter import Chapter
 from FMD3.Core.database import Series
 from FMD3.Core.settings import Keys
@@ -26,7 +27,9 @@ def make_output_path(series: Series, chapter: Chapter):
     # manga_folder_name = get_series_folder_name(manga=series.title)
     manga_folder_name = series.save_to
     cbz_filename = get_chapter_name(manga=series.title,
-                                    chapter=chapter.number) + ".cbz" # fm.make_filename(chapter, series.title)
+                                    chapter=chapter.number,
+                                    volume=chapter.volume,
+                                    website=get_source(source_id=series.source_id).NAME) + ".cbz" # fm.make_filename(chapter, series.title)
 
     # Create folders
     parent_folder = Path(root_folder, manga_folder_name)

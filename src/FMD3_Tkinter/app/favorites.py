@@ -22,9 +22,9 @@ class Favourites:
                                                                                                               get_source(
                                                                                                                   source_id=series.get("source_id")).get(
                                                                                                                   "name"),
-                                                                                                              "",
-                                                                                                              series.get("status"),
+                                                                                                              series.get("save_to"),
                                                                                                               series.get("dateadded"),
+                                                                                                              series.get("status"),
                                                                                                               series.get("datelastchecked"),
                                                                                                               series.get("datelastupdated"),
                                                                                                               series.get("source_id")))
@@ -47,8 +47,7 @@ class Favourites:
 
         i_r = -1
         for item_id in children:
-            text = tree.item(item_id)[
-                'text'].lower()  # already contains the strin-concatenation (over columns) of the row's values
+            text = tree.item(item_id)['text'].lower()  # already contains the strin-concatenation (over columns) of the row's values
             if filter_text in text:
                 i_r += 1
                 tree.reattach(item_id, '', i_r)
@@ -65,6 +64,26 @@ class Favourites:
             # Mark the parent as loaded
             self.fav_tree_loaded_parents[series_id] = True
 
+    def reload_fav_treeview_children(self):
+        # Clear all children of the selected parent
+        parent_id = self.favourites_treeview.focus()
+        self.favourites_treeview.delete(*self.favourites_treeview.get_children(parent_id))
+
+        # Reload the children for the selected parent
+        self.load_children(parent_id)
+
+    def reload_all_opened_fav_treeview_children(self):
+        # Iterate over all opened parent items
+        for series_id in self.fav_tree_loaded_parents:
+            if series_id == '':
+                continue # skip root
+            # Check if the item has been loaded
+            if self.fav_tree_loaded_parents.get(series_id, False):
+                # Clear all children of the parent
+                self.favourites_treeview.delete(*self.favourites_treeview.get_children(series_id))
+
+                # Reload the children for the parent
+                self.load_children(series_id)
     def load_children(self, parent_id):
         # Simulate loading children from a data source
         for chapter in sorted(get_chapters(parent_id), key=lambda x: x.get("number")):

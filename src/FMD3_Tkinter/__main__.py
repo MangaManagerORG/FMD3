@@ -43,17 +43,16 @@ class TkinterUI(App):
     def show_edit_save_to(self,*args):
         "series_destination_path_edit"
         "top_level_edit_save_to"
-        top_level = self.builder.get_object('top_level_edit_save_to', self.mainwindow)
+        self.builder.get_object('dialog1', self.mainwindow).run()
         self.builder.connect_callbacks(self)
         series_id = self.favourites_treeview.selection()
         vals = self.favourites_treeview.item(series_id, "values")
 
         toplevel_entry_val = self.builder.get_variable("series_destination_path_edit")
         toplevel_entry_val.set(vals[2])
-        top_level.deiconify()
+        # top_level.deiconify()
 
     def update_series_destination_path_submit(self,*args):
-        top_level = self.builder.get_object('top_level_edit_save_to')
         series_id = self.favourites_treeview.selection()[0]
         vals = list(self.favourites_treeview.item(series_id, "values"))
 
@@ -63,9 +62,13 @@ class TkinterUI(App):
         update_save_to(series_id,toplevel_entry_val.get())
         print("edited")
 
-        top_level.withdraw()
+        self.close_series_destination_path_submit()
 
-
+    def close_series_destination_path_submit(self,*args):
+        top_level = self.builder.get_object('dialog1')
+        toplevel_entry_val = self.builder.get_variable("series_destination_path_edit")
+        toplevel_entry_val.set(None)
+        top_level.close()
     def __init__(self, master=None, translator=None):
 
         self.settings = json.loads(get_settings())

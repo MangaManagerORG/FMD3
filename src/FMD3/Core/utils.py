@@ -1,6 +1,9 @@
 import logging
 from pathlib import Path
 from string import Template
+
+import pathvalidate
+
 from FMD3.Models.Chapter import Chapter
 from FMD3.Core.database import Series
 from FMD3.Core.settings import Keys
@@ -51,7 +54,7 @@ def get_series_folder_name(website=None, manga=None, author=None, artist=None):
         AUTHOR=author if author else "",
         ARTIST=artist if artist else ""
     )
-    return cleanup_final_string(folder_name)
+    return pathvalidate.sanitize_filename(cleanup_final_string(folder_name))
 
 
 def get_chapter_name(website=None, manga=None, chapter=None, author=None, artist=None, volume=None):

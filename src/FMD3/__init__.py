@@ -3,6 +3,7 @@ import sys
 from logging import DEBUG, INFO, Handler, StreamHandler, basicConfig, addLevelName, Logger
 from logging.handlers import RotatingFileHandler
 from FMD3.Core import database
+from FMD3.Core.settings import Settings
 from FMD3.Sources import get_source, load_sources
 
 umpumped_events = []
@@ -45,5 +46,7 @@ logging.getLogger("PIL").setLevel(logging.WARNING)
 Logger.trace = trace
 
 setup_logging("config/log.log", TRACE)
+settings = Settings()
 load_sources()
+settings.save()
 source = get_source("MangaDex")

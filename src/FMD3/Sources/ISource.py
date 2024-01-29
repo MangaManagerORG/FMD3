@@ -46,22 +46,27 @@ class ISource(ISourceMethods, ISourceNet):
         Settings().load_defaults(self.NAME, self.settings)
 
     @final
-    def get_series_info(self, series_id) -> SeriesInfo | None:
+    def get_series_info(self, series_id) -> tuple[SeriesInfo | None, None|str]:
+        saved_series = db.Session.query(db.Series).filter_by(series_id=series_id).one_or_none()
+        save_to = None
+        if saved_series:
+            save_to = saved_series.save_to
+
         series = db.Session().query(db.SeriesCache).filter_by(series_id=series_id).one_or_none()
         if not series:
             data = self.get_info(series_id)
             if not data:
-                return data
+                return data, None
             try:
                 series = db.SeriesCache.from_manga_info(data)
                 db.Session().add(series)
                 db.Session().flush()
                 db.Session().commit()
-                return series.series_info
+                return series.series_info, save_to
             except:
                 logging.getLogger().exception("Exception introducing cached serie")
                 db.Session().rollback()
-                return None
+                return None, None
         # Check cache date
         else:
             if series.cached_date + timedelta(days=5) < datetime.now():
@@ -70,4 +75,5 @@ class ISource(ISourceMethods, ISourceNet):
                 series.update(data)
                 db.Session().flush()
                 db.Session().commit()
-        return series.series_info
+
+        return series.series_info, save_to

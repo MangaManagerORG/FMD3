@@ -2,6 +2,7 @@ import logging
 import threading
 
 from concurrent.futures import ProcessPoolExecutor
+from concurrent.futures.process import BrokenProcessPool
 
 from FMD3.Core import database
 from FMD3.Core.database import DLDChapters
@@ -38,7 +39,12 @@ class TaskManager:
         task.add_done_callback(self.commit)
 
     def commit(self, future):
-        series_id, chapter_id, status = future.result()
+        try:
+            series_id, chapter_id, status = future.result()
+        except BrokenProcessPool:
+            # Main process that excepted raised exceptions.
+            # These are just telling one process exited thus provides no info
+            pass
         status: DLDCS
         logging.getLogger(__name__).info("Marking chapter as done")
         database.Session().query(database.DLDChapters).filter(DLDChapters.chapter_id == chapter_id,

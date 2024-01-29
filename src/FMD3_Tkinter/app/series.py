@@ -3,7 +3,8 @@ from tkinter import END, NW
 
 from PIL import ImageTk, Image
 
-from FMD3.api import get_series_info, query_series, get_chapters, get_source_chapters, get_cover, download_chapters
+from FMD3.api import get_series_info, query_series, get_chapters, get_source_chapters, get_cover, download_chapters, \
+    get_sanitized_download
 
 
 def add_detail_entry(widget,data, title, data_key, tag=""):
@@ -31,7 +32,7 @@ def add_series_detail(series_detail_widget, data):
 
 def list_chapters_treeview(widget, chapter_list: list, tags: tuple[str]):
     for chapter in chapter_list:
-        widget.insert('', 'end', chapter.get("id"), values=(chapter.get("title"), chapter.get("volume"), chapter.get("number")), tags=tags)
+        widget.insert('', 'end', chapter.get("chapter_id"), values=(chapter.get("title"), chapter.get("volume"), chapter.get("number")), tags=tags)
 
 class Series:
     builder: type[""]
@@ -92,6 +93,14 @@ class Series:
             chapters = get_source_chapters(self.selected_source_id,series_id)
             list_chapters_treeview(chapters_treeview, chapters, ("not_downloaded",))
         self.load_queried_cover(data.get("cover_url"))
+        output_var = self.builder.get_variable("series_destination_path")
+        output_widget = self.builder.get_object("series_output_save_to_entry")
+        if data.get("save_to",None) is not None:
+            output_widget.configure(state="readonly")
+            output_var.set(data.get("save_to"))
+        else:
+            output_widget.configure(state="normal")
+            output_var.set(get_sanitized_download(manga=data.get("title")))
 
     def load_queried_cover(self, cover_url):
         # threading.Thread(target=getImageFromURL, args=(data.cover_url, self)).start()
@@ -112,7 +121,8 @@ class Series:
         ...
 
     def download_selected_chapters(self):
+        self.builder.get_object("series_output_save_to_entry").configure(state="readonly")
         chapters_treeview = self.builder.get_object("selected_series_chapter_treeview")
         to_download_ids = chapters_treeview.selection()
         to_download_series = self.selected_series_id
-        download_chapters(self.selected_source_id, to_download_series, to_download_ids) # Todo save to
+        download_chapters(self.selected_source_id, to_download_series, to_download_ids,output_path=self.builder.get_variable("series_destination_path").get()) # Todo save to

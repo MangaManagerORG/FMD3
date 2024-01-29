@@ -1,7 +1,8 @@
 import json
+import pathlib
 
 from FMD3.Core import database as db
-from FMD3.Core.settings import Settings
+from FMD3.Core.settings import Settings, Keys
 from FMD3.Core.updater import create_download_task
 from FMD3.Core.utils import make_output_path, get_series_folder_name
 from FMD3.Models.Chapter import Chapter
@@ -12,10 +13,8 @@ def get_series():
     return [
         {
             "series_id": series.series_id,
-            "order": series.order,
             "enabled": series.enabled,
             "source_id": series.source_id,
-            "link": series.link,
             "title": series.title,
             "status": series.status,
             "max_chapter": None if not series.chapters else max(series.chapters, key=lambda x: x.number,
@@ -88,10 +87,13 @@ def get_source_chapters(source_id, series_id, filter: int = None):
     }
         for chapter in chapters]
 
+def get_sanitized_download(website=None, manga=None, author=None, artist=None):
+    return pathlib.Path(Settings().get(Keys.DEFAULT_DOWNLOAD_PATH),get_series_folder_name(website=website,manga=manga,author=author,artist=artist))
+
 
 def get_series_info(source_id, series_id):
     source = sup_get_source(source_id=source_id)
-    series_info = source.get_series_info(series_id)
+    series_info,save_to = source.get_series_info(series_id)
     if not series_info:
         return {}
     return {
@@ -106,7 +108,8 @@ def get_series_info(source_id, series_id):
         "demographic": series_info.demographic,
         "rating": series_info.rating,
         "status": series_info.status,
-        "chapters": series_info.chapters
+        "chapters": series_info.chapters,
+        "save_to": save_to
     }
 
 
@@ -136,7 +139,7 @@ def get_cover(source_id, request_url):
     return source.session.get(request_url)
 
 
-def download_chapters(source_id: str, series_id: str, chapter_ids: list[str]):
+def download_chapters(source_id: str, series_id: str, chapter_ids: list[str],output_path=None):
     source = sup_get_source(source_id=source_id)
     chapters = source.get_queried_chapters(series_id, chapter_ids)
 
@@ -146,7 +149,7 @@ def download_chapters(source_id: str, series_id: str, chapter_ids: list[str]):
         try:
             series = db.Series(series_id=data.id, title=data.title)  # todo add missing data
             series.enabled = True
-            series.save_to = get_series_folder_name(manga=series.title)
+            series.save_to = output_path if output_path is not None else get_series_folder_name(manga=series.title)
             series.source_id = source_id
             db.Session().add(series)
             db.Session().flush()

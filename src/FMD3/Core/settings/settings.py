@@ -1,4 +1,5 @@
 import json
+import time
 from pathlib import Path
 
 from ._SettingsDefault import default_settings
@@ -20,8 +21,10 @@ class Settings:
             Settings._config_file = Path(_json_file)
             if not Settings._config_file.exists():
                 Settings.__instance.save()
+            time.sleep(0.5)
             Settings.__instance.load()
             Settings.__instance.load_defaults("Core", default_settings)
+            Settings.__instance.save()
 
         return Settings.__instance
 
@@ -76,18 +79,19 @@ class Settings:
         return self.get_value("Core", key)
 
     def save(self):
-        with open(self._config_file, "w") as f:
+        with open(self._config_file, "w", encoding='UTF-8') as f:
             json.dump(self._settings_dict, f)
 
     def load(self):
         with open(self._config_file, "r") as f:
+            # print(f.readlines())
             self._settings_dict = json.load(f)
 
     def load_defaults(self, section: str, default_controls: list[SettingControl]):
         for control in default_controls:
             if control.key.value not in self._settings_dict:
                 self.add_control(section, control)
-        self.save()
+
 
     def update(self, new_dict):
         for section in new_dict:

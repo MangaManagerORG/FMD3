@@ -1,9 +1,9 @@
 import unittest
 from pathlib import Path
 
-from FMD3.Core.settings import Settings
-from FMD3.Core.settings import Keys
-from FMD3.Core.utils import get_series_folder_name, get_chapter_name
+from FMD3.core.settings import Settings
+from FMD3.core.settings import Keys
+from FMD3.core.utils import get_series_folder_name, get_chapter_name
 from FMD3.errors import TemplateMissingTag
 
 

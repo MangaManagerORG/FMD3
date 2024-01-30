@@ -7,7 +7,7 @@ from importlib.metadata import entry_points
 from ComicInfo import ComicInfo
 
 from .IEnricher import IEnricher
-from ..Models.Chapter import Chapter
+from ..models.chapter import Chapter
 
 enricher_factory: list[IEnricher] = []
 

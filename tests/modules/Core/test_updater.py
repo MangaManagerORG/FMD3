@@ -17,22 +17,22 @@ import schedule
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, scoped_session
 
-from FMD3.Core.database import Base, Series
-from FMD3.Core.updater import new_chapters_finder, create_download_task
-from FMD3.Sources import ISource, get_source
-from FMD3.Core import updater, TaskManager
-from FMD3 import Sources
+from FMD3.core.database import Base, Series
+from FMD3.core.updater import new_chapters_finder, create_download_task
+from FMD3.sources import ISource, get_source
+from FMD3.core import updater, TaskManager
+from FMD3 import sources
 from tests.TestSource.TestSource import TestSource
-from FMD3.Core import database, scheduler
-Sources.sources_factory = [TestSource()]
+from FMD3.core import database, scheduler
+sources.sources_factory = [TestSource()]
 
 database.engine = create_engine('sqlite:///', isolation_level="SERIALIZABLE")
 
 session_factory = sessionmaker(bind=database.engine)
 database.Session = scoped_session(session_factory)
-from FMD3.Core.database import predefined
+from FMD3.core.database import predefined
 predefined.Session = database.Session
-from FMD3.Core.database import models
+from FMD3.core.database import models
 models.Session = database.Session
 get_scoped_session = None
 

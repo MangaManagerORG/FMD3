@@ -6,13 +6,13 @@
 # from PIL import Image
 #
 #
-# from FMD3.Core.downloader import convert_image
+# from FMD3.core.downloader import convert_image
 #
 #
 # class TestImageConverter(unittest.TestCase):
 #     def test_convert_image(self):
 #         # Mock the Image.open method to return a mock image
-#         with patch("FMD3.Core.downloader.Image.open") as mock_image_open:
+#         with patch("FMD3.core.downloader.Image.open") as mock_image_open:
 #             # Create a red image for testing
 #             red_image = Image.new("RGB", (100, 100), "red")
 #
@@ -31,7 +31,7 @@
 #             mock_image_open.return_value = mock_image
 #
 #             # Mock the BytesIO class to capture the converted image data
-#             with patch("FMD3.Core.downloader.BytesIO") as mock_bytes_io:
+#             with patch("FMD3.core.downloader.BytesIO") as mock_bytes_io:
 #                 # Create a mock BytesIO instance
 #                 mock_bytes_io_instance = MagicMock()
 #

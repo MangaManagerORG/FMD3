@@ -2,8 +2,8 @@ import abc
 from typing import final
 from ComicInfo import ComicInfo
 
-from FMD3.Models.Chapter import Chapter
-from FMD3.Models.SeriesInfo import SeriesInfo
+from FMD3.models.chapter import Chapter
+from FMD3.models.series_info import SeriesInfo
 
 
 class IEnricher(abc.ABC):

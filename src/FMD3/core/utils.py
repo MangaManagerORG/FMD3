@@ -5,10 +5,10 @@ from string import Template
 import pathvalidate
 
 from FMD3 import get_source
-from FMD3.Models.Chapter import Chapter
-from FMD3.Core.database import Series
-from FMD3.Core.settings import Keys
-from FMD3.Core.settings import Settings
+from FMD3.models.chapter import Chapter
+from FMD3.core.database import Series
+from FMD3.core.settings import Keys
+from FMD3.core.settings import Settings
 from FMD3.errors import TemplateMissingTag
 
 

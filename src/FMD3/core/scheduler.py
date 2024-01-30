@@ -1,9 +1,9 @@
 from time import sleep
 
 import schedule
-from FMD3.Core.settings import Settings
-from FMD3.Core.settings import Keys
-from FMD3.Core.updater import new_chapters_finder
+from FMD3.core.settings import Settings
+from FMD3.core.settings import Keys
+from FMD3.core.updater import new_chapters_finder
 
 
 def start_fav_scan_schedule():

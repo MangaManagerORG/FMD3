@@ -1,6 +1,6 @@
 from sqlalchemy import or_, and_
 
-from FMD3.Core.database import DLDChapters, Session
+from FMD3.core.database import DLDChapters, Session
 
 
 def chapter_exists(series_id, chapter_id, session=Session, ):

@@ -1,7 +1,7 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, scoped_session
 
-from FMD3.Core.database.base import Base
+from FMD3.core.database.base import Base
 
 def make_session():
     engine = create_engine('sqlite:///')

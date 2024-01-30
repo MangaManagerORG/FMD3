@@ -3,7 +3,7 @@ import enum
 from sqlalchemy import Column, Text, Integer, Boolean, String, SmallInteger, DateTime, func
 from sqlalchemy.orm import relationship
 
-from FMD3.Core.database import Base
+from FMD3.core.database import Base
 
 
 class SeriesStatus(enum.Enum):

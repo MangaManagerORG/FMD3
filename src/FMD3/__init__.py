@@ -2,9 +2,9 @@ import logging
 import sys
 from logging import DEBUG, INFO, Handler, StreamHandler, basicConfig, addLevelName, Logger
 from logging.handlers import RotatingFileHandler
-from FMD3.Core import database
-from FMD3.Core.settings import Settings
-from FMD3.Sources import get_source, load_sources
+from FMD3.core import database
+from FMD3.core.settings import Settings
+from FMD3.sources import get_source, load_sources
 
 umpumped_events = []
 
@@ -12,13 +12,25 @@ TRACE = 9
 
 
 def trace(self, message, *args, **kws):
+    """
+    Reports a trace. Used for spam loggings tring to trace the whole execution of a function
+    Args:
+        self:
+        message:
+        *args:
+        **kws:
+
+    Returns:
+
+    """
     # Yes, logger takes its '*args' as 'args'.
     self._log(TRACE, message, args, **kws)
+
 
 class UmpumpedLogHandler(Handler):
     def emit(self, record):
         umpumped_events.append(record)
-        ei = record.exc_info
+        record.exc_info
 
 
 def setup_logging(LOGFILE_PATH, level=DEBUG):
@@ -39,6 +51,7 @@ def setup_logging(LOGFILE_PATH, level=DEBUG):
     # logger.debug('DEBUG LEVEL - MAIN MODULE')
     # logger.info('INFO LEVEL - MAIN MODULE')
     # logger.trace('TRACE LEVEL - MAIN MODULE')
+
 
 # def getLogger(*args,**kwargs)
 addLevelName(TRACE, "TRACE")

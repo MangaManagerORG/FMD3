@@ -4,13 +4,13 @@ from datetime import timedelta, datetime
 
 from sqlalchemy import and_
 
-from FMD3.Core.TaskManager import TaskManager
-from FMD3.Core.database import Series, DLDChapters, Session, SeriesCache
-from FMD3.Core.database.models import DLDChaptersStatus, SeriesStatus
-from FMD3.Core.database.predefined import chapter_exists, max_chapter_number
-from FMD3.Core.utils import make_output_path
-from FMD3.Models.Chapter import Chapter
-from FMD3.Sources import get_sources_list, ISource, get_source_by_id
+from FMD3.core.TaskManager import TaskManager
+from FMD3.core.database import Series, DLDChapters, Session, SeriesCache
+from FMD3.core.database.models import DLDChaptersStatus, SeriesStatus
+from FMD3.core.database.predefined import chapter_exists, max_chapter_number
+from FMD3.core.utils import make_output_path
+from FMD3.models.chapter import Chapter
+from FMD3.sources import get_sources_list, ISource, get_source_by_id
 
 logger = logging.getLogger(__name__)
 

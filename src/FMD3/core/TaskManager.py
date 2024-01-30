@@ -4,11 +4,11 @@ import threading
 from concurrent.futures import ProcessPoolExecutor
 from concurrent.futures.process import BrokenProcessPool
 
-from FMD3.Core import database
-from FMD3.Core.database import DLDChapters
-from FMD3.Core.database.models import DLDChaptersStatus as DLDCS
-from FMD3.Core.database.predefined import chapter_exists
-from FMD3.Core.downloader import download_series_chapter
+from FMD3.core import database
+from FMD3.core.database import DLDChapters
+from FMD3.core.database.models import DLDChaptersStatus as DLDCS
+from FMD3.core.database.predefined import chapter_exists
+from FMD3.core.downloader import download_series_chapter
 
 
 def exception_handler(func, *args, **kwargs):

@@ -2,8 +2,8 @@ import io
 import tkinter
 from urllib import request
 from PIL import Image, ImageTk
-from FMD3.Sources import ISource,  get_source
-from FMD3.Models.SeriesInfo import SeriesInfo
+from FMD3.sources import ISource,  get_source
+from FMD3.models.series_info import SeriesInfo
 
 
 def load_data():

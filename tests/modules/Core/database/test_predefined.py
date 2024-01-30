@@ -3,9 +3,9 @@ import unittest
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, scoped_session
 
-from FMD3.Core import database
-from FMD3.Core.database import DLDChapters, Base
-from FMD3.Core.database.predefined import chapter_exists
+from FMD3.core import database
+from FMD3.core.database import DLDChapters, Base
+from FMD3.core.database.predefined import chapter_exists
 
 
 database.engine = create_engine('sqlite:///', isolation_level="SERIALIZABLE")

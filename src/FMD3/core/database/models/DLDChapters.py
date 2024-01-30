@@ -3,7 +3,7 @@ import enum
 from sqlalchemy import Column, String, ForeignKey, SmallInteger, Text, Integer, DateTime, func
 
 from ...database import Base
-from FMD3.Models.Chapter import Chapter
+from FMD3.models.chapter import Chapter
 
 
 class DLDChaptersStatus(enum.Enum):

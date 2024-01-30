@@ -1,12 +1,12 @@
 import json
 import pathlib
 
-from FMD3.Core import database as db
-from FMD3.Core.settings import Settings, Keys
-from FMD3.Core.updater import create_download_task
-from FMD3.Core.utils import make_output_path, get_series_folder_name
-from FMD3.Models.Chapter import Chapter
-from FMD3.Sources import get_source as sup_get_source, get_sources_list
+from FMD3.core import database as db
+from FMD3.core.settings import Settings, Keys
+from FMD3.core.updater import create_download_task
+from FMD3.core.utils import make_output_path, get_series_folder_name
+from FMD3.models.chapter import Chapter
+from FMD3.sources import get_source as sup_get_source, get_sources_list
 
 
 def get_series():

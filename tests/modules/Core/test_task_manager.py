@@ -4,13 +4,13 @@ from unittest.mock import patch, MagicMock
 
 from ComicInfo import ComicInfo
 
-from FMD3.Core.TaskManager import TaskManager
+from FMD3.core.TaskManager import TaskManager
 from tests.TestSource.TestSource import TestSource
 
 
 class TestTaskManager(unittest.TestCase):
-    @patch('FMD3.Core.TaskManager.download_series_chapter')
-    @patch('FMD3.Core.TaskManager.TaskManager.commit')
+    @patch('FMD3.core.TaskManager.download_series_chapter')
+    @patch('FMD3.core.TaskManager.TaskManager.commit')
     def test_queue_items_processed(self,mocked_commit:MagicMock,*_):
 
 

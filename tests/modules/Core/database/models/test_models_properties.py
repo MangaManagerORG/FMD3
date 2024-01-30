@@ -1,6 +1,6 @@
 import unittest
 
-from FMD3.Core.database import DLDChapters
+from FMD3.core.database import DLDChapters
 from tests.TestSource.TestSource import TestSource
 
 class TestModelsProperties(unittest.TestCase):

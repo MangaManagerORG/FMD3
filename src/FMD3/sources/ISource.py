@@ -6,12 +6,12 @@ import logging
 from typing import final
 from datetime import timedelta, datetime
 
-import FMD3.Core.database.models.SeriesCache
-from FMD3.Core.settings import Settings, SettingControl
-from FMD3.Core import database as db
-from FMD3.Models.SeriesInfo import SeriesInfo
-from FMD3.Sources.ISourceMethods import ISourceMethods
-from FMD3.Sources.ISourceNet import ISourceNet
+import FMD3.core.database.models.SeriesCache
+from FMD3.core.settings import Settings, SettingControl
+from FMD3.core import database as db
+from FMD3.models.series_info import SeriesInfo
+from FMD3.sources.ISourceMethods import ISourceMethods
+from FMD3.sources.ISourceNet import ISourceNet
 
 SOURCES_SECTIONS_PREFIX = "source_"
 

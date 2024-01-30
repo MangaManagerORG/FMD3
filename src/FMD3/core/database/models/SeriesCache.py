@@ -2,8 +2,8 @@ from datetime import datetime
 
 from sqlalchemy import Column, Text, DateTime, func
 
-from FMD3.Core.database import Base
-from FMD3.Models.SeriesInfo import SeriesInfo
+from FMD3.core.database import Base
+from FMD3.models.series_info import SeriesInfo
 
 
 class SeriesCache(Base):

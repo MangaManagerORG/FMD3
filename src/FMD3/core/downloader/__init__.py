@@ -8,10 +8,10 @@ from zipfile import ZipFile
 import aiohttp
 from PIL import Image, ImageStat
 
-from FMD3.Core.database.models import DLDChaptersStatus
+from FMD3.core.database.models import DLDChaptersStatus
 from .utils import append_cinfo
-from FMD3.Models.Chapter import Chapter
-from FMD3.Sources import ISource
+from FMD3.models.chapter import Chapter
+from FMD3.sources import ISource
 
 logger = logging.getLogger(__name__)
 max_dimensions = (16383, 16383)

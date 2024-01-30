@@ -4,8 +4,8 @@ Contains interfaces that the core will use to fetch info from the source
 
 from abc import abstractmethod
 
-from FMD3.Models.Chapter import Chapter
-from FMD3.Models.SeriesInfo import SeriesInfo
+from FMD3.models.chapter import Chapter
+from FMD3.models.series_info import SeriesInfo
 
 
 class ISourceMethods:
@@ -27,7 +27,7 @@ class ISourceMethods:
         if last_chapter:
             return last_chapter[0].number
 
-    def get_new_chapters(self, series_id: str, last_chapter_in_db: float) -> list[Chapter]:
+    def get_new_chapters(self, series_id: str, last_chapter: float) -> list[Chapter]:
         """
         Convenience method. Uses get_chapters and sorts them.
         Gets all the chapters continuing last downloaded
@@ -38,7 +38,7 @@ class ISourceMethods:
         Returns: List of Chapters that have not been downloaded.
         """
         chapters = self.get_chapters(series_id)
-        return list(filter(lambda x: x.number > last_chapter_in_db, chapters))
+        return list(filter(lambda x: x.number > last_chapter, chapters))
 
     @abstractmethod
     def get_chapters(self, series_id: str) -> list[Chapter]:

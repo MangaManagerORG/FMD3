@@ -2,17 +2,17 @@ import unittest
 from datetime import datetime, timedelta
 from unittest.mock import patch, MagicMock
 
-from FMD3.Core.database import Series, DLDChapters, SeriesStatus
-from FMD3.Core.database.models import DLDChaptersStatus
-from FMD3.Core.updater import create_download_task, scan_hanging_tasks, scan_new_chapters, new_chapters_finder
+from FMD3.core.database import Series, DLDChapters, SeriesStatus
+from FMD3.core.database.models import DLDChaptersStatus
+from FMD3.core.updater import create_download_task, scan_hanging_tasks, scan_new_chapters, new_chapters_finder
 from TestSource.TestSource import TestSource
 from dbutils import make_session
 
 
-@patch("FMD3.Core.updater.get_source_by_id", return_value=TestSource())
-@patch("FMD3.Core.updater.create_download_task")
+@patch("FMD3.core.updater.get_source_by_id", return_value=TestSource())
+@patch("FMD3.core.updater.create_download_task")
 class TestScanHangingTasks(unittest.TestCase):
-    @patch("FMD3.Core.updater.Session", new_callable=make_session())
+    @patch("FMD3.core.updater.Session", new_callable=make_session())
     def test_hanging_chapter_expired(self, mock_Session, mock_create_downloads_task: MagicMock, *_):
         source = TestSource()
         s = Series()
@@ -38,10 +38,10 @@ class TestScanHangingTasks(unittest.TestCase):
         print("sdas")
 
 
-@patch("FMD3.Core.updater.get_sources_list", return_value=[TestSource()])
-@patch("FMD3.Core.updater.create_download_task")
+@patch("FMD3.core.updater.get_sources_list", return_value=[TestSource()])
+@patch("FMD3.core.updater.create_download_task")
 class TestScanNewChapters(unittest.TestCase):
-    @patch("FMD3.Core.updater.Session", new_callable=make_session)
+    @patch("FMD3.core.updater.Session", new_callable=make_session)
     def test_scan_new_chapters(self, mock_session, mock_create_download_task: MagicMock, *_):
         # Create and add series
         source = TestSource()
@@ -57,10 +57,10 @@ class TestScanNewChapters(unittest.TestCase):
         mock_create_download_task.assert_called()
 
 
-@patch("FMD3.Core.updater.Session")
+@patch("FMD3.core.updater.Session")
 class TestCreateDownloadTask(unittest.TestCase):
 
-    @patch("FMD3.Core.updater.TaskManager.submit_series_chapter")
+    @patch("FMD3.core.updater.TaskManager.submit_series_chapter")
     def test_create_download_task(self, mock_submit_series_chapter: MagicMock, mock_Session):
         mock_Session = make_session()
 
@@ -78,9 +78,9 @@ class TestCreateDownloadTask(unittest.TestCase):
 
 # This one for shake of completness in coverage
 
-@patch("FMD3.Core.updater.get_sources_list", return_value=[TestSource()])
-@patch("FMD3.Core.updater.Session", new_callable=make_session)
-@patch("FMD3.Core.updater.TaskManager.submit_series_chapter")
+@patch("FMD3.core.updater.get_sources_list", return_value=[TestSource()])
+@patch("FMD3.core.updater.Session", new_callable=make_session)
+@patch("FMD3.core.updater.TaskManager.submit_series_chapter")
 class TestNewChapterFinder(unittest.TestCase):
 
     def test_new_chapters_finder(self, mock_submit_series_chapter: MagicMock, mock_session, *_):
@@ -97,9 +97,9 @@ class TestNewChapterFinder(unittest.TestCase):
 
         new_chapters_finder()
         mock_submit_series_chapter.assert_called()
-    @patch("FMD3.Core.updater.create_download_task")
-    @patch("FMD3.Core.updater.max_chapter_number",return_value=1)
-    @patch("FMD3.Core.updater.__no_new_chapters")
+    @patch("FMD3.core.updater.create_download_task")
+    @patch("FMD3.core.updater.max_chapter_number",return_value=1)
+    @patch("FMD3.core.updater.__no_new_chapters")
     def test_new_chapters_finder_should_have_no_more_chapters(self,mock_no_new_chapters:MagicMock,mock_max_ch_num, mock_create_download_task:MagicMock ,mock_submit_series_chapter: MagicMock, mock_session, *_):
         source = TestSource()
         s = Series()
@@ -128,9 +128,9 @@ class TestNewChapterFinder(unittest.TestCase):
         mock_create_download_task.assert_not_called()
         # mock_submit_series_chapter.assert_called()
 
-    @patch("FMD3.Core.updater.create_download_task")
-    @patch("FMD3.Core.updater.max_chapter_number",return_value=1)
-    @patch("FMD3.Core.updater.__no_new_chapters")
+    @patch("FMD3.core.updater.create_download_task")
+    @patch("FMD3.core.updater.max_chapter_number",return_value=1)
+    @patch("FMD3.core.updater.__no_new_chapters")
     def test_new_chapters_finder_should_skip_fully_downloaded_series(self,mock_no_new_chapters:MagicMock,mock_max_ch_num, mock_create_download_task:MagicMock ,mock_submit_series_chapter: MagicMock, mock_session, *_):
         source = TestSource()
         s = Series()

@@ -6,8 +6,8 @@ from zipfile import ZipFile
 from ComicInfo import ComicInfo
 from sqlalchemy import create_engine, text
 from sqlalchemy.orm import sessionmaker, scoped_session
-from FMD3.Core.database import Base, Series, DLDChapters
-from FMD3.Core.downloader import download_n_pack_pages, download_series_chapter, download_image
+from FMD3.core.database import Base, Series, DLDChapters
+from FMD3.core.downloader import download_n_pack_pages, download_series_chapter, download_image
 from mockzip import MockZip
 from tests.TestSource.TestSource import TestSource
 
@@ -30,8 +30,8 @@ def scoped_session(*_):
 
 class TestDownload(unittest.TestCase):
 
-    @patch("FMD3.Core.downloader.ZipFile")
-    @patch("FMD3.Core.downloader.download_image")
+    @patch("FMD3.core.downloader.ZipFile")
+    @patch("FMD3.core.downloader.download_image")
     def test_downloading_pages(self, download_image_mock: MagicMock, zip_patch):
         zip_patch = MockZip
         zip_patch.files = [Mock(filename="f1.cbz")]
@@ -45,8 +45,8 @@ class TestDownload(unittest.TestCase):
             download_image_mock(url, str(i).zfill(3) + ".jpeg")
 
     @unittest.skip("Needs to be remade")
-    @patch("FMD3.Core.downloader.scoped_session", new_callable=scoped_session)
-    @patch("FMD3.Core.downloader.download_image")
+    @patch("FMD3.core.downloader.scoped_session", new_callable=scoped_session)
+    @patch("FMD3.core.downloader.download_image")
     def test_download_series_chapter(self, dld, session, *args):
         # patch db session
         # Insert series

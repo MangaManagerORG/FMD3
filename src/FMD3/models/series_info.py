@@ -1,6 +1,6 @@
 import dataclasses
 from ComicInfo import ComicInfo
-from FMD3.Models.Chapter import Chapter
+from FMD3.models.chapter import Chapter
 
 
 @dataclasses.dataclass(init=False)

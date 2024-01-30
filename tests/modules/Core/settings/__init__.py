@@ -3,7 +3,7 @@ import os
 from pathlib import Path
 from unittest.mock import patch
 
-from FMD3.Core.settings import SettingControl, SettingKeys, SettingType, Settings
+from FMD3.core.settings import SettingControl, SettingKeys, SettingType, Settings
 
 
 # class TestSettingsInit(unittest.TestCase):
@@ -22,7 +22,7 @@ from FMD3.Core.settings import SettingControl, SettingKeys, SettingType, Setting
 #
 #         self.assertEqual(self.settings._settings_dict, {})
 
-@patch("FMD3.Core.settings.Settings.save")
+@patch("FMD3.core.settings.Settings.save")
 class TestSettingsDefaults(unittest.TestCase):
     def setUp(self):
         if Path(Settings._config_file).exists():

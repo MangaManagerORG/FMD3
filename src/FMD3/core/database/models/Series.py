@@ -20,6 +20,7 @@ class Series(Base):
     source_id = Column(String(255),  nullable=False)  # Used
     title = Column(Text, nullable=False)  # Used
     status = Column(SmallInteger)  # Used
+
     save_to = Column(Text)  # will be used
 
     dateadded = Column(DateTime, server_default=func.now())

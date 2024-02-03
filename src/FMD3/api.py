@@ -15,7 +15,12 @@ from FMD3.sources import get_source as sup_get_source, get_sources_list
 
 
 def get_series(sort=_NoArg.NO_ARG, order: Literal["asc", "desc"] = "desc", limit=None):
-    order = desc if order == "asc" else desc
+    order = desc if order == "desc" else asc
+    q = db.Session().query(db.Series)
+    if sort != _NoArg.NO_ARG:
+        q = q.order_by(order(get_column_from_str("series", sort)))
+    if limit:
+        q = q.limit(limit)
 
     return [
         {
@@ -32,8 +37,7 @@ def get_series(sort=_NoArg.NO_ARG, order: Literal["asc", "desc"] = "desc", limit
             "datelastupdated": series.datelastupdated,
 
         }
-        for series in
-        db.Session().query(db.Series).order_by(order(get_column_from_str("series", sort))).limit(limit).all()
+        for series in q.all()
     ]
 
 

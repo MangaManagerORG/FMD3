@@ -1,5 +1,3 @@
-import json
-import tkinter as tk
 from pathlib import Path
 
 from FMD3.api import get_series

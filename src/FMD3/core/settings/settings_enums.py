@@ -11,3 +11,4 @@ class SettingType(Enum):
     Options = 2
     Number = 3
     Radio = 4
+    STR_ARRAY = 5

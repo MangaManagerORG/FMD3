@@ -733,6 +733,7 @@
                                     <child>
                                       <object class="ttk.Entry" id="entry6">
                                         <property name="state">normal</property>
+                                        <property name="textvariable">string:settings_lib_alias_entry</property>
                                         <layout manager="grid">
                                           <property name="column">0</property>
                                           <property name="row">1</property>
@@ -751,6 +752,7 @@
                                     </child>
                                     <child>
                                       <object class="ttk.Button" id="button10">
+                                        <property name="command" type="command" cbtype="simple">add_library_to_treeview</property>
                                         <property name="text" translatable="yes">ADD</property>
                                         <layout manager="grid">
                                           <property name="column">2</property>
@@ -760,6 +762,7 @@
                                     </child>
                                     <child>
                                       <object class="ttk.Entry" id="entry9">
+                                        <property name="textvariable">string:settings_lib_path_entry</property>
                                         <layout manager="grid">
                                           <property name="column">1</property>
                                           <property name="row">1</property>
@@ -770,7 +773,7 @@
                                   </object>
                                 </child>
                                 <child>
-                                  <object class="pygubu.builder.widgets.editabletreeview" id="editabletreeview1">
+                                  <object class="pygubu.builder.widgets.editabletreeview" id="settings_libraries_treeview" named="True">
                                     <property name="height">5</property>
                                     <property name="selectmode">extended</property>
                                     <property name="show">headings</property>
@@ -817,8 +820,10 @@
                               </object>
                             </child>
                             <child>
-                              <object class="ttk.Combobox" id="combobox2">
+                              <object class="ttk.Combobox" id="settings_def_lib_combo" named="True">
+                                <property name="postcommand" type="command" cbtype="simple">settings_load_libs_from_treeview</property>
                                 <property name="state">readonly</property>
+                                <property name="textvariable">string:default_downloads_path</property>
                                 <layout manager="pack">
                                   <property name="fill">x</property>
                                   <property name="side">top</property>

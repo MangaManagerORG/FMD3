@@ -87,13 +87,15 @@ def get_source_chapters(source_id, series_id, filter: int = None):
     }
         for chapter in chapters]
 
+
 def get_sanitized_download(website=None, manga=None, author=None, artist=None):
-    return pathlib.Path(Settings().get(Keys.DEFAULT_DOWNLOAD_PATH),get_series_folder_name(website=website,manga=manga,author=author,artist=artist))
+    return pathlib.Path(Settings().get(Keys.DEFAULT_DOWNLOAD_PATH),
+                        get_series_folder_name(website=website, manga=manga, author=author, artist=artist))
 
 
 def get_series_info(source_id, series_id):
     source = sup_get_source(source_id=source_id)
-    series_info,save_to = source.get_series_info(series_id)
+    series_info, save_to = source.get_series_info(series_id)
     if not series_info:
         return {}
     return {
@@ -139,7 +141,7 @@ def get_cover(source_id, request_url):
     return source.session.get(request_url)
 
 
-def download_chapters(source_id: str, series_id: str, chapter_ids: list[str],output_path=None):
+def download_chapters(source_id: str, series_id: str, chapter_ids: list[str], output_path=None):
     source = sup_get_source(source_id=source_id)
     chapters = source.get_queried_chapters(series_id, chapter_ids)
 
@@ -168,7 +170,8 @@ def update_settings(new_settings):
     new_set = json.loads(new_settings)
     Settings().update(new_set)
 
-def update_save_to(series_id,new_value):
+
+def update_save_to(series_id, new_value):
     if new_value is None:
         return
     db.Session().query(db.Series).filter_by(series_id=series_id).one_or_none().save_to = new_value

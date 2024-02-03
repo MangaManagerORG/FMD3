@@ -38,7 +38,9 @@ class Settings:
             self._settings_dict[section][control.key.value] = control.to_dict()
 
     def check_key(self, section, key):
-        if self._settings_dict[section].get(key.value, None) is None:
+        if not isinstance(key,str):
+            key = key.value
+        if self._settings_dict[section].get(key, None) is None:
             raise Exception(f"Setting key not found '{section}.{key}'")
 
     def check_section(self, section):
@@ -95,9 +97,10 @@ class Settings:
 
     def update(self, new_dict):
         for section in new_dict:
+            self.check_section(section)
             for key in new_dict[section]:
-                if key in self._settings_dict:
-                    self._settings_dict[section][key]["value"] = new_dict[section][key]["value"]
+                self.check_key(section,key)
+                self._settings_dict[section][key]["value"] = new_dict[section][key]["value"]
         self.save()
 
     def to_json(self):

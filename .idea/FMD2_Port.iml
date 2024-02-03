@@ -5,6 +5,18 @@
       <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/test" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/tests" isTestSource="true" />
+      <excludeFolder url="file://$MODULE_DIR$/Overlord" />
+      <excludeFolder url="file://$MODULE_DIR$/Series A" />
+      <excludeFolder url="file://$MODULE_DIR$/Series B" />
+      <excludeFolder url="file://$MODULE_DIR$/Series a Folder" />
+      <excludeFolder url="file://$MODULE_DIR$/Soukyuu Boys" />
+      <excludeFolder url="file://$MODULE_DIR$/Tensei Shitara Ken Deshita Another Wish" />
+      <excludeFolder url="file://$MODULE_DIR$/Tensei Shitara Warui Kuni no Musume Deshita" />
+      <excludeFolder url="file://$MODULE_DIR$/Tensei Shitara dai Nana Ouji datta node, Kimama ni Majutsu o Kiwamemasu" />
+      <excludeFolder url="file://$MODULE_DIR$/config" />
+      <excludeFolder url="file://$MODULE_DIR$/data" />
+      <excludeFolder url="file://$MODULE_DIR$/dist" />
+      <excludeFolder url="file://$MODULE_DIR$/test_download_lib" />
       <excludeFolder url="file://$MODULE_DIR$/venv" />
     </content>
     <orderEntry type="jdk" jdkName="Python 3.11 (FMD2_Port)" jdkType="Python SDK" />

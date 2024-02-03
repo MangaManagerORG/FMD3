@@ -121,10 +121,17 @@ class TkinterUI(App):
         self.track_setting("rename_chapter_digits_volume_value")
         self.track_setting("rename_chapter_digits_chapter_value")
 
+        self.track_setting("default_downloads_path")#,"settings_def_lib_combo")
+        self.settings_load_save_to_treeview_from_settings()
 
 
         super().__init__()
 
+    def settings_load_save_to_treeview_from_settings(self):
+        tree = self.builder.get_object("settings_libraries_treeview")
+        for lib in self.settings["Core"].get("libraries_alias_paths_list")["value"]:
+            # libs.append(lib["alias"] + " - " + lib["path"])
+            tree.insert('', 'end', lib["path"], values=(lib["alias"], lib["path"]))
     def on_source_selected(self, *_):
 
         combo = self.builder.get_object("source_selector_combobox")
@@ -169,11 +176,38 @@ class TkinterUI(App):
             new_state = tk.NORMAL if new_value else tk.DISABLED
             widget.config(state=new_state)
 
-        self.settings[key]["value"] = new_value
+        self.settings["Core"][key]["value"] = new_value
         print(f"setting key:{key} updated to: {new_value}")
 
     def apply_settings(self):
         update_settings(json.dumps(self.settings))
+
+    def add_library_to_treeview(self,*_):
+        alias = self.builder.get_variable("settings_lib_alias_entry").get()
+        path = self.builder.get_variable("settings_lib_path_entry").get()
+        tree = self.builder.get_object("settings_libraries_treeview")
+
+        tree.insert('', 'end', path, values=(alias,path))
+        self.settings["Core"].get("libraries_alias_paths_list")["value"].append({"alias":alias,"path":path})
+        print("sads")
+    def settings_load_libs_from_treeview(self):
+        libs = set()
+        tree = self.builder.get_object("settings_libraries_treeview")
+
+        for lib in self.settings["Core"].get("libraries_alias_paths_list")["value"]:
+            libs.add(lib["alias"] + " - " + lib["path"])
+
+        for row in tree.get_children():
+            alias, path = tree.item(row)['values']
+            libs.add(alias + " - " + path)
+
+
+        lib_selector_combo = self.builder.get_object("settings_def_lib_combo")
+        lib_selector_combo['values'] = libs
+
+
+
+
 
 
 if __name__ == "__main__":

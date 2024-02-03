@@ -3,8 +3,8 @@ from tkinter import END, NW
 
 from PIL import ImageTk, Image
 from FMD3_Tkinter.api import get_series_info, query_series
-from FMD3.api import get_chapters, get_source_chapters, get_cover, download_chapters, \
-    get_sanitized_download
+from FMD3.api import get_cover, get_sanitized_download
+from FMD3.api.chapters import get_chapters, get_source_chapters, download_chapters
 
 
 def add_detail_entry(widget,data, title, data_key, tag=""):

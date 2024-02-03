@@ -18,6 +18,7 @@
       <excludeFolder url="file://$MODULE_DIR$/dist" />
       <excludeFolder url="file://$MODULE_DIR$/test_download_lib" />
       <excludeFolder url="file://$MODULE_DIR$/venv" />
+      <excludeFolder url="file://$MODULE_DIR$/src/FMD3_ThePromidius.egg-info" />
     </content>
     <orderEntry type="jdk" jdkName="Python 3.11 (FMD2_Port)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />

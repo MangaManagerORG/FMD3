@@ -10,7 +10,8 @@ from .settings import Settings
 class App(Favourites, Series, Settings):
     # Settings stuff
     settings_libraries: dict
-
+    def __init__(self):
+        Settings.__init__(self)
     def add_library_to_treeview(self, *_):
         alias = self.builder.get_variable("settings_lib_alias_entry").get()
         path = self.builder.get_variable("settings_lib_path_entry").get()

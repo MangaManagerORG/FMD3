@@ -1055,6 +1055,64 @@
                         </child>
                       </object>
                     </child>
+                    <child>
+                      <object class="ttk.Notebook.Tab" id="tab6">
+                        <property name="text" translatable="yes">Sources</property>
+                        <child>
+                          <object class="ttk.Frame" id="frame28">
+                            <property name="height">200</property>
+                            <property name="width">200</property>
+                            <layout manager="pack">
+                              <property name="padx">5</property>
+                              <property name="pady">5</property>
+                              <property name="side">top</property>
+                            </layout>
+                            <child>
+                              <object class="ttk.Notebook" id="notebook2">
+                                <property name="height">200</property>
+                                <property name="width">200</property>
+                                <layout manager="pack">
+                                  <property name="expand">true</property>
+                                  <property name="fill">both</property>
+                                  <property name="padx">8</property>
+                                  <property name="pady">8</property>
+                                  <property name="side">top</property>
+                                </layout>
+                                <child>
+                                  <object class="ttk.Notebook.Tab" id="tab5">
+                                    <property name="text" translatable="yes">Options</property>
+                                    <child>
+                                      <object class="ttk.Frame" id="frame29">
+                                        <property name="height">200</property>
+                                        <property name="width">200</property>
+                                        <layout manager="pack">
+                                          <property name="fill">both</property>
+                                          <property name="side">top</property>
+                                        </layout>
+                                        <child>
+                                          <object class="pygubu.builder.widgets.scrolledframe" id="settings_sources_options" named="True">
+                                            <property name="scrolltype">vertical</property>
+                                            <property name="usemousewheel">false</property>
+                                            <layout manager="pack">
+                                              <property name="anchor">n</property>
+                                              <property name="expand">true</property>
+                                              <property name="fill">both</property>
+                                              <property name="padx">20</property>
+                                              <property name="pady">20</property>
+                                              <property name="side">top</property>
+                                            </layout>
+                                          </object>
+                                        </child>
+                                      </object>
+                                    </child>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
                   </object>
                 </child>
                 <child>
@@ -1073,6 +1131,11 @@
                 </child>
               </object>
             </child>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Notebook.Tab" id="tab3">
+            <property name="text" translatable="yes">Sources</property>
           </object>
         </child>
       </object>

@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from FMD3.api import get_series
+from FMD3_Tkinter.api import get_series
 from .favorites import Favourites
 from .series import Series
 from .settings import Settings

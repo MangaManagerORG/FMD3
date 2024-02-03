@@ -1,6 +1,7 @@
 from datetime import datetime
 
-from FMD3.api import get_series, get_source, get_chapters, get_series_info
+from FMD3.api import  get_source, get_chapters
+from FMD3_Tkinter.api import get_series
 
 
 def _str_to_datetime(string):

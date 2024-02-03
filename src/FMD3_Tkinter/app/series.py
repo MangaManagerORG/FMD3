@@ -2,8 +2,8 @@ from io import BytesIO
 from tkinter import END, NW
 
 from PIL import ImageTk, Image
-
-from FMD3.api import get_series_info, query_series, get_chapters, get_source_chapters, get_cover, download_chapters, \
+from FMD3_Tkinter.api import get_series_info
+from FMD3.api import query_series, get_chapters, get_source_chapters, get_cover, download_chapters, \
     get_sanitized_download
 
 

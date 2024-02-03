@@ -6,6 +6,7 @@ from sqlalchemy.sql.base import _NoArg
 from FMD3 import get_source as sup_get_source
 from FMD3.core import database as db
 from FMD3.core.database.predefined import get_column_from_str
+from FMD3.core.utils import get_series_folder_name as sup_get_series_folder_name
 
 
 def get_series(sort=_NoArg.NO_ARG, order: Literal["asc", "desc"] = "desc", limit=None):
@@ -66,3 +67,12 @@ def query_series(source_id, series_query):
         "cover_url": series.cover_url
     }
         for series in series_list]
+
+
+def get_series_folder_name(website=None, manga=None, author=None, artist=None):
+    return sup_get_series_folder_name(website, manga, author, artist)
+
+
+def get_cover(source_id, request_url):
+    source = sup_get_source(source_id=source_id)
+    return source.session.get(request_url)

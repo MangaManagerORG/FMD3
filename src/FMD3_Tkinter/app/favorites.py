@@ -6,7 +6,8 @@ from FMD3_Tkinter.api import get_series
 
 
 def _str_to_datetime(string):
-    return datetime.strptime(string, "%Y-%m-%d %H:%M:%S")
+    return datetime.strptime(string, "%Y-%m-%dT%H:%M:%S")
+
 
 class Favourites:
     favourites_treeview: type[""]
@@ -66,6 +67,8 @@ class Favourites:
 
     def child_opened_fav_treeview(self, *_):
         series_id = self.favourites_treeview.focus()
+        if not series_id:
+            return
         # Check if the item has been loaded
         if not self.fav_tree_loaded_parents.get(series_id, False):
             # Load the children of the parent item

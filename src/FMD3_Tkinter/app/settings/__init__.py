@@ -1,7 +1,7 @@
 import json
 import tkinter as tk
 from tkinter import ttk
-from FMD3.api import update_settings
+from FMD3_Tkinter.api import update_settings
 from .source_settings import SourceSettings
 
 

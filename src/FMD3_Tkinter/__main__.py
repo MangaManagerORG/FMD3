@@ -6,8 +6,9 @@ from tkinter import ttk
 import pygubu
 from FMD3_Tkinter.app import App
 from FMD3_Tkinter.api import get_series_info
-from FMD3.api import get_settings, update_save_to
+from FMD3_Tkinter.api import get_settings
 from FMD3_Tkinter.api import get_sources
+from FMD3_Tkinter.api import update_settings_save_to as update_save_to
 
 PROJECT_PATH = pathlib.Path(__file__).parent
 PROJECT_UI = PROJECT_PATH / "ui_test.ui"

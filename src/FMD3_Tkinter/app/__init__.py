@@ -10,6 +10,8 @@ class App(Favourites, Series, Settings):
     settings_libraries: dict
     def __init__(self):
         Settings.__init__(self)
+        Favourites.__init__(self)
+        Series.__init__(self)
     def add_library_to_treeview(self, *_):
         alias = self.builder.get_variable("settings_lib_alias_entry").get()
         path = self.builder.get_variable("settings_lib_path_entry").get()
@@ -51,7 +53,7 @@ class App(Favourites, Series, Settings):
 
     def nb_tab_changed(self, event):
         match event.widget.tab(event.widget.select(), "text"):
-            case "Favorites":
-                self.load_favourites(get_series("dateadded", "desc", 10))
+            # case "Favorites":
+            #     self.load_favourites(get_series("dateadded", "desc", 10))
             case _:
                 ...

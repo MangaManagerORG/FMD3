@@ -1,6 +1,6 @@
 from sqlalchemy import or_, and_
 
-from FMD3.core.database import DLDChapters, Session
+from FMD3.core.database import DLDChapters, Session, Base
 
 
 def chapter_exists(series_id, chapter_id, session=Session, ):
@@ -47,3 +47,19 @@ def max_chapter_number(series_id):
         return max_number.number
     else:
         return None
+
+def get_column_from_str(tablename,columnname):
+    mappers = Base.registry.mappers
+    # Get the mapper for our table.
+    mapper = next(m for m in mappers if m.entity.__tablename__ == tablename)
+    # Get the entity class (Thing).
+    entity = mapper.entity
+    # Get the column from the Table.
+    table_column = mapper.selectable.c[columnname]
+    # Get the mapper property that corresponds to the column
+    # (the entity attribute may have a different name to the
+    # column in the database).
+    mapper_property = mapper.get_property_by_column(table_column)
+    # Get the queryable entity attribute (Thing.thing_foo).
+    return mapper.all_orm_descriptors[mapper_property.key]
+

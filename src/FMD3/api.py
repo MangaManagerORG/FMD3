@@ -1,7 +1,12 @@
 import json
 import pathlib
+from typing import Literal
+
+from sqlalchemy import asc, desc
+from sqlalchemy.sql.base import _NoArg
 
 from FMD3.core import database as db
+from FMD3.core.database.predefined import get_column_from_str
 from FMD3.core.settings import Settings, Keys
 from FMD3.core.updater import create_download_task
 from FMD3.core.utils import make_output_path, get_series_folder_name
@@ -9,7 +14,9 @@ from FMD3.models.chapter import Chapter
 from FMD3.sources import get_source as sup_get_source, get_sources_list
 
 
-def get_series():
+def get_series(sort=_NoArg.NO_ARG, order: Literal["asc", "desc"] = "desc", limit=None):
+    order = desc if order == "asc" else desc
+
     return [
         {
             "series_id": series.series_id,
@@ -25,7 +32,8 @@ def get_series():
             "datelastupdated": series.datelastupdated,
 
         }
-        for series in db.Session().query(db.Series).all()
+        for series in
+        db.Session().query(db.Series).order_by(order(get_column_from_str("series", sort))).limit(limit).all()
     ]
 
 

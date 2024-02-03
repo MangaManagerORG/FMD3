@@ -10,6 +10,7 @@
       <object class="ttk.Notebook" id="notebook_widget" named="True">
         <property name="height">800</property>
         <property name="width">1000</property>
+        <bind sequence="&lt;&lt;NotebookTabChanged&gt;&gt;" handler="nb_tab_changed" add="" />
         <layout manager="pack">
           <property name="expand">true</property>
           <property name="fill">both</property>
@@ -459,7 +460,7 @@
           </object>
         </child>
         <child>
-          <object class="ttk.Notebook.Tab" id="tab3">
+          <object class="ttk.Notebook.Tab" id="fav_tab" named="True">
             <property name="text" translatable="yes">Favorites</property>
             <child>
               <object class="ttk.Frame" id="frame10">
@@ -606,8 +607,9 @@
                       </object>
                     </child>
                     <child>
-                      <object class="ttk.Treeview.Column" id="column5">
+                      <object class="ttk.Treeview.Column" id="dateadded" named="True">
                         <property name="column_anchor">w</property>
+                        <property name="command" type="command" cbtype="simple">fav_sort_date_added</property>
                         <property name="heading_anchor">w</property>
                         <property name="minwidth">20</property>
                         <property name="stretch">true</property>

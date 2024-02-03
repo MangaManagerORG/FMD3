@@ -95,11 +95,15 @@ class Series:
         self.load_queried_cover(data.get("cover_url"))
         output_var = self.builder.get_variable("series_destination_path")
         output_widget = self.builder.get_object("series_output_save_to_entry")
+        output_lib_widget = self.builder.get_object("settings_def_series_lib_combo")
         if data.get("save_to",None) is not None:
-            output_widget.configure(state="readonly")
-            output_var.set(data.get("save_to"))
+            output_widget.configure(state="disabled")
+            output_lib_widget.configure(state="disabled")
+            self.builder.get_variable("series_final_download_dest").set(data.get("save_to"))
+            # output_var.set(data.get("save_to"))
         else:
             output_widget.configure(state="normal")
+            output_lib_widget.configure(state="readonly")
             output_var.set(get_sanitized_download(manga=data.get("title")))
 
     def load_queried_cover(self, cover_url):
@@ -125,4 +129,6 @@ class Series:
         chapters_treeview = self.builder.get_object("selected_series_chapter_treeview")
         to_download_ids = chapters_treeview.selection()
         to_download_series = self.selected_series_id
-        download_chapters(self.selected_source_id, to_download_series, to_download_ids,output_path=self.builder.get_variable("series_destination_path").get()) # Todo save to
+        self.builder.get_object("series_output_save_to_entry").configure(state="disabled")
+        self.builder.get_object("settings_def_series_lib_combo").configure(state="disabled")
+        download_chapters(self.selected_source_id, to_download_series, to_download_ids,output_path=self.builder.get_variable("series_final_download_dest").get()) # Todo save to

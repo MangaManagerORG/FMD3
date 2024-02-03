@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from FMD3.api.chapters import get_chapters
+from FMD3_Tkinter.api import get_chapters
 from FMD3_Tkinter.api import get_source
 from FMD3_Tkinter.api import get_series
 

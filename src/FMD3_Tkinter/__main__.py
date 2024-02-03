@@ -5,7 +5,7 @@ from tkinter import ttk
 
 import pygubu
 from FMD3_Tkinter.app import App
-from FMD3.api import get_sources, get_series_info, get_settings, update_settings, update_save_to
+from FMD3.api import get_sources, get_series_info, get_settings, update_save_to
 
 PROJECT_PATH = pathlib.Path(__file__).parent
 PROJECT_UI = PROJECT_PATH / "ui_test.ui"
@@ -26,9 +26,10 @@ class Source_():
 
 
 class TkinterUI(App):
-    def test(self,*args):
+    def test(self, *args):
         print("asdas")
-    def do_popup(self,event):
+
+    def do_popup(self, event):
         m = self.builder.get_object("fav_treeview_ctx_menu")
 
         try:
@@ -40,9 +41,10 @@ class TkinterUI(App):
                 m.tk_popup(event.x_root, event.y_root)
         finally:
             m.grab_release()
-    def show_edit_save_to(self,*args):
-        "series_destination_path_edit"
-        "top_level_edit_save_to"
+
+    def show_edit_save_to(self, *args):
+        # "series_destination_path_edit"
+        # "top_level_edit_save_to"
         self.builder.get_object('dialog1', self.mainwindow).run()
         self.builder.connect_callbacks(self)
         series_id = self.favourites_treeview.selection()
@@ -52,23 +54,24 @@ class TkinterUI(App):
         toplevel_entry_val.set(vals[2])
         # top_level.deiconify()
 
-    def update_series_destination_path_submit(self,*args):
+    def update_series_destination_path_submit(self, *args):
         series_id = self.favourites_treeview.selection()[0]
         vals = list(self.favourites_treeview.item(series_id, "values"))
 
         toplevel_entry_val = self.builder.get_variable("series_destination_path_edit")
         vals[2] = toplevel_entry_val.get()
-        self.favourites_treeview.item(series_id,values=vals)
-        update_save_to(series_id,toplevel_entry_val.get())
+        self.favourites_treeview.item(series_id, values=vals)
+        update_save_to(series_id, toplevel_entry_val.get())
         print("edited")
 
         self.close_series_destination_path_submit()
 
-    def close_series_destination_path_submit(self,*args):
+    def close_series_destination_path_submit(self, *args):
         top_level = self.builder.get_object('dialog1')
         toplevel_entry_val = self.builder.get_variable("series_destination_path_edit")
         toplevel_entry_val.set(None)
         top_level.close()
+
     def __init__(self, master=None, translator=None):
 
         self.settings = json.loads(get_settings())
@@ -79,17 +82,14 @@ class TkinterUI(App):
         # Main widget
         self.mainwindow: tk.Tk = builder.get_object("tk1", master)
         self.favourites_treeview = self.builder.get_object("favourites_treeview")
-        self.favourites_treeview.bind("<Button-3>",self.do_popup)
+        self.favourites_treeview.bind("<Button-3>", self.do_popup)
         self.favourites_treeview: ttk.Treeview
         self.favourites_treeview.focus()
 
-        self.builder.get_object("fav_treeview_ctx_menu",master)
+        self.builder.get_object("fav_treeview_ctx_menu", master)
         # self.builder.get_object("command2")
 
         # top2 = tk.Toplevel(self.mainwindow)
-
-
-
 
         builder.connect_callbacks(self)
         s = get_sources()
@@ -110,28 +110,36 @@ class TkinterUI(App):
         self.track_setting("replace_unicode", "replace_unicode_char_with_entry")
         self.track_setting("replace_unicode_with")
 
-        self.track_setting("generate_series_folder","manga_folder_name_entry")
+        self.track_setting("generate_series_folder", "manga_folder_name_entry")
         self.track_setting("series_folder_name")
 
         # self.track_setting("remove_manga_name_from_chapter_name")
         self.track_setting("chapter_name")
 
-        self.track_setting("rename_chapter_digits_volume","rename_volume_digits_spinbox")
-        self.track_setting("rename_chapter_digits_chapter","rename_chapter_digits_spinbox")
+        self.track_setting("rename_chapter_digits_volume", "rename_volume_digits_spinbox")
+        self.track_setting("rename_chapter_digits_chapter", "rename_chapter_digits_spinbox")
         self.track_setting("rename_chapter_digits_volume_value")
         self.track_setting("rename_chapter_digits_chapter_value")
 
-        self.track_setting("default_downloads_path")#,"settings_def_lib_combo")
+        self.settings_libraries = {}
+        self.track_setting("default_downloads_path")  # ,"settings_def_lib_combo")
+
+        # Library selection field
+        default_series_downloads_path = builder.get_variable("default_series_downloads_path")
+        default_series_downloads_path.trace_add("write", self.series_update_final_dest)
+
+
+        # Series field
+        series_destination_path = builder.get_variable("series_destination_path")
+        series_destination_path.trace_add("write", self.series_update_final_dest)
+        super().__init__()
         self.settings_load_save_to_treeview_from_settings()
 
+        # Library selection field set default
+        default_series_downloads_path.set(self.settings["Core"].get("default_downloads_path", None)["value"])
 
-        super().__init__()
 
-    def settings_load_save_to_treeview_from_settings(self):
-        tree = self.builder.get_object("settings_libraries_treeview")
-        for lib in self.settings["Core"].get("libraries_alias_paths_list")["value"]:
-            # libs.append(lib["alias"] + " - " + lib["path"])
-            tree.insert('', 'end', lib["path"], values=(lib["alias"], lib["path"]))
+
     def on_source_selected(self, *_):
 
         combo = self.builder.get_object("source_selector_combobox")
@@ -159,55 +167,6 @@ class TkinterUI(App):
 
     def run(self):
         self.mainwindow.mainloop()
-
-    def track_setting(self, key, link_to=None):
-        var = self.builder.get_variable(key)
-        # Set the StringVar's value to the initial value of the corresponding attribute
-        var.set(self.settings["Core"].get(key).get("value"))
-        # Set up the trace on the StringVar to call a callback when it changes
-        var.trace_add("write", lambda *args: self.update_attribute(key, var, link_to))
-
-    def update_attribute(self, key, string_var, link_to=None):
-        # Update the object's attribute when the StringVar changes
-        new_value = string_var.get()
-
-        if link_to:
-            widget = self.builder.get_object(link_to)
-            new_state = tk.NORMAL if new_value else tk.DISABLED
-            widget.config(state=new_state)
-
-        self.settings["Core"][key]["value"] = new_value
-        print(f"setting key:{key} updated to: {new_value}")
-
-    def apply_settings(self):
-        update_settings(json.dumps(self.settings))
-
-    def add_library_to_treeview(self,*_):
-        alias = self.builder.get_variable("settings_lib_alias_entry").get()
-        path = self.builder.get_variable("settings_lib_path_entry").get()
-        tree = self.builder.get_object("settings_libraries_treeview")
-
-        tree.insert('', 'end', path, values=(alias,path))
-        self.settings["Core"].get("libraries_alias_paths_list")["value"].append({"alias":alias,"path":path})
-        print("sads")
-    def settings_load_libs_from_treeview(self):
-        libs = set()
-        tree = self.builder.get_object("settings_libraries_treeview")
-
-        for lib in self.settings["Core"].get("libraries_alias_paths_list")["value"]:
-            libs.add(lib["alias"] + " - " + lib["path"])
-
-        for row in tree.get_children():
-            alias, path = tree.item(row)['values']
-            libs.add(alias + " - " + path)
-
-
-        lib_selector_combo = self.builder.get_object("settings_def_lib_combo")
-        lib_selector_combo['values'] = libs
-
-
-
-
 
 
 if __name__ == "__main__":

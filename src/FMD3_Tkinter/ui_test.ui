@@ -333,72 +333,123 @@
                     <property name="height">200</property>
                     <property name="width">200</property>
                     <layout manager="pack">
-                      <property name="anchor">s</property>
                       <property name="expand">false</property>
                       <property name="fill">x</property>
                       <property name="padx">20</property>
                       <property name="pady">20</property>
-                      <property name="side">bottom</property>
+                      <property name="side">top</property>
                     </layout>
                     <child>
-                      <object class="ttk.Frame" id="frame22">
+                      <object class="ttk.Frame" id="frame27">
+                        <property name="height">200</property>
+                        <property name="width">200</property>
                         <layout manager="pack">
-                          <property name="anchor">w</property>
-                          <property name="expand">true</property>
-                          <property name="fill">x</property>
-                          <property name="side">left</property>
+                          <property name="side">top</property>
                         </layout>
                         <child>
-                          <object class="ttk.Label" id="label5">
-                            <property name="text" translatable="yes">Save to:	</property>
+                          <object class="ttk.Frame" id="frame25">
+                            <property name="height">200</property>
+                            <property name="width">200</property>
                             <layout manager="pack">
-                              <property name="anchor">w</property>
-                              <property name="side">top</property>
-                            </layout>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="ttk.Entry" id="series_output_save_to_entry" named="True">
-                            <property name="state">normal</property>
-                            <property name="textvariable">string:series_destination_path</property>
-                            <property name="width">120</property>
-                            <layout manager="pack">
-                              <property name="anchor">w</property>
                               <property name="expand">true</property>
                               <property name="fill">x</property>
                               <property name="side">left</property>
                             </layout>
+                            <child>
+                              <object class="ttk.Label" id="label10">
+                                <layout manager="pack">
+                                  <property name="expand">true</property>
+                                  <property name="fill">x</property>
+                                  <property name="side">top</property>
+                                </layout>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="ttk.Combobox" id="settings_def_series_lib_combo" named="True">
+                                <property name="postcommand" type="command" cbtype="simple">settings_load_libs_from_treeview</property>
+                                <property name="state">readonly</property>
+                                <property name="textvariable">string:default_series_downloads_path</property>
+                                <layout manager="pack">
+                                  <property name="expand">true</property>
+                                  <property name="fill">x</property>
+                                  <property name="side">left</property>
+                                </layout>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="ttk.Frame" id="frame22">
+                            <layout manager="pack">
+                              <property name="anchor">e</property>
+                              <property name="expand">true</property>
+                              <property name="fill">x</property>
+                              <property name="side">left</property>
+                            </layout>
+                            <child>
+                              <object class="ttk.Label" id="label5">
+                                <property name="text" translatable="yes">Save to:	</property>
+                                <layout manager="pack">
+                                  <property name="anchor">w</property>
+                                  <property name="side">top</property>
+                                </layout>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="ttk.Entry" id="series_output_save_to_entry" named="True">
+                                <property name="state">normal</property>
+                                <property name="textvariable">string:series_destination_path</property>
+                                <property name="width">120</property>
+                                <layout manager="pack">
+                                  <property name="anchor">w</property>
+                                  <property name="expand">true</property>
+                                  <property name="fill">x</property>
+                                  <property name="side">left</property>
+                                </layout>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="ttk.Frame" id="frame21">
+                            <property name="height">10</property>
+                            <property name="width">160</property>
+                            <layout manager="pack">
+                              <property name="anchor">e</property>
+                              <property name="expand">true</property>
+                              <property name="fill">y</property>
+                              <property name="padx">5</property>
+                              <property name="pady">5</property>
+                              <property name="side">right</property>
+                            </layout>
+                            <containerlayout manager="pack">
+                              <property name="propagate">false</property>
+                            </containerlayout>
+                            <child>
+                              <object class="ttk.Button" id="button3">
+                                <property name="command" type="command" cbtype="simple">download_selected_chapters</property>
+                                <property name="text" translatable="yes">Download selected</property>
+                                <layout manager="pack">
+                                  <property name="anchor">s</property>
+                                  <property name="expand">true</property>
+                                  <property name="fill">y</property>
+                                  <property name="side">bottom</property>
+                                </layout>
+                              </object>
+                            </child>
                           </object>
                         </child>
                       </object>
                     </child>
                     <child>
-                      <object class="ttk.Frame" id="frame21">
-                        <property name="height">10</property>
-                        <property name="width">160</property>
+                      <object class="ttk.Entry" id="entry3">
+                        <property name="state">readonly</property>
+                        <property name="textvariable">string:series_final_download_dest</property>
+                        <property name="width">200</property>
                         <layout manager="pack">
-                          <property name="anchor">e</property>
-                          <property name="expand">true</property>
-                          <property name="fill">y</property>
-                          <property name="padx">5</property>
-                          <property name="pady">5</property>
-                          <property name="side">right</property>
+                          <property name="expand">false</property>
+                          <property name="side">top</property>
                         </layout>
-                        <containerlayout manager="pack">
-                          <property name="propagate">false</property>
-                        </containerlayout>
-                        <child>
-                          <object class="ttk.Button" id="button3">
-                            <property name="command" type="command" cbtype="simple">download_selected_chapters</property>
-                            <property name="text" translatable="yes">Download selected</property>
-                            <layout manager="pack">
-                              <property name="anchor">s</property>
-                              <property name="expand">true</property>
-                              <property name="fill">y</property>
-                              <property name="side">bottom</property>
-                            </layout>
-                          </object>
-                        </child>
                       </object>
                     </child>
                   </object>

@@ -8,7 +8,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "FMD3"
 description = "Free Manga Downloader 3"
-version = "0.0.0.dev1"
+version = "0.0.0.a1dev2"
 authors = [
   { name="ThePromidius", email="thepromidiusyt@gmail.com" }
 ]

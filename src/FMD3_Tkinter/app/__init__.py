@@ -127,7 +127,7 @@ class TkinterUI(App):
         toplevel_entry_val = self.builder.get_variable("series_destination_path_edit")
         vals[2] = toplevel_entry_val.get()
         self.favourites_treeview.item(series_id, values=vals)
-        api.update_save_to(series_id, toplevel_entry_val.get())
+        api.update_settings_save_to(series_id, toplevel_entry_val.get())
         print("edited")
 
         self.close_series_destination_path_submit()

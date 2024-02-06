@@ -5,6 +5,7 @@
     <property name="padx">2</property>
     <property name="pady">2</property>
     <property name="resizable">both</property>
+    <property name="title" translatable="yes">FMD3 - Web Client - ThePromidius</property>
     <property name="width">200</property>
     <child>
       <object class="ttk.Notebook" id="notebook_widget" named="True">

@@ -2,7 +2,12 @@ import json
 import time
 from pathlib import Path
 
-_json_file = Path("config/" + "client_settings.json")  # Todo: Change this to a more appropriate location
+import userpaths
+
+CONFIG_PATH = Path(userpaths.get_local_appdata(), "FMD3", "client_config")
+CONFIG_PATH.mkdir(parents=True, exist_ok=True)
+
+_json_file = Path(CONFIG_PATH, "client_settings.json")  # Todo: Change this to a more appropriate location
 
 
 class Settings:

@@ -3,11 +3,10 @@ import pathlib
 import tkinter as tk
 from pathlib import Path
 from tkinter import ttk
-
+from tkinter.tix import CheckList
 import pygubu
 
-from FMD3_Tkinter.api import get_series, get_sources, update_settings_save_to as update_save_to, get_settings, \
-    get_series_info
+from FMD3_Tkinter import api
 from .favorites import Favourites
 from .series import Series
 from .settings import Settings
@@ -68,7 +67,7 @@ class App(Favourites, Series, Settings):
 
 PROJECT_PATH = pathlib.Path(__file__).parent.parent
 PROJECT_UI = PROJECT_PATH / "ui_test.ui"
-sources = get_sources()
+sources = api.get_sources()
 
 
 class Source_():
@@ -119,7 +118,7 @@ class TkinterUI(App):
         toplevel_entry_val = self.builder.get_variable("series_destination_path_edit")
         vals[2] = toplevel_entry_val.get()
         self.favourites_treeview.item(series_id, values=vals)
-        update_save_to(series_id, toplevel_entry_val.get())
+        api.update_save_to(series_id, toplevel_entry_val.get())
         print("edited")
 
         self.close_series_destination_path_submit()
@@ -132,7 +131,7 @@ class TkinterUI(App):
 
     def __init__(self, master=None, translator=None):
 
-        self.settings = json.loads(get_settings())
+        self.settings = json.loads(api.get_settings())
 
         self.builder = builder = pygubu.Builder(translator)
         builder.add_resource_path(PROJECT_PATH)
@@ -150,7 +149,6 @@ class TkinterUI(App):
         # top2 = tk.Toplevel(self.mainwindow)
 
         builder.connect_callbacks(self)
-        s = get_sources()
         builder.get_object("source_selector_combobox").config(values=[s["name"] for s in sources])
 
         self.selected_source_id = None
@@ -215,7 +213,7 @@ class TkinterUI(App):
             values = tree.item(series_id, "values")
             if not self.selected_source_id:
                 self.selected_source_id = values[7]
-            data = get_series_info(values[7], tree.selection()[0])
+            data = api.get_series_info(values[7], tree.selection()[0])
             if data:
                 self.selected_series_id = series_id
                 series_result_tree = self.builder.get_object("series_result")
@@ -223,6 +221,12 @@ class TkinterUI(App):
                 self.load_queried_data(series_id, data)
                 self.builder.get_object("notebook_widget").select(1)
 
+    def populate_sources(self, *_):
+        frame = self.builder.get_object("enabled_sources")
+        self.cl = CheckList(frame, browsecmd=self.selectItem)
+
+    def selectItem(self, item):
+        print(item, self.cl.getstatus(item))
     def run(self):
         self.mainwindow.mainloop()
 

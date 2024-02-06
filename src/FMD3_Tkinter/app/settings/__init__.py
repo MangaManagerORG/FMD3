@@ -1,7 +1,7 @@
 import json
 import tkinter as tk
 from tkinter import ttk
-from FMD3_Tkinter.api import update_settings
+from FMD3_Tkinter import api
 from .source_settings import SourceSettings
 
 
@@ -38,7 +38,7 @@ class Settings(SourceSettings):
         print(f"setting key:{key} updated to: {new_value}")
 
     def apply_settings(self):
-        update_settings(json.dumps(self.settings))
+        api.update_settings(json.dumps(self.settings))
 
     def __init__(self):
         top_frame = self.builder.get_object("settings_sources_options")

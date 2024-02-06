@@ -16,7 +16,7 @@ class Settings:
             if not Settings._config_file.exists():
                 Settings.__instance.save()
                 time.sleep(0.5)
-                Settings.__instance.load()
+            Settings.__instance.load()
         return Settings.__instance
 
     def set(self, key, value):

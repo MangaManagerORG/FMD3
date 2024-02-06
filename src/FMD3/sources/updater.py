@@ -6,6 +6,7 @@ from . import sources_factory, get_source
 from packaging import version
 installed_sources = {}
 
+
 def check_updates():
     for source in sources_factory:
         installed_sources[source.ID] = {

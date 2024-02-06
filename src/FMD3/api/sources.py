@@ -6,7 +6,9 @@ def get_sources():
     return [
         {
             "id": source.ID,
-            "name": source.NAME
+            "name": source.NAME,
+            "version": source.VERSION,
+            "has_updates": source._has_updates,
         }
         for source in get_sources_list()
     ]
@@ -19,7 +21,9 @@ def get_source(name=None, source_id=None):
         "name": src.NAME,
         "root_url": src.ROOT_URL,
         "category": src.CATEGORY,
-        "maxtasklimit": src.MaxTaskLimit
+        "maxtasklimit": src.MaxTaskLimit,
+        "version": src.VERSION,
+        "has_updates": src._has_updates,
     }
     return source
 

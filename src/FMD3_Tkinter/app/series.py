@@ -2,8 +2,7 @@ from io import BytesIO
 from tkinter import END, NW
 
 from PIL import ImageTk, Image
-from FMD3_Tkinter.api import get_series_info, query_series, get_source_chapters, get_chapters, download_chapters, \
-    get_cover
+from FMD3_Tkinter import api
 from FMD3_Tkinter.utils import get_sanitized_download
 
 
@@ -63,7 +62,7 @@ class Series:
         if not query:
             return
 
-        series_list = query_series(self.selected_source_id, query)
+        series_list = api.query_series(self.selected_source_id, query)
 
         tree = self.builder.get_object("series_result")
         tree.delete(*tree.get_children())
@@ -76,7 +75,7 @@ class Series:
     def select_query_result(self, event):
         search_result = self.search_results.get(event.widget.selection()[0])
         series_id = search_result.get("series_id")
-        data = get_series_info(self.selected_source_id, series_id)
+        data = api.get_series_info(self.selected_source_id, series_id)
         if not data:
             return
         self.selected_series_id = series_id
@@ -89,13 +88,13 @@ class Series:
         chapters_treeview = self.builder.get_object("selected_series_chapter_treeview")
         chapters_treeview.delete(*chapters_treeview.get_children())
 
-        if dld_chapters := get_chapters(series_id):
+        if dld_chapters := api.get_chapters(series_id):
             last_in_db = max(dld_chapters, key=lambda x: x["number"])
             list_chapters_treeview(chapters_treeview, dld_chapters, ("downloaded",))
-            chapters = get_source_chapters(self.selected_source_id, series_id, last_in_db.get("number"))
+            chapters = api.get_source_chapters(self.selected_source_id, series_id, last_in_db.get("number"))
             list_chapters_treeview(chapters_treeview, chapters, ("not_downloaded",))
         else:
-            chapters = get_source_chapters(self.selected_source_id, series_id)
+            chapters = api.get_source_chapters(self.selected_source_id, series_id)
             list_chapters_treeview(chapters_treeview, chapters, ("not_downloaded",))
         self.load_queried_cover(data.get("cover_url"))
         output_var = self.builder.get_variable("series_destination_path")
@@ -119,7 +118,7 @@ class Series:
         # threading.Thread(target=getImageFromURL, args=(data.cover_url, self)).start()
         self.mainwindow.update()
 
-        response = get_cover(self.selected_source_id, cover_url)
+        response = api.get_cover(self.selected_source_id, cover_url)
         image_ = BytesIO(response.content)
         image = Image.open(image_)
         image = image.resize((130, 200), Image.NEAREST)
@@ -140,5 +139,5 @@ class Series:
         to_download_series = self.selected_series_id
         self.builder.get_object("series_output_save_to_entry").configure(state="disabled")
         self.builder.get_object("settings_def_series_lib_combo").configure(state="disabled")
-        download_chapters(self.selected_source_id, to_download_series, to_download_ids,
+        api.download_chapters(self.selected_source_id, to_download_series, to_download_ids,
                           output_path=self.builder.get_variable("series_final_download_dest").get())  # Todo save to

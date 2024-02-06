@@ -1,12 +1,10 @@
 from datetime import datetime
 
-from FMD3_Tkinter.api import get_chapters
-from FMD3_Tkinter.api import get_source
-from FMD3_Tkinter.api import get_series
+from FMD3_Tkinter import api
 
 
 def _str_to_datetime(string):
-    return datetime.strptime(string, "%Y-%m-%dT%H:%M:%S")
+    return datetime.strptime(string, "%Y-%m-%dT%H:%M:%S" if "T" in string else "%Y-%m-%d %H:%M:%S")
 
 
 class Favourites:
@@ -22,13 +20,13 @@ class Favourites:
         self._detached_fav_filter = set()
 
 
-    def load_favourites(self, series_list=get_series(sort="dateadded", order="desc")):
+    def load_favourites(self, series_list=api.get_series(sort="dateadded", order="desc")):
         for series in series_list:
             if series.get("series_id") not in self.fav_tree_loaded_parents:
                 item_id = self.favourites_treeview.insert('', 'end', series.get("series_id"), text=series.get("title"),
                                                           values=(series.get("max_chapter")
                                                                   ,
-                                                                  get_source(
+                                                                  api.get_source(
                                                                       source_id=series.get("source_id")).get(
                                                                       "name"),
                                                                   series.get("save_to"),
@@ -99,7 +97,7 @@ class Favourites:
 
     def load_children(self, parent_id):
         # Simulate loading children from a data source
-        for chapter in sorted(get_chapters(parent_id), key=lambda x: x.get("number")):
+        for chapter in sorted(api.get_chapters(parent_id), key=lambda x: x.get("number")):
             child_id = self.favourites_treeview.insert(parent_id, 'end', text=chapter.get("title") or "",
                                                        values=(
                                                            f'Ch.{chapter["number"]} Vol.{chapter["volume"]}', "",

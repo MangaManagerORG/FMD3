@@ -67,3 +67,13 @@ class Api:
     @abstractmethod
     def update_settings_save_to(series_id:str, save_to:str):
         ...
+
+    @staticmethod
+    @abstractmethod
+    def get_available_sources():
+        ...
+
+    @staticmethod
+    @abstractmethod
+    def update_source(source_id):
+        ...

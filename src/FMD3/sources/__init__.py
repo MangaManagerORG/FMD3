@@ -32,7 +32,8 @@ def import_and_register_source(module_info: pkgutil.ModuleInfo):
 
 
 def load_sources():
-    user_folder = r"..\FMD3\src\sources"
+    user_folder = r"C:\Users\galla\PycharmProjects\FMD2_Port\test_extensions"
+    # user_folder = r"..\FMD3\src\sources"
 
     for module in list(pkgutil.iter_modules(path=[user_folder])):
 

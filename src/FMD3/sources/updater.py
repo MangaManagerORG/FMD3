@@ -24,4 +24,4 @@ def check_updates():
             if version.parse(available_sources[source]["version"]) > installed_sources[source]["version"]:
                 print(f"New version of {installed_sources[source]['name']} available: {available_sources[source]['version']}")
                 logging.getLogger(__name__).warning(f"New version of {installed_sources[source]['name']} available: {available_sources[source]['version']}")
-                get_source(source_id=source)._has_updates = True
+                get_source(source_id=source)._has_updates = available_sources[source]['version']

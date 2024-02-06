@@ -64,3 +64,4 @@ class WebApi(Api):
     @staticmethod
     def update_settings_save_to(series_id: str, save_to: str):
         return session.post(host_url + f"/settings/update/save_to?series_id={series_id}&save_to={save_to}").json()
+

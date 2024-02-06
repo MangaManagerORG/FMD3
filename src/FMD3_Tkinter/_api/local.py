@@ -4,7 +4,7 @@ import requests
 from FMD3.api.series import get_series as sup_get_series, get_series_info as sup_get_series_info, \
     query_series as sup_query_series, get_series_folder_name as sup_get_series_folder_name, \
     get_cover as sup_get_series_cover
-from FMD3.api.sources import get_sources as sup_get_sources, get_source as sup_get_source
+from FMD3.api.sources import get_sources as sup_get_sources, get_source as sup_get_source, get_available_sources as sup_get_available_sources, update_source as sup_update_source
 from FMD3.api.chapters import get_source_chapters as sup_get_source_chapters
 from FMD3.api.chapters import get_chapters as sup_get_chapters, download_chapters as sup_download_chapters
 from FMD3.api.settings import get_settings as sup_get_settings, update_settings as sup_update_settings, \
@@ -64,3 +64,11 @@ class LocalApi(Api):
     @staticmethod
     def update_settings_save_to(series_id: str, save_to: str):
         return sup_update_save_to(series_id, save_to)
+
+    @staticmethod
+    def get_available_sources():
+        return sup_get_available_sources()
+
+    @staticmethod
+    def update_source(source_id):
+        return sup_update_source(source_id)

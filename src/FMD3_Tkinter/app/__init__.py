@@ -10,14 +10,18 @@ from FMD3_Tkinter import api
 from .favorites import Favourites
 from .series import Series
 from .settings import Settings
+from .widgets.TtkCheckList import TtkCheckList
+
 
 class App(Favourites, Series, Settings):
     # Settings stuff
     settings_libraries: dict
+
     def __init__(self):
         Settings.__init__(self)
         Favourites.__init__(self)
         Series.__init__(self)
+
     def add_library_to_treeview(self, *_):
         alias = self.builder.get_variable("settings_lib_alias_entry").get()
         path = self.builder.get_variable("settings_lib_path_entry").get()
@@ -80,6 +84,10 @@ class Source_():
 
     def __repr__(self):
         return self.name
+
+
+available_sources = {}
+installed_sources = []
 
 
 class TkinterUI(App):
@@ -184,7 +192,6 @@ class TkinterUI(App):
         default_series_downloads_path = builder.get_variable("default_series_downloads_path")
         default_series_downloads_path.trace_add("write", self.series_update_final_dest)
 
-
         # Series field
         series_destination_path = builder.get_variable("series_destination_path")
         series_destination_path.trace_add("write", self.series_update_final_dest)
@@ -193,8 +200,7 @@ class TkinterUI(App):
 
         # Library selection field set default
         default_series_downloads_path.set(self.settings["Core"].get("default_downloads_path", None)["value"])
-
-
+        self.populate_sources()
 
     def on_source_selected(self, *_):
 
@@ -221,12 +227,99 @@ class TkinterUI(App):
                 self.load_queried_data(series_id, data)
                 self.builder.get_object("notebook_widget").select(1)
 
+    # def populate_sources(self, *_):
+    #     frame = self.builder.get_object("enabled_sources")
+    #     self.cl = TtkCheckList(frame)
+    #     self.cl.add_item("installed", "Installed")
+    #     self.cl.add_item("NotInstalled", "Not Installed")
+    #
+    #     for source in sources:
+    #         self.cl.add_item("installed."+source["id"], source.get("name"),"Installed", True)
+    #         installed_sources.append(source["id"])
+    #     available_sources = api.get_available_sources()
+    #     if available_sources:
+    #         for source in available_sources:
+    #             if source not in installed_sources:
+    #                 self.cl.add_item("not_installed." + source.get("id"), source.get("name"), "NotInstalled")
+    #
+    #     self.cl.pack(anchor="w",fill="both", expand=True)
+    #     # self.cl = CheckList(frame, browsecmd=self.selectItem)
+    #
+    # def selectItem(self, item):
+    #     print(item, self.cl.getstatus(item))
     def populate_sources(self, *_):
-        frame = self.builder.get_object("enabled_sources")
-        self.cl = CheckList(frame, browsecmd=self.selectItem)
+        parent_frame = self.builder.get_object("enabled_sources")
+        global available_sources, installed_sources
+        available_sources = api.get_available_sources()
+        installed_sources = []
 
-    def selectItem(self, item):
-        print(item, self.cl.getstatus(item))
+        self.populate_installed()
+        self.populate_not_installed()
+
+    def populate_not_installed(self):
+        not_installed_frame = self.builder.get_object("settings_sources_not_installed")
+        if available_sources:
+            for i, source in enumerate(available_sources):
+                if source not in installed_sources:
+                    source_obj = available_sources[source]
+
+                    ttk.Label(not_installed_frame, text=source_obj.get("name"), width=100).grid(row=i, column=0,
+                                                                                                sticky="nswe")
+                    ttk.Label(not_installed_frame, text=source_obj.get("version"), width=100).grid(row=i, column=1,
+                                                                                                   sticky="nswe")
+                    ttk.Label(not_installed_frame, text=source_obj.get("_has_updates"), width=100).grid(row=i, column=2,
+                                                                                                        sticky="nswe")
+                    ttk.Button(not_installed_frame, text="Install",
+                               command=lambda x=source: self.install_source(x)).grid(row=i, column=4, sticky="e")
+
+    def populate_installed(self):
+        installed_frame = self.builder.get_object("settings_sources_installed")
+        for i, source in enumerate(sources, start=1):
+            # frame = ttk.Frame(installed_frame, width="200")
+            ttk.Label(installed_frame, text=source.get("name")).grid(row=i, column=0, sticky="nswe")
+            ttk.Label(installed_frame, text=source.get("version")).grid(row=i, column=1, sticky="nswe")
+            ttk.Label(installed_frame, text=source.get("_has_updates") or "False").grid(row=i, column=2, sticky="nswe")
+
+            actions = ttk.Frame(installed_frame)
+            actions.grid(row=i, column=4, sticky="e")
+            ttk.Button(actions, text="Uninstall", state="disabled",
+                       command=lambda x=source.get("id"): self.install_source(x)).pack(side="right")
+            # if source.get("_has_updates"):
+            button = ttk.Button(actions, text="Update", state="normal" if source.get("_has_updates") else "disabled")
+            button.configure(command=lambda x=source.get("id"), btn=button: self.pre_update_source(x, btn))
+            button.pack(side="right")
+
+            installed_sources.append(source.get("id"))
+
+    def pre_update_source(self, source_id, button):
+        button.configure(state="disabled")
+        api.update_source(source_id)
+        global sources
+        sources = api.get_sources()
+        self.update_installed_listing()
+
+    def update_installed_listing(self):
+        grid_frame = self.builder.get_object("settings_sources_installed")
+        [widget.grid_forget() for row in range(1, grid_frame.grid_size()[1]) for widget in
+         grid_frame.grid_slaves(row=row)]
+        self.populate_installed()
+
+    def install_source(self, source_id):
+        api.update_source(source_id)
+        installed_sources.append(source_id)
+
+        global sources
+        sources = api.get_sources()
+        self.update_installed_listing()
+        self.update_not_installed_listing()
+
+    def update_not_installed_listing(self):
+        # Update the not installed sources
+        grid_frame = self.builder.get_object("settings_sources_not_installed")
+        [widget.grid_forget() for row in range(1, grid_frame.grid_size()[1]) for widget in
+         grid_frame.grid_slaves(row=row)]
+        self.populate_not_installed()
+
     def run(self):
         self.mainwindow.mainloop()
 

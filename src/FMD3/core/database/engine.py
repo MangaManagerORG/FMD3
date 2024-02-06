@@ -1,3 +1,5 @@
 from sqlalchemy import create_engine
 
-engine = create_engine('sqlite:///config/test.db')
+from FMD3.constants import DB_PATH
+
+engine = create_engine('sqlite:///'+DB_PATH.as_posix())

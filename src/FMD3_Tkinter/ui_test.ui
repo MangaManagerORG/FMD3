@@ -1174,7 +1174,7 @@
                                         <child>
                                           <object class="ttk.Labelframe" id="labelframe7">
                                             <property name="height">200</property>
-                                            <property name="text" translatable="yes">Installed</property>
+                                            <property name="text" translatable="yes">Not Installed</property>
                                             <property name="width">200</property>
                                             <layout manager="pack">
                                               <property name="fill">both</property>

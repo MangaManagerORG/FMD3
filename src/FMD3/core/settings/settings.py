@@ -3,8 +3,7 @@ import time
 from pathlib import Path
 
 from ._SettingsDefault import default_settings
-
-_json_file = Path("config/" + "settings.json")
+from ...constants import SETTING_FILE_PATH
 
 from .settings_enums import SettingKeys
 from .setting_control import SettingControl
@@ -18,7 +17,7 @@ class Settings:
         if Settings.__instance is None:
             Settings.__instance = object.__new__(cls)
             Settings.__instance._settings_dict = {}
-            Settings._config_file = Path(_json_file)
+            Settings._config_file = Path(SETTING_FILE_PATH)
             if not Settings._config_file.exists():
                 Settings.__instance.save()
             time.sleep(0.5)

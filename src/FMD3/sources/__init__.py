@@ -13,25 +13,34 @@ from importlib.metadata import entry_points
 import requests
 
 from .ISource import ISource
+from ..constants import SOURCE_PATHS, EXTENSION_PATHS
 
 """Module with methods related with extensions"""
 
 sources_factory: list[ISource] = []
-SOURCES_PATH = output_path = r"C:\Users\galla\PycharmProjects\FMD2_Port\test_extensions"
+
 def import_and_register_source(module_info: pkgutil.ModuleInfo):
     # sys.path.append(os.path.abspath(package_path))
-    package_path = os.path.abspath("..\\FMD3\\src")
-    sys.path.append(package_path)
+    sys.path.append(str(EXTENSION_PATHS))
+
+    module_name = "MangaDex"  # Assuming this is the module name you want to import
+    module_path = f"sources.{module_name}"
 
     try:
-        module = importlib.import_module("sources."+module_info.name)
+        importlib.invalidate_caches()
+        module = importlib.import_module(module_path)
+
+        # Now you can access the Source variable from the imported module
+        Source = module.Source
         sources_factory.append(module.Source())
         print(f"Source module '{module_info.name}' imported and registered successfully.")
     except ImportError as e:
         print(f"Error importing source module '{module_info.name}': {e}")
+    except Exception as e:
+        print(f"Error importing source module '{module_info.name}': {e}")
     finally:
         try:
-            sys.path.remove(package_path)
+            sys.path.remove(str(SOURCE_PATHS))
         except ValueError:
             pass
 
@@ -40,10 +49,7 @@ def reload_sources():
     load_sources()
 
 def load_sources():
-    user_folder = r"C:\Users\galla\PycharmProjects\FMD2_Port\test_extensions"
-    # user_folder = r"..\FMD3\src\sources"
-
-    for module in list(pkgutil.iter_modules(path=[user_folder])):
+    for module in list(pkgutil.iter_modules(path=[SOURCE_PATHS])):
 
         import_and_register_source(module)
 
@@ -110,10 +116,10 @@ def load_source():
 def update_source(source_id):
 
 
-    if not os.path.exists(SOURCES_PATH):
-        os.makedirs(SOURCES_PATH)
+    if not os.path.exists(SOURCE_PATHS):
+        os.makedirs(SOURCE_PATHS)
 
-    "https://raw.githubusercontent.com/MangaManagerORG/FMD3-Extensions/repo/output"
+    # "https://raw.githubusercontent.com/MangaManagerORG/FMD3-Extensions/repo/output"
     r = requests.get("https://raw.githubusercontent.com/MangaManagerORG/FMD3-Extensions/repo/output/" + source_id + ".zip")
 
     # Save the zip file
@@ -121,9 +127,9 @@ def update_source(source_id):
         # Extract the contents of the zip file directly from memory
     with zipfile.ZipFile(io.BytesIO(r.content), 'r') as zip_ref:
         top_level_folder = list({item.split('/')[0] + '/' for item in zip_ref.namelist() if '/' in item})[0]
-        if os.path.exists(source_path:=os.path.join(SOURCES_PATH,top_level_folder)):
+        if os.path.exists(source_path:=os.path.join(SOURCE_PATHS,top_level_folder)):
             shutil.rmtree(source_path)
-        zip_ref.extractall(SOURCES_PATH)
+        zip_ref.extractall(SOURCE_PATHS)
 
     reload_sources()
 
@@ -131,6 +137,6 @@ def uninstall_source(source_id):
     for ext in sources_factory:
         if ext.ID == source_id:
             sources_factory.remove(ext)
-            if os.path.exists(source_path := os.path.join(SOURCES_PATH, ext.__class__.__name__)):
+            if os.path.exists(source_path := os.path.join(SOURCE_PATHS, ext.__class__.__name__)):
                 shutil.rmtree(source_path)
     reload_sources()

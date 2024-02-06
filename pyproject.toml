@@ -5,16 +5,10 @@ requires = [
 ]
 build-backend = "setuptools.build_meta"
 
-
-
-[requires]
-sqlalchemy=">=1.4.33"
-
 [project]
-#dynamic = ["version"]
-name = "FMD3_ThePromidius"
-description = "Super secret package :)"
-version = "0.0.5.dev0+local"
+name = "FMD3"
+description = "Free Manga Downloader 3"
+version = "0.0.0.dev1"
 authors = [
   { name="ThePromidius", email="thepromidiusyt@gmail.com" }
 ]
@@ -26,6 +20,19 @@ classifiers = [
     "Operating System :: OS Independent",
 ]
 
+dependencies = [
+    "ComicInfo",
+    "SQLAlchemy",
+    "aiohttp",
+    "requests",
+    "pillow",
+    "pathvalidate",
+    "schedule",
+    "userpaths"
+]
+
+
+
 [project.urls]
 Homepage = "https://github.com/MangaManagerORG/FMD3"
 Issues = "https://github.com/MangaManagerORG/FMD3/issues"
@@ -34,7 +41,4 @@ Issues = "https://github.com/MangaManagerORG/FMD3/issues"
 [tool.setuptools.packages.find]
 # All the following settings are optional:
 where = ["src"]  # ["."] by default
-include = ["FMD3*"]  # ["*"] by default
-
-[project.scripts]
-cli-name = "FMD3.Core.hello:hello"
+include = ["FMD3","FMD3.*"]  # ["*"] by default

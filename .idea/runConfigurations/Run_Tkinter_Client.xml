@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="Run Tkinter" type="PythonConfigurationType" factoryName="Python">
+  <configuration default="false" name="Run Tkinter Client" type="PythonConfigurationType" factoryName="Python">
     <module name="FMD2_Port" />
     <option name="ENV_FILES" value="" />
     <option name="INTERPRETER_OPTIONS" value="" />
@@ -25,7 +25,7 @@
       </ENTRIES>
     </EXTENSION>
     <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/FMD3_Tkinter/__main__.py" />
-    <option name="PARAMETERS" value="--local" />
+    <option name="PARAMETERS" value="--web" />
     <option name="SHOW_COMMAND_LINE" value="false" />
     <option name="EMULATE_TERMINAL" value="false" />
     <option name="MODULE_MODE" value="false" />

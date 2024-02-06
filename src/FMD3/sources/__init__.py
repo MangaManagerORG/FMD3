@@ -1,18 +1,23 @@
 import abc
 import importlib
+import io
+import logging
 import os
 import pkgutil
+import shutil
 import sys
 import zipfile
 
 from importlib.metadata import entry_points
+
+import requests
 
 from .ISource import ISource
 
 """Module with methods related with extensions"""
 
 sources_factory: list[ISource] = []
-
+SOURCES_PATH = output_path = r"C:\Users\galla\PycharmProjects\FMD2_Port\test_extensions"
 def import_and_register_source(module_info: pkgutil.ModuleInfo):
     # sys.path.append(os.path.abspath(package_path))
     package_path = os.path.abspath("..\\FMD3\\src")
@@ -30,6 +35,9 @@ def import_and_register_source(module_info: pkgutil.ModuleInfo):
         except ValueError:
             pass
 
+def reload_sources():
+    sources_factory.clear()
+    load_sources()
 
 def load_sources():
     user_folder = r"C:\Users\galla\PycharmProjects\FMD2_Port\test_extensions"
@@ -45,7 +53,7 @@ def get_extension(name) -> ISource:
             return ext
 
 
-def get_source(name=None, source_id=None) -> ISource:
+def get_source(name=None, source_id=None) -> ISource|None:
     if name is None and source_id is None:
         raise ValueError("At least one parameter needs to be fulfilled: name or id. None provided")
 
@@ -63,8 +71,9 @@ def get_source(name=None, source_id=None) -> ISource:
         except StopIteration:
             pass
 
+    logging.getLogger(__name__).error(f"No extension found with name='{name}' and id='{source_id}'")
     # If no extension is found, you might want to return a default value or raise an exception
-    raise ValueError(f"No extension found with name='{name}' and id='{source_id}'")
+    return None
 
 
 def get_source_by_id(source_id) -> ISource:
@@ -97,3 +106,31 @@ def load_source():
     :param source:
     :return:
     """
+
+def update_source(source_id):
+
+
+    if not os.path.exists(SOURCES_PATH):
+        os.makedirs(SOURCES_PATH)
+
+    "https://raw.githubusercontent.com/MangaManagerORG/FMD3-Extensions/repo/output"
+    r = requests.get("https://raw.githubusercontent.com/MangaManagerORG/FMD3-Extensions/repo/output/" + source_id + ".zip")
+
+    # Save the zip file
+
+        # Extract the contents of the zip file directly from memory
+    with zipfile.ZipFile(io.BytesIO(r.content), 'r') as zip_ref:
+        top_level_folder = list({item.split('/')[0] + '/' for item in zip_ref.namelist() if '/' in item})[0]
+        if os.path.exists(source_path:=os.path.join(SOURCES_PATH,top_level_folder)):
+            shutil.rmtree(source_path)
+        zip_ref.extractall(SOURCES_PATH)
+
+    reload_sources()
+
+def uninstall_source(source_id):
+    for ext in sources_factory:
+        if ext.ID == source_id:
+            sources_factory.remove(ext)
+            if os.path.exists(source_path := os.path.join(SOURCES_PATH, ext.__class__.__name__)):
+                shutil.rmtree(source_path)
+    reload_sources()

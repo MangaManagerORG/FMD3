@@ -72,7 +72,8 @@ class App(Favourites, Series, Settings):
 PROJECT_PATH = pathlib.Path(__file__).parent.parent
 PROJECT_UI = PROJECT_PATH / "ui_test.ui"
 sources = api.get_sources()
-
+def update_sources():
+    sources = api.get_sources()
 
 class Source_():
     def __init__(self, id, name):
@@ -87,7 +88,7 @@ class Source_():
 
 
 available_sources = {}
-installed_sources = []
+installed_sources = set
 
 
 class TkinterUI(App):
@@ -251,7 +252,7 @@ class TkinterUI(App):
         parent_frame = self.builder.get_object("enabled_sources")
         global available_sources, installed_sources
         available_sources = api.get_available_sources()
-        installed_sources = []
+        installed_sources = set()
 
         self.populate_installed()
         self.populate_not_installed()
@@ -259,18 +260,26 @@ class TkinterUI(App):
     def populate_not_installed(self):
         not_installed_frame = self.builder.get_object("settings_sources_not_installed")
         if available_sources:
-            for i, source in enumerate(available_sources):
+            i =1
+            for source in available_sources:
                 if source not in installed_sources:
                     source_obj = available_sources[source]
 
-                    ttk.Label(not_installed_frame, text=source_obj.get("name"), width=100).grid(row=i, column=0,
+                    ttk.Label(not_installed_frame, text=source_obj.get("name")).grid(row=i, column=0,
                                                                                                 sticky="nswe")
-                    ttk.Label(not_installed_frame, text=source_obj.get("version"), width=100).grid(row=i, column=1,
+                    ttk.Label(not_installed_frame, text=source_obj.get("version")).grid(row=i, column=1,
                                                                                                    sticky="nswe")
-                    ttk.Label(not_installed_frame, text=source_obj.get("_has_updates"), width=100).grid(row=i, column=2,
-                                                                                                        sticky="nswe")
-                    ttk.Button(not_installed_frame, text="Install",
-                               command=lambda x=source: self.install_source(x)).grid(row=i, column=4, sticky="e")
+                    ttk.Label(not_installed_frame, text=source_obj.get("_has_updates" or False)).grid(row=i, column=2,
+                                                                                                           sticky="nswe")
+                    actions = ttk.Frame(not_installed_frame)
+                    actions.grid(row=i, column=4, sticky="e")
+                    button = ttk.Button(actions, text="Install")
+                    button.configure(command = lambda x=source, btn=button: self.install_source(x,btn))
+                    button.pack(side="right")
+
+
+                    i += 1
+
 
     def populate_installed(self):
         installed_frame = self.builder.get_object("settings_sources_installed")
@@ -282,14 +291,15 @@ class TkinterUI(App):
 
             actions = ttk.Frame(installed_frame)
             actions.grid(row=i, column=4, sticky="e")
-            ttk.Button(actions, text="Uninstall", state="disabled",
-                       command=lambda x=source.get("id"): self.install_source(x)).pack(side="right")
+            button = ttk.Button(actions, text="Uninstall")
+            button.configure(command=lambda x=source.get("id"),btn=button: self.pre_delete_source(x,button))
+            button.pack(side="right")
             # if source.get("_has_updates"):
             button = ttk.Button(actions, text="Update", state="normal" if source.get("_has_updates") else "disabled")
             button.configure(command=lambda x=source.get("id"), btn=button: self.pre_update_source(x, btn))
             button.pack(side="right")
 
-            installed_sources.append(source.get("id"))
+            installed_sources.add(source.get("id"))
 
     def pre_update_source(self, source_id, button):
         button.configure(state="disabled")
@@ -304,14 +314,15 @@ class TkinterUI(App):
          grid_frame.grid_slaves(row=row)]
         self.populate_installed()
 
-    def install_source(self, source_id):
+    def install_source(self, source_id, button):
+        button.configure(state="disabled")
         api.update_source(source_id)
-        installed_sources.append(source_id)
+        installed_sources.add(source_id)
 
         global sources
         sources = api.get_sources()
-        self.update_installed_listing()
         self.update_not_installed_listing()
+        self.update_installed_listing()
 
     def update_not_installed_listing(self):
         # Update the not installed sources
@@ -319,6 +330,15 @@ class TkinterUI(App):
         [widget.grid_forget() for row in range(1, grid_frame.grid_size()[1]) for widget in
          grid_frame.grid_slaves(row=row)]
         self.populate_not_installed()
+
+    def pre_delete_source(self, source_id, button):
+        button.configure(state="disabled")
+        api.uninstall_source(source_id)
+        installed_sources.remove(source_id)
+        global sources
+        sources = api.get_sources()
+        self.update_installed_listing()
+        self.update_not_installed_listing()
 
     def run(self):
         self.mainwindow.mainloop()

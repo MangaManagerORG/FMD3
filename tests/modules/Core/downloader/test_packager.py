@@ -5,7 +5,7 @@ from ComicInfo import ComicInfo
 from FMD3.core.database.models import DLDChaptersStatus
 from FMD3.core.downloader import download_series_chapter
 from FMD3.models.chapter import Chapter
-from TestSource.TestSource import TestSource
+from tests.TestSource.TestSource import TestSource
 
 
 class TestDownloadChapter(unittest.TestCase):

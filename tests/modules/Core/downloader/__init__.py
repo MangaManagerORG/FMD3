@@ -8,7 +8,7 @@ from sqlalchemy import create_engine, text
 from sqlalchemy.orm import sessionmaker, scoped_session
 from FMD3.core.database import Base, Series, DLDChapters
 from FMD3.core.downloader import download_n_pack_pages, download_series_chapter, download_image
-from mockzip import MockZip
+from tests.mockzip import MockZip
 from tests.TestSource.TestSource import TestSource
 
 

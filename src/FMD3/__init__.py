@@ -2,6 +2,8 @@ import logging
 import sys
 from logging import DEBUG, INFO, Handler, StreamHandler, basicConfig, addLevelName, Logger
 from logging.handlers import RotatingFileHandler
+
+from FMD3.constants import LOGFILE_PATH
 from FMD3.core import database
 from FMD3.core.settings import Settings
 from FMD3.sources import get_source, load_sources
@@ -33,10 +35,10 @@ class UmpumpedLogHandler(Handler):
         record.exc_info
 
 
-def setup_logging(LOGFILE_PATH, level=DEBUG):
+def setup_logging(log_file_path, level=DEBUG):
     umpumped_handler = UmpumpedLogHandler(INFO)
 
-    rotating_file_handler = RotatingFileHandler(LOGFILE_PATH, maxBytes=10_000_000,
+    rotating_file_handler = RotatingFileHandler(log_file_path, maxBytes=10_000_000,
                                                 backupCount=2)
     rotating_file_handler.setLevel(level)
 
@@ -58,7 +60,7 @@ addLevelName(TRACE, "TRACE")
 logging.getLogger("PIL").setLevel(logging.WARNING)
 Logger.trace = trace
 
-setup_logging("config/log.log", TRACE)
+setup_logging(LOGFILE_PATH.joinpath("log.log"), TRACE)
 settings = Settings()
 load_sources()
 settings.save()

@@ -3,7 +3,7 @@ from unittest.mock import patch, MagicMock
 
 from FMD3.core.downloader import analyze_archive
 from FMD3.models.chapter import Chapter
-from mockzip import MockZip
+from tests.mockzip import MockZip
 
 
 class TestAnalyzeArchive(unittest.TestCase):

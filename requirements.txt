@@ -1,0 +1,12 @@
+pygubu~=0.32
+sqlalchemy~=2.0.25
+sv_ttk
+ComicInfo~=0.0.0.dev0
+requests~=2.31.0
+pillow~=10.2.0
+aiohttp~=3.9.2
+pathvalidate~=3.2.0
+schedule~=1.2.1
+fastapi~=0.109.1
+setuptools~=68.2.0
+userpaths

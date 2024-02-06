@@ -2,16 +2,16 @@ import io
 import tkinter
 from urllib import request
 from PIL import Image, ImageTk
-from FMD3.Sources import extesion_factory, ISource, list_extension, get_extension
-from FMD3.Models.MangaInfo import MangaInfo
+from FMD3.sources import ISource,  get_source
+from FMD3.models.series_info import SeriesInfo
 
 
 def load_data():
     url = var.get()
     sel_ext = clicked.get()
 
-    ext: ISource = get_extension(sel_ext)
-    mi: MangaInfo = ext.on_get_info(url)
+    ext: ISource = get_source(sel_ext)
+    mi: SeriesInfo = ext.on_get_info(url)
 
     res = f"""
     Series name: {mi.title}

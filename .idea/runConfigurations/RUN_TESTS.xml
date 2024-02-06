@@ -1,0 +1,7 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="RUN_TESTS" type="CompoundRunConfigurationType">
+    <toRun name="Flows Unittests" type="tests" />
+    <toRun name="Modules Unittests" type="tests" />
+    <method v="2" />
+  </configuration>
+</component>

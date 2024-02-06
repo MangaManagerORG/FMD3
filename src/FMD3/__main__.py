@@ -6,7 +6,7 @@ from FMD3.core.settings import Settings
 from FMD3.core.settings import Keys
 from FMD3.sources import get_extension, load_sources, get_source
 
-load_sources()
+# load_sources()
 
 Settings()
 Settings().set(Keys.CHAPTER_NAME,"Series - ${CHAPTER}")

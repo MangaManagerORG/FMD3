@@ -1,4 +1,9 @@
 import abc
+import importlib
+import os
+import pkgutil
+import sys
+import zipfile
 
 from importlib.metadata import entry_points
 
@@ -8,18 +13,34 @@ from .ISource import ISource
 
 sources_factory: list[ISource] = []
 
+def import_and_register_source(package_path, module_name):
+    sys.path.append(package_path)
+    full_module_name = f"{module_name}.{module_name}"
+
+    try:
+        module = importlib.import_module(full_module_name)
+        source_class = getattr(module, module_name)
+
+        # Register the source class in the factory
+        sources_factory.append(source_class)
+        print(f"Source module '{module_name}' imported and registered successfully.")
+    except ImportError as e:
+        print(f"Error importing source module '{module_name}': {e}")
+    finally:
+        sys.path.remove(package_path)
+
 
 def load_sources():
-    display_eps = entry_points(group='FMD3_Sources')
-    for entry in display_eps:
-        if entry.attr == "load_source":
-            module = entry.load()
-            module()
+    user_folder = r"../FMD3\src\FMD3_Sources"
 
+    for _, module_name, _ in pkgutil.iter_modules([user_folder]):
+        if module_name.startswith('MangaDex') and module_name != 'SourceModule':
+        # if module_name.startswith('SourceModule') and module_name != 'SourceModule':
+            import_and_register_source(user_folder, module_name)
 
 def get_extension(name) -> ISource:
     for ext in sources_factory:
-        if ext.__class__.__name__ == name:
+        if ext.NAME == name:
             return ext
 
 

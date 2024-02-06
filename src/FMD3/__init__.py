@@ -62,4 +62,4 @@ setup_logging("config/log.log", TRACE)
 settings = Settings()
 load_sources()
 settings.save()
-source = get_source("MangaDex")
+

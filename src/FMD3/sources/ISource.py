@@ -25,6 +25,9 @@ class ISource(ISourceMethods, ISourceNet):
     CATEGORY = None
     # OnGetInfo = None
     MaxTaskLimit = None
+    VERSION = None
+
+    _has_updates = False  # Becomes true once the updater has been called if new version avaialble
 
     @final
     def get_setting(self, setting_key):

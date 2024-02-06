@@ -5,12 +5,15 @@ from FMD3.core.database import Session
 from FMD3.core.settings import Settings
 from FMD3.core.settings import Keys
 from FMD3.sources import get_extension, load_sources, get_source
+from FMD3.sources.updater import check_updates
 
 # load_sources()
 
 Settings()
 Settings().set(Keys.CHAPTER_NAME,"Series - ${CHAPTER}")
 
+
+check_updates()
 
 
 ext = get_extension("MangaDex")

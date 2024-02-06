@@ -18,42 +18,6 @@
           <property name="side">top</property>
         </layout>
         <child>
-          <object class="ttk.Notebook.Tab" id="Downloads" named="True">
-            <property name="text" translatable="yes">tab1</property>
-            <child>
-              <object class="ttk.Frame" id="frame3">
-                <property name="height">200</property>
-                <property name="width">200</property>
-                <layout manager="pack">
-                  <property name="side">top</property>
-                </layout>
-                <child>
-                  <object class="ttk.Treeview" id="treeview3">
-                    <property name="selectmode">extended</property>
-                    <property name="show">tree</property>
-                    <layout manager="pack">
-                      <property name="expand">true</property>
-                      <property name="fill">y</property>
-                      <property name="side">left</property>
-                    </layout>
-                  </object>
-                </child>
-                <child>
-                  <object class="ttk.Frame" id="frame13">
-                    <property name="height">200</property>
-                    <property name="width">200</property>
-                    <layout manager="pack">
-                      <property name="expand">true</property>
-                      <property name="fill">both</property>
-                      <property name="side">right</property>
-                    </layout>
-                  </object>
-                </child>
-              </object>
-            </child>
-          </object>
-        </child>
-        <child>
           <object class="ttk.Notebook.Tab" id="tab2">
             <property name="text" translatable="yes">Series</property>
             <child>

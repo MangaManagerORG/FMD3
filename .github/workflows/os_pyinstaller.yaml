@@ -13,7 +13,7 @@ jobs:
     strategy:
         fail-fast: false
         matrix:
-            spec_file: [FMD3-API, FMD3-Client, FMD3-WebClient]
+            spec_file: [FMD3-API_SingleExe, FMD3-Client_SingleExe, FMD3-WebClient_SingleExe]
 #            spec_file: ["FMD3-WebClient_SingleExe"]
     runs-on: ${{ inputs.os }}
     steps:

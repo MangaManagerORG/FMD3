@@ -2,7 +2,7 @@
 
 
 a = Analysis(
-    ['../src/FMD3_Tkinter\\__main__.py'],
+    ['../src/FMD3_Tkinter/__main__.py'],
     pathex=[],
     binaries=[],
     datas=[

@@ -2,7 +2,7 @@
 
 
 a = Analysis(
-    ['../src/FMD3_Api/__main__.py'],
+    ['../src/FMD3_API/__main__.py'],
     pathex=[],
     binaries=[],
     datas=[('../src/FMD3','FMD3'),

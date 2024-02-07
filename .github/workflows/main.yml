@@ -1,0 +1,25 @@
+name: Main Workflow
+
+on:
+  push:
+    branches:
+      - flow_test
+
+jobs:
+  run_tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      # Add steps to run your tests here
+
+  run_pyinstaller:
+    runs-on: ubuntu-latest
+    needs: run_tests
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Run PyInstaller Workflow
+        uses: ./.github/workflows/pyinstaller.yml

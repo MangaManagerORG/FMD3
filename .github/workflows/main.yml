@@ -22,9 +22,8 @@ jobs:
       fail-fast: true
       matrix:
           os: [ubuntu-latest, windows-latest, macOS-latest]
-          spec_file: [FMD3-API.spec, FMD3-Client.spec, FMD3-WebClient.spec]
     needs: run_tests
-    uses: ./.github/workflows/pyinstaller.yaml
+    uses: ./.github/workflows/os_pyinstaller.yaml
     with:
         os: ${{ matrix.os }}
 

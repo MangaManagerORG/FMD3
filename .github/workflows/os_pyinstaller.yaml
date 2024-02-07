@@ -27,6 +27,6 @@ jobs:
           python -m pip install --upgrade pip PyInstaller
           pip install -r requirements.txt
       - name: Build Executable
-        uses: ./.github/app_pyinstaller
+        uses: ./.github/workflows/app_pyinstaller
         with:
           spec_file: ${{ matrix.spec_file }}

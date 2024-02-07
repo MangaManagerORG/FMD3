@@ -11,10 +11,10 @@ on:
 jobs:
   build:
     strategy:
-        fail-fast: true
+        fail-fast: false
         matrix:
 #            spec_file: [FMD3-API.spec, FMD3-Client.spec, FMD3-WebClient.spec]
-            spec_file: ["FMD3-WebClient.spec"]
+            spec_file: ["FMD3-WebClient_SingleExe"]
     runs-on: ${{ inputs.os }}
     steps:
       - name: Checkout repository
@@ -23,3 +23,4 @@ jobs:
         uses: ./.github/workflows/app_pyinstaller
         with:
           spec_file: ${{ matrix.spec_file }}
+          os: ${{ inputs.os }}

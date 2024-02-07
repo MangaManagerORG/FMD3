@@ -20,6 +20,9 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
-
+      - name: Debug
+        run: |
+          echo "Debugging..."
+          ls -la
       - name: Run PyInstaller Workflow
-        uses: .github/workflows/pyinstaller.yml
+        uses: ./github/workflows/pyinstaller.yml

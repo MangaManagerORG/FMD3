@@ -9,8 +9,17 @@ inputs:
 runs:
   using: 'composite'
   steps:
-    - name: Build Executable
+    - name: Checkout repository
+      uses: actions/checkout@v3
+    - name: Set up Python 3.11
+      uses: actions/setup-python@v4
+      with:
+        python-version: 3.11
+        cache: 'pip'
+    - name: Install dependencies
       shell: bash
       run: |
+        python -m pip install --upgrade pip PyInstaller
+        pip install -r requirements.txt
         echo "Building ${{ inputs.spec_file }}..."
-        PyInstaller pyinstaller/${{ inputs.spec_file }}
+        python -m PyInstaller pyinstaller/${{ inputs.spec_file }}

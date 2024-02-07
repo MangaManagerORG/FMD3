@@ -13,8 +13,8 @@ jobs:
     strategy:
         fail-fast: false
         matrix:
-#            spec_file: [FMD3-API.spec, FMD3-Client.spec, FMD3-WebClient.spec]
-            spec_file: ["FMD3-WebClient_SingleExe"]
+            spec_file: [FMD3-API.spec, FMD3-Client.spec, FMD3-WebClient.spec]
+#            spec_file: ["FMD3-WebClient_SingleExe"]
     runs-on: ${{ inputs.os }}
     steps:
       - name: Checkout repository

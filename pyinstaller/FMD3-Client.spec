@@ -2,12 +2,12 @@
 
 
 a = Analysis(
-    ['..\\src\\FMD3_Tkinter\\__main__.py'],
+    ['../src/FMD3_Tkinter\\__main__.py'],
     pathex=[],
     binaries=[],
     datas=[
-        ('..\\src/FMD3','FMD3'),
-        ('..\\src/FMD3_Tkinter','FMD3_Tkinter')
+        ('../src/FMD3','FMD3'),
+        ('../src/FMD3_Tkinter','FMD3_Tkinter')
     ],
     hiddenimports=["FMD3"],
     hookspath=[],

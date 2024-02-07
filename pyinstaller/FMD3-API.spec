@@ -2,11 +2,11 @@
 
 
 a = Analysis(
-    ['..\\src\\FMD3_Api\\__main__.py'],
+    ['../src/FMD3_Api/__main__.py'],
     pathex=[],
     binaries=[],
-    datas=[('..\\src/FMD3','FMD3'),
-    ('..\\src/FMD3_API','FMD3_API')
+    datas=[('../src/FMD3','FMD3'),
+    ('../src/FMD3_API','FMD3_API')
     ],
     hiddenimports=["FMD3"],
     hookspath=["pyinstaller/extra_hooks"],

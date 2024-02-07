@@ -1,13 +1,20 @@
 # -*- mode: python ; coding: utf-8 -*-
 
+for root, dirs, files in os.walk("../"):
+        level = root.replace(startpath, '').count(os.sep)
+        indent = ' ' * 4 * (level)
+        print('{}{}/'.format(indent, os.path.basename(root)))
+        subindent = ' ' * 4 * (level + 1)
+        for f in files:
+            print('{}{}'.format(subindent, f))
 
 a = Analysis(
-    ['..\\src\\FMD3_Tkinter\\run_web_client.py'],
+    ['../src/FMD3_Tkinter/run_web_client.py'],
     pathex=[],
     binaries=[],
     datas=[
-        ('..\\src/FMD3','FMD3'),
-        ('..\\src/FMD3_Tkinter','FMD3_Tkinter')
+        ('../src/FMD3','FMD3'),
+        ('../src/FMD3_Tkinter','FMD3_Tkinter')
     ],
     hiddenimports=["FMD3"],
     hookspath=[],

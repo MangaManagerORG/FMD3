@@ -27,5 +27,4 @@ jobs:
     uses: ./.github/workflows/pyinstaller.yaml
     with:
         os: ${{ matrix.os }}
-        spec_file: ${{ matrix.spec_file }}
 

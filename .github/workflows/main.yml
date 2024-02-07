@@ -21,7 +21,8 @@ jobs:
       # fail-fast is true by default
       fail-fast: true
       matrix:
-          os: [ubuntu-latest, windows-latest, macOS-latest]
+#          os: [ubuntu-latest, windows-latest, macOS-latest]
+          os: [ubuntu-latest]
     needs: run_tests
     uses: ./.github/workflows/os_pyinstaller.yaml
     with:

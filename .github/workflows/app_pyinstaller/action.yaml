@@ -29,6 +29,6 @@ runs:
     - name: 'Upload Artifact'
       uses: actions/upload-artifact@v4
       with:
-        name: ${{ inputs.os }}${{ input.spec_file }}--dist
+        name: ${{ inputs.os }}${{ inputs.spec_file }}--dist
         path: dist/*
         retention-days: 1

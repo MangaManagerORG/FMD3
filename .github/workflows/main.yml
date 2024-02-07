@@ -6,6 +6,7 @@ on:
       - flow_test
 
 jobs:
+
   run_tests:
     runs-on: ubuntu-latest
     steps:
@@ -14,15 +15,17 @@ jobs:
 
       # Add steps to run your tests here
 
-  run_pyinstaller:
-    runs-on: ubuntu-latest
+  run-pyinstaller-matrix:
+    strategy:
+      # super important if you want to see all results, even if one fails
+      # fail-fast is true by default
+      fail-fast: true
+      matrix:
+          os: [ubuntu-latest, windows-latest, macOS-latest]
+          spec_file: [FMD3-API.spec, FMD3-Client.spec, FMD3-WebClient.spec]
     needs: run_tests
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-      - name: Debug
-        run: |
-          echo "Debugging..."
-          ls -la
-      - name: Run PyInstaller Workflow
-        uses: ./github/workflows/pyinstaller.yml
+    uses: ./.github/workflows/pyinstaller.yaml
+    with:
+        os: ${{ matrix.os }}
+        spec_file: ${{ matrix.spec_file }}
+

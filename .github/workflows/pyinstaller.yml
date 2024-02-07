@@ -11,13 +11,14 @@ jobs:
       strategy:
         matrix:
           spec_file:
-            - FMD3.spec
-            - spec_file_2.spec
+            - FMD3-API.spec
             # Add more .spec files as needed
       steps:
         -
+          name: Checkout repository
           uses: actions/checkout@v3
         -
+          name: Set up Python 3.11
           uses: actions/setup-python@v4
           with:
             python-version: 3.11

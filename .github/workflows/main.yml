@@ -99,7 +99,7 @@ jobs:
           export BUMP_TYPE=${BUMP_TYPE:-patch}
           
           git add src/*/__version__.py
-          git add src/workflow_helpers/versions_metadata.json
+          git add versions_metadata.json
           git config --local user.email "actions@github.com"
           git config --local user.name "GitHub Actions"
           git commit -m "Bump version"

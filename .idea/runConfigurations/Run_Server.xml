@@ -1,13 +1,13 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="Run Server" type="Python.FastAPI">
     <option name="additionalOptions" value="--reload --host 0.0.0.0 --port 8000" />
-    <option name="file" value="C:\Users\galla\PycharmProjects\FMD2_Port\src\FMD3_API\main.py" />
-    <module name="FMD2_Port" />
+    <option name="file" value="$PROJECT_DIR$\src\FMD3_API\main.py" />
+    <module name="FMD3" />
     <option name="ENV_FILES" value="" />
     <option name="INTERPRETER_OPTIONS" value="" />
     <option name="PARENT_ENVS" value="true" />
-    <option name="SDK_HOME" value="C:\Users\galla\PycharmProjects\FMD2_Port\venv\Scripts\python.exe" />
-    <option name="SDK_NAME" value="Python 3.11 (FMD2_Port)" />
+    <option name="SDK_HOME" value="$PROJECT_DIR$\venv\Scripts\python.exe" />
+    <option name="SDK_NAME" value="Python 3.11 (FMD3)" />
     <option name="WORKING_DIRECTORY" value="" />
     <option name="IS_MODULE_SDK" value="false" />
     <option name="ADD_CONTENT_ROOTS" value="true" />

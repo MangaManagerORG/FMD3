@@ -64,6 +64,9 @@ jobs:
         with:
           python-version: 3.11
           cache: 'pip'
+      - name: Install dependencies
+        run: |
+          pip install packaging
       - name: Store Original Versions
         id: store_original_versions
         run: |

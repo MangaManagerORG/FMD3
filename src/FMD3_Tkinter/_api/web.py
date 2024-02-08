@@ -10,6 +10,11 @@ host_url = lambda :Settings().get("host")
 
 
 class WebApi(Api):
+    @staticmethod
+    def api_version():
+        version = session.get(host_url()).json().get("version", "Unknown")
+        return ('v' + version) if version != "Unknown" else version
+
     @property
     def host(self):
         return Settings().get("host")

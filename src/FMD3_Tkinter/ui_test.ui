@@ -5,7 +5,7 @@
     <property name="padx">2</property>
     <property name="pady">2</property>
     <property name="resizable">both</property>
-    <property name="title" translatable="yes">FMD3 - Web Client - ThePromidius</property>
+    <property name="title" translatable="yes">FMD3</property>
     <property name="width">200</property>
     <child>
       <object class="ttk.Notebook" id="notebook_widget" named="True">
@@ -1282,6 +1282,16 @@
             <property name="text" translatable="yes">Sources</property>
           </object>
         </child>
+      </object>
+    </child>
+    <child>
+      <object class="tk.Label" id="app_info_label" named="True">
+        <layout manager="place">
+          <property name="anchor">ne</property>
+          <property name="relx">1.0</property>
+          <property name="x">0</property>
+          <property name="y">0</property>
+        </layout>
       </object>
     </child>
   </object>

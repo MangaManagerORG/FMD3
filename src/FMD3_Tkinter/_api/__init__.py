@@ -3,6 +3,12 @@ from typing import Literal
 
 
 class Api:
+
+    @staticmethod
+    @abstractmethod
+    def api_version():
+        ...
+
     @staticmethod
     @abstractmethod
     def get_series(sort=None, order: Literal["asc", "desc"] = "desc", limit=None):

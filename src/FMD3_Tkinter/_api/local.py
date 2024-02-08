@@ -9,10 +9,15 @@ from FMD3.api.chapters import get_source_chapters as sup_get_source_chapters
 from FMD3.api.chapters import get_chapters as sup_get_chapters, download_chapters as sup_download_chapters
 from FMD3.api.settings import get_settings as sup_get_settings, update_settings as sup_update_settings, \
     update_save_to as sup_update_save_to
+from FMD3.__version__ import __version__
 from . import Api
 
 
 class LocalApi(Api):
+    @staticmethod
+    def api_version():
+        return f"Local:{__version__}"
+
     @staticmethod
     def get_series(sort=None, order: Literal["asc", "desc"] = "desc", limit=None):
         return sup_get_series()

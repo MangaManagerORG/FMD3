@@ -7,6 +7,7 @@ from tkinter.tix import CheckList
 import pygubu
 
 from FMD3_Tkinter import api
+from FMD3_Tkinter.__version__ import __version__
 from .favorites import Favourites
 from .series import Series
 from .settings import Settings
@@ -21,6 +22,7 @@ class App(Favourites, Series, Settings):
         Settings.__init__(self)
         Favourites.__init__(self)
         Series.__init__(self)
+        self.builder.get_object("app_info_label").config(text=f"Running: FMD3 Client v{__version__} | API {api.api_version()}")
 
     def add_library_to_treeview(self, *_):
         alias = self.builder.get_variable("settings_lib_alias_entry").get()

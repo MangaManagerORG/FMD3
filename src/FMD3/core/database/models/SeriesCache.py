@@ -21,6 +21,7 @@ class SeriesCache(Base):
     demographic = Column(Text)
     rating = Column(Text)
     status = Column(Text)
+    url = Column(Text)
 
     @property
     def series_info(self):

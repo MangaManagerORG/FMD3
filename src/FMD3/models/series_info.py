@@ -19,6 +19,7 @@ class SeriesInfo:
     rating: str
     status: str
     chapters: list[Chapter]
+    url: str
     def __init__(self):
         self.title: str = None
         self.alt_titles: list = None
@@ -31,6 +32,7 @@ class SeriesInfo:
         self.rating: str = None
         self.status: str = None
         self.chapters: list[Chapter] = None
+        self.url: str = None
 
     def to_comicinfo(self) -> ComicInfo:
         c = ComicInfo()

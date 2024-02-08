@@ -54,6 +54,19 @@ class Series:
             self.is_delayed_search = True
             self.mainwindow.after(1500, self.delayed_search)
 
+    def series_tab_search_by_url(self,*_):
+        series_id = self.builder.get_variable("series_browser_url_entry_var").get()
+        if series_id:
+            data = api.get_series_info(self.selected_source_id, series_id)
+            if not data:
+                return
+            self.selected_series_id = series_id
+            series_detail_widget = self.builder.get_object("series_detail")
+
+            add_series_detail(series_detail_widget, data)
+            self.load_queried_data(series_id, data)
+
+
     def delayed_search(self, *_):
         # ext = self.builder.get_variable("selected_source_name").get()
         source_id = self.selected_source_id

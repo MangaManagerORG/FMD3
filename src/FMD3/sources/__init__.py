@@ -19,6 +19,7 @@ from ..constants import SOURCE_PATHS, EXTENSION_PATHS
 
 sources_factory: list[ISource] = []
 
+logger = logging.getLogger(__name__)
 def import_and_register_source(module_info: pkgutil.ModuleInfo):
     # sys.path.append(os.path.abspath(package_path))
     sys.path.append(str(EXTENSION_PATHS))
@@ -33,11 +34,11 @@ def import_and_register_source(module_info: pkgutil.ModuleInfo):
         # Now you can access the Source variable from the imported module
         Source = module.Source
         sources_factory.append(module.Source())
-        print(f"Source module '{module_info.name}' imported and registered successfully.")
+        logger.info(f"Source module '{module_info.name}' imported and registered successfully.")
     except ImportError as e:
-        print(f"Error importing source module '{module_info.name}': {e}")
+        logger.exception(f"Error importing source module '{module_info.name}': {e}")
     except Exception as e:
-        print(f"Error importing source module '{module_info.name}': {e}")
+        logger.exception(f"Undhandled exception importing source module '{module_info.name}': {e}")
     finally:
         try:
             sys.path.remove(str(SOURCE_PATHS))

@@ -58,6 +58,7 @@ def setup_logging(log_file_path, level=DEBUG):
 # def getLogger(*args,**kwargs)
 addLevelName(TRACE, "TRACE")
 logging.getLogger("PIL").setLevel(logging.WARNING)
+logging.getLogger("pygubu").setLevel(logging.WARNING)
 Logger.trace = trace
 
 setup_logging(LOGFILE_PATH.joinpath("log.log"), TRACE)

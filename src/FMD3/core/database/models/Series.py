@@ -28,4 +28,4 @@ class Series(Base):
     datelastupdated = Column(DateTime)
 
     chapters = relationship("DLDChapters", backref="series")
-    ulr = Column(Text)
+    url = Column(Text)

@@ -71,7 +71,7 @@ class Api:
 
     @staticmethod
     @abstractmethod
-    def update_settings_save_to(series_id:str, save_to:str):
+    def update_settings_save_to(series_id: str, save_to: str):
         ...
 
     @staticmethod

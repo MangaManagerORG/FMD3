@@ -177,51 +177,92 @@
                               <property name="fill">x</property>
                               <property name="side">top</property>
                             </layout>
-                            <containerlayout manager="pack">
-                              <property name="propagate">false</property>
-                            </containerlayout>
                             <child>
-                              <object class="ttk.Frame" id="frame17">
-                                <property name="height">160</property>
-                                <property name="width">90</property>
+                              <object class="tk.Frame" id="frame13">
+                                <property name="height">200</property>
+                                <property name="width">200</property>
                                 <layout manager="pack">
-                                  <property name="expand">false</property>
-                                  <property name="fill">both</property>
-                                  <property name="side">left</property>
+                                  <property name="fill">x</property>
+                                  <property name="padx">5</property>
+                                  <property name="pady">10</property>
+                                  <property name="side">top</property>
                                 </layout>
                                 <child>
-                                  <object class="tk.Canvas" id="series_detail_cover_canvas" named="True">
-                                    <property name="background">#878787</property>
-                                    <property name="height">200</property>
-                                    <property name="width">130</property>
-                                    <bind sequence="&lt;&lt;ImageLoaded&gt;&gt;" handler="on_series_detail_image_loaded" add="" />
+                                  <object class="tk.Entry" id="entry5">
+                                    <property name="textvariable">string:series_browser_url_entry_var</property>
                                     <layout manager="pack">
+                                      <property name="anchor">w</property>
                                       <property name="expand">true</property>
-                                      <property name="side">top</property>
+                                      <property name="fill">x</property>
+                                      <property name="side">left</property>
+                                    </layout>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="tk.Button" id="button11">
+                                    <property name="command" type="command" cbtype="simple">series_tab_search_by_url</property>
+                                    <property name="state">normal</property>
+                                    <property name="text" translatable="yes">Search</property>
+                                    <layout manager="pack">
+                                      <property name="ipadx">25</property>
+                                      <property name="side">right</property>
                                     </layout>
                                   </object>
                                 </child>
                               </object>
                             </child>
                             <child>
-                              <object class="ttk.Frame" id="frame19">
+                              <object class="tk.Frame" id="frame3">
                                 <property name="height">200</property>
                                 <property name="width">200</property>
                                 <layout manager="pack">
-                                  <property name="expand">true</property>
                                   <property name="fill">both</property>
-                                  <property name="side">right</property>
+                                  <property name="side">top</property>
                                 </layout>
                                 <child>
-                                  <object class="tk.Text" id="series_detail" named="True">
-                                    <property name="height">10</property>
-                                    <property name="width">50</property>
+                                  <object class="ttk.Frame" id="frame17">
+                                    <property name="height">160</property>
+                                    <property name="width">90</property>
+                                    <layout manager="pack">
+                                      <property name="expand">false</property>
+                                      <property name="fill">both</property>
+                                      <property name="side">left</property>
+                                    </layout>
+                                    <child>
+                                      <object class="tk.Canvas" id="series_detail_cover_canvas" named="True">
+                                        <property name="background">#878787</property>
+                                        <property name="height">200</property>
+                                        <property name="width">130</property>
+                                        <bind sequence="&lt;&lt;ImageLoaded&gt;&gt;" handler="on_series_detail_image_loaded" add="" />
+                                        <layout manager="pack">
+                                          <property name="expand">true</property>
+                                          <property name="side">top</property>
+                                        </layout>
+                                      </object>
+                                    </child>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="ttk.Frame" id="frame19">
+                                    <property name="height">200</property>
+                                    <property name="width">200</property>
                                     <layout manager="pack">
                                       <property name="expand">true</property>
                                       <property name="fill">both</property>
-                                      <property name="padx">0 5</property>
                                       <property name="side">right</property>
                                     </layout>
+                                    <child>
+                                      <object class="tk.Text" id="series_detail" named="True">
+                                        <property name="height">10</property>
+                                        <property name="width">50</property>
+                                        <layout manager="pack">
+                                          <property name="expand">true</property>
+                                          <property name="fill">both</property>
+                                          <property name="padx">0 5</property>
+                                          <property name="side">right</property>
+                                        </layout>
+                                      </object>
+                                    </child>
                                   </object>
                                 </child>
                               </object>
@@ -230,7 +271,6 @@
                         </child>
                         <child>
                           <object class="ttk.Frame" id="frame16">
-                            <property name="height">100</property>
                             <property name="width">200</property>
                             <layout manager="pack">
                               <property name="expand">true</property>

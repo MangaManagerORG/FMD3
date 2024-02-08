@@ -3,7 +3,6 @@ name: Main Workflow
 on:
   push:
     branches:
-      - flow_test
       - test
 env:
     IMAGE_NAME: "thepromidius/fmd3-api"
@@ -125,7 +124,7 @@ jobs:
     name: Build and push docker image
     needs: bump_version
     runs-on: ubuntu-latest
-    if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/flow_test' && contains(needs.bump_version.outputs.bumped_packages, 'FMD3_API') }}
+    if: ${{ github.ref == 'refs/heads/test' || github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/heads/release/alpha') && contains(needs.bump_version.outputs.bumped_packages, 'FMD3_API') }}
     steps:
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2

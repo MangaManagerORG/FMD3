@@ -11,11 +11,15 @@ on:
 jobs:
   build:
     strategy:
-        fail-fast: false
-        matrix:
-          spec_file: ${{ contains(steps.detect_bump.outputs.bumped_packages, 'FMD3_API') && ['FMD3-API_SingleExe'] ||
-            contains(steps.detect_bump.outputs.bumped_packages, 'FMD3_Tkinter') && ['FMD3-Client_SingleExe', 'FMD3-WebClient_SingleExe'] ||
-            [] }}
+      fail-fast: false
+      matrix:
+        spec_file:
+          - FMD3-API_SingleExe
+          - FMD3-Client_SingleExe
+          - FMD3-WebClient_SingleExe
+        include:
+          - spec_file: ${{ matrix.spec_file }}
+            if: contains(steps.detect_bump.outputs.bumped_packages, 'FMD3_API') && contains(steps.detect_bump.outputs.bumped_packages, 'FMD3_Tkinter')
     runs-on: ${{ inputs.os }}
     steps:
       - name: Checkout repository

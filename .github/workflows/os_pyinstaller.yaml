@@ -18,8 +18,12 @@ jobs:
           - FMD3-Client_SingleExe
           - FMD3-WebClient_SingleExe
         include:
-          - spec_file: ${{ matrix.spec_file }}
-            if: contains(steps.detect_bump.outputs.bumped_packages, 'FMD3_API') && contains(steps.detect_bump.outputs.bumped_packages, 'FMD3_Tkinter')
+          - spec_file: FMD3-API_SingleExe
+            if: contains(steps.detect_bump.outputs.bumped_packages, 'FMD3_API') || contains(steps.detect_bump.outputs.bumped_packages, 'FMD3_Tkinter')
+          - spec_file: FMD3-Client_SingleExe
+            if: contains(steps.detect_bump.outputs.bumped_packages, 'FMD3_API') || contains(steps.detect_bump.outputs.bumped_packages, 'FMD3_Tkinter')
+          - spec_file: FMD3-WebClient_SingleExe
+            if: contains(steps.detect_bump.outputs.bumped_packages, 'FMD3_API') || contains(steps.detect_bump.outputs.bumped_packages, 'FMD3_Tkinter')
     runs-on: ${{ inputs.os }}
     steps:
       - name: Checkout repository

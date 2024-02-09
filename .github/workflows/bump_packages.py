@@ -1,6 +1,6 @@
 import os
 
-from promidius_versioning_utils import bump_packages_if_modified
+from versioning_utils import bump_packages_if_modified
 
 if __name__ == '__main__':
     src_path = 'src'

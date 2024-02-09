@@ -10,3 +10,4 @@
 /config/
 /tests/test.db*
 venv
+/.idea/sonarlint

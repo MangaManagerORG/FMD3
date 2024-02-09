@@ -7,6 +7,7 @@ import requests
 
 from FMD3 import get_source as sup_get_source
 from FMD3.sources import get_sources_list, update_source as sup_update_source, uninstall_source as sup_uninstall_source
+from FMD3.sources.updater import check_source_updates as sup_check_source_updates
 
 
 def get_sources():
@@ -46,3 +47,6 @@ def update_source(source_id):
 
 def uninstall_source(source_id):
     sup_uninstall_source(source_id=source_id)
+
+def check_source_updates():
+    sup_check_source_updates()

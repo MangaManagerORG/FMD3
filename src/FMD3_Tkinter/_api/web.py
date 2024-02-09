@@ -60,6 +60,10 @@ class WebApi(Api):
         return session.get(host_url() + f"/sources/{source_id}").json()
 
     @staticmethod
+    def check_source_updates():
+        return session.get(host_url() + "/sources/check_updates/")
+
+    @staticmethod
     def get_source_chapters(source_id: str, series_id: str, get_from: int = None):
         return session.get(host_url() + f"/sources/{source_id}/{series_id}?get_from={get_from}").json()
 

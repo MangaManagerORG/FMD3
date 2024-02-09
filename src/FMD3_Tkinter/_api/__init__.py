@@ -88,3 +88,8 @@ class Api:
     @abstractmethod
     def uninstall_source(source_id):
         ...
+
+    @staticmethod
+    @abstractmethod
+    def check_source_updates():
+        ...

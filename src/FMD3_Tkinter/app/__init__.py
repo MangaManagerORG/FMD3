@@ -73,6 +73,7 @@ class App(Favourites, Series, Settings):
 
 PROJECT_PATH = pathlib.Path(__file__).parent.parent
 PROJECT_UI = PROJECT_PATH / "ui_test.ui"
+api.check_source_updates()
 sources = api.get_sources()
 def update_sources():
     sources = api.get_sources()
@@ -282,14 +283,22 @@ class TkinterUI(App):
 
                     i += 1
 
+    def settings_sources_listing_refresh_btn_call(self):
+        global available_sources, installed_sources
+        api.check_source_updates()
+        available_sources = api.get_available_sources()
+        installed_sources = set()
+        self.update_installed_listing()
+        self.update_not_installed_listing()
 
     def populate_installed(self):
         installed_frame = self.builder.get_object("settings_sources_installed")
         for i, source in enumerate(sources, start=1):
             # frame = ttk.Frame(installed_frame, width="200")
-            ttk.Label(installed_frame, text=source.get("name")).grid(row=i, column=0, sticky="nswe")
-            ttk.Label(installed_frame, text=source.get("version")).grid(row=i, column=1, sticky="nswe")
-            ttk.Label(installed_frame, text=source.get("_has_updates") or "False").grid(row=i, column=2, sticky="nswe")
+            background = "orange" if source.get("has_updates") else None
+            ttk.Label(installed_frame, text=source.get("name"), background=background).grid(row=i, column=0, sticky="nswe")
+            ttk.Label(installed_frame, text=source.get("version"), background=background).grid(row=i, column=1, sticky="nswe")
+            ttk.Label(installed_frame, text=source.get("has_updates") or "False", background=background).grid(row=i, column=2, sticky="nswe")
 
             actions = ttk.Frame(installed_frame)
             actions.grid(row=i, column=4, sticky="e")
@@ -297,7 +306,7 @@ class TkinterUI(App):
             button.configure(command=lambda x=source.get("id"),btn=button: self.pre_delete_source(x,button))
             button.pack(side="right")
             # if source.get("_has_updates"):
-            button = ttk.Button(actions, text="Update", state="normal" if source.get("_has_updates") else "disabled")
+            button = ttk.Button(actions, text="Update", state="normal" if source.get("has_updates") else "disabled")
             button.configure(command=lambda x=source.get("id"), btn=button: self.pre_update_source(x, btn))
             button.pack(side="right")
 

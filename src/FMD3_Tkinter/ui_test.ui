@@ -199,7 +199,7 @@
                                   </object>
                                 </child>
                                 <child>
-                                  <object class="tk.Button" id="button11">
+                                  <object class="tk.Button" id="settings_sources_search_url_butto" named="True">
                                     <property name="command" type="command" cbtype="simple">series_tab_search_by_url</property>
                                     <property name="state">normal</property>
                                     <property name="text" translatable="yes">Search</property>
@@ -809,7 +809,7 @@
                                       </object>
                                     </child>
                                     <child>
-                                      <object class="ttk.Button" id="button10">
+                                      <object class="ttk.Button" id="settings_sources_search_url_button" named="True">
                                         <property name="command" type="command" cbtype="simple">add_library_to_treeview</property>
                                         <property name="text" translatable="yes">ADD</property>
                                         <layout manager="grid">
@@ -1094,6 +1094,15 @@
                                           <property name="side">top</property>
                                         </layout>
                                         <child>
+                                          <object class="ttk.Button" id="button9">
+                                            <property name="command" type="command" cbtype="simple">settings_sources_listing_refresh_btn_call</property>
+                                            <property name="text" translatable="yes">Refresh</property>
+                                            <layout manager="pack">
+                                              <property name="side">top</property>
+                                            </layout>
+                                          </object>
+                                        </child>
+                                        <child>
                                           <object class="ttk.Labelframe" id="labelframe4">
                                             <property name="height">200</property>
                                             <property name="text" translatable="yes">Installed</property>
@@ -1116,6 +1125,7 @@
                                                 <child>
                                                   <object class="ttk.Frame" id="settings_sources_installed" named="True">
                                                     <property name="height">200</property>
+                                                    <property name="style">red</property>
                                                     <property name="width">200</property>
                                                     <layout manager="pack">
                                                       <property name="anchor">w</property>

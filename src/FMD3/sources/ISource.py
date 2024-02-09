@@ -49,6 +49,14 @@ class ISource:
 
         Settings().load_defaults(self.NAME, self.settings)
 
+    @abstractmethod
+    def is_url_from_source(self, url) -> bool:
+        """
+        Method called passing a url. Mostly to fetch a source from a given url
+        :param url:
+        :return:
+        """
+
     @final
     def get_series_info(self, series_id) -> tuple[SeriesInfo | None, None|str]:
         saved_series = db.Session.query(db.Series).filter_by(series_id=series_id).one_or_none()

@@ -6,7 +6,6 @@ from ComicInfo import ComicInfo
 NUM_THREADS = 10
 DL_FOLDER = "test_download_lib"
 
-
 logger = logging.getLogger(__name__)
 
 

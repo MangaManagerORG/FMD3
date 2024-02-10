@@ -23,11 +23,13 @@
       <sourceFolder url="file://$MODULE_DIR$/../FMD3_Extensions/extensions/sources" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/../FMD3_Extensions/tests" isTestSource="true" />
       <excludeFolder url="file://$MODULE_DIR$/../FMD3_Extensions/build" />
+      <excludeFolder url="file://$MODULE_DIR$/../FMD3_Extensions/output" />
     </content>
     <orderEntry type="jdk" jdkName="Python 3.11 (FMD3)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="module" module-name="versioning-utils" />
   </component>
   <component name="SonarLintModuleSettings">
-    <option name="uniqueId" value="c17eecc4-46b2-4a62-b41c-72795e180875" />
+    <option name="uniqueId" value="46ca3ec5-6e4f-4208-b6a9-0b8b50b21a9b" />
   </component>
 </module>

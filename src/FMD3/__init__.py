@@ -12,7 +12,7 @@ umpumped_events = []
 
 TRACE = 9
 
-
+from .__version__ import __version__
 def trace(self, message, *args, **kws):
     """
     Reports a trace. Used for spam loggings tring to trace the whole execution of a function

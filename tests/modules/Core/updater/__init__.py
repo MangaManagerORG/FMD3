@@ -3,7 +3,7 @@ from datetime import datetime, timedelta
 from unittest.mock import patch, MagicMock
 
 from FMD3.core.database import Series, DLDChapters, SeriesStatus
-from FMD3.core.database.models import DLDChaptersStatus
+from FMD3.models.ddl_chapter_status import DLDChaptersStatus
 from FMD3.core.updater import create_download_task, scan_hanging_tasks, scan_new_chapters, new_chapters_finder
 from tests.TestSource.TestSource import TestSource
 from tests.dbutils import make_session

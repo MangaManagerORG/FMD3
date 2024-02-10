@@ -4,7 +4,7 @@ from sqlalchemy import Column, String, ForeignKey, SmallInteger, Text, Integer, 
 
 from ...database import Base
 from FMD3.models.chapter import Chapter
-
+from FMD3.models.ddl_chapter_status import DLDChaptersStatus as _DLDChaptersStatus
 
 class DLDChaptersStatus(enum.Enum):
     NOT_DOWNLOADED = 0
@@ -27,7 +27,7 @@ class DLDChapters(Base):
     number = Column(SmallInteger)
     volume = Column(SmallInteger)
     title = Column(Text)
-    status = Column(Integer, default=DLDChaptersStatus.NOT_DOWNLOADED.value)
+    status = Column(Integer, default=_DLDChaptersStatus.NOT_DOWNLOADED.value)
     path = Column(Text)
     downloaded_at = Column(DateTime, server_default=func.now())
 

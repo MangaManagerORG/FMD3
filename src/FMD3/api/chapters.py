@@ -3,7 +3,7 @@ from FMD3.core import database as db
 from FMD3.core.updater import create_download_task
 from FMD3.core.utils import get_series_folder_name
 from FMD3.models.chapter import Chapter
-
+from FMD3.models.ddl_chapter_status import DLDChaptersStatus
 
 def get_chapters(series_id):
     chapters = [
@@ -13,7 +13,7 @@ def get_chapters(series_id):
             "volume": chapter.volume,
             "number": chapter.number,
             "title": chapter.title,
-            "status": db.DLDChaptersStatus(chapter.status).as_name(),
+            "status": DLDChaptersStatus(chapter.status).as_name(),
             "path": chapter.path,
             "download_date": chapter.downloaded_at
         }

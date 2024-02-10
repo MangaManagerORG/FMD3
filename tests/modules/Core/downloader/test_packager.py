@@ -2,7 +2,7 @@ import unittest
 from unittest.mock import patch, MagicMock
 from ComicInfo import ComicInfo
 
-from FMD3.core.database.models import DLDChaptersStatus
+from FMD3.models.ddl_chapter_status import DLDChaptersStatus
 from FMD3.core.downloader import download_series_chapter
 from FMD3.models.chapter import Chapter
 from tests.TestSource.TestSource import TestSource

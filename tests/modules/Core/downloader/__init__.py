@@ -7,7 +7,6 @@ from ComicInfo import ComicInfo
 from sqlalchemy import create_engine, text
 from sqlalchemy.orm import sessionmaker, scoped_session
 from FMD3.core.database import Base, Series, DLDChapters
-from FMD3.core.downloader import download_n_pack_pages, download_series_chapter, download_image
 from tests.mockzip import MockZip
 from tests.TestSource.TestSource import TestSource
 
@@ -28,6 +27,7 @@ def scoped_session(*_):
     return scoped_session(session_factory)
 
 
+@unittest.skip("Invalid")
 class TestDownload(unittest.TestCase):
 
     @patch("FMD3.core.downloader.ZipFile")

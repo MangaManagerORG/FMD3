@@ -5,10 +5,8 @@ from abc import abstractmethod
 import logging
 from typing import final
 from datetime import timedelta, datetime
+from requests_ratelimiter import LimiterSession
 
-import requests
-
-import FMD3.core.database.models.SeriesCache
 from FMD3.core.settings import Settings, SettingControl
 from FMD3.core import database as db
 from FMD3.models.chapter import Chapter
@@ -27,6 +25,7 @@ class ISource:
     # OnGetInfo = None
     MaxTaskLimit = None
     VERSION = None
+    MAX_REQUESTS_PER_SECOND = 10
 
     _has_updates = False  # Becomes true once the updater has been called if new version avaialble
 
@@ -48,6 +47,25 @@ class ISource:
         self.init_settings()
 
         Settings().load_defaults(self.NAME, self.settings)
+
+    #
+    # Net stuff
+    #
+
+    _session = None
+
+    @property
+    def session(self):
+        if self._session is None:
+            self._session = self.create_session()
+        return self._session
+
+    @staticmethod
+    def create_session():
+        """
+        Override this method to configure the session and connection settings more specifically.
+        """
+        return LimiterSession(per_second=5)
 
     @abstractmethod
     def is_url_from_source(self, url) -> bool:
@@ -189,37 +207,4 @@ class ISource:
         :param url:
         :return:
         """
-
-    #
-    # Net stuff
-    #
-
-    _session = None
-
-    # @property
-    # def session(self) -> ClientSession:
-    #     if self._session is None:
-    #         self._session = self.create_session()
-    #     return self._session
-
-    # def create_session(self) -> ClientSession:
-    #     """
-    #     Override this method to configure the session and connection settings more specifically.
-    #     """
-    #     connector = TCPConnector(limit=5)  # Example: Setting connection limit to 5
-    #     session = ClientSession(connector=connector)
-    #     return session
-    @property
-    def session(self):
-        if self._session is None:
-            self._session = self.create_session()
-        return self._session
-
-    @staticmethod
-    def create_session():
-        """
-        Override this method to configure the session and connection settings more specifically.
-        """
-        return requests.Session()
-        # Make sure to close the session when the instance is destroyed
 

@@ -28,7 +28,8 @@ dependencies = [
     "pillow",
     "pathvalidate",
     "schedule",
-    "userpaths"
+    "userpaths",
+    'requests-ratelimiter'
 ]
 
 

@@ -8,6 +8,7 @@ from FMD3.core import database
 from FMD3.core.database import DLDChapters
 from FMD3.core.database.predefined import chapter_exists
 from FMD3.core.downloader.processing import convert_and_zip
+from FMD3.core.downloader.utils import analyze_archive
 from FMD3.models.ddl_chapter_status import DLDChaptersStatus
 from FMD3.models.download_task import DownloadTask
 from FMD3.core.downloader.downloader import download_images_for_chapter
@@ -56,6 +57,9 @@ class TaskManager:
         self.active_tasks.add(f"{series_id}/{chapter.chapter_id}")
 
         dl_obj = DownloadTask(source, series_id, chapter, path, cinfo, *args, **kwargs)
+        if analyze_archive(dl_obj.output_path, series_id, chapter):
+            self.on_process_done(dl_obj)
+            return
 
         thread_future = self.__DPE.submit(download_images_for_chapter, dl_obj)
         thread_future.add_done_callback(lambda future: self.on_thread_done(thread_future))
@@ -67,10 +71,9 @@ class TaskManager:
 
         logger.info(f"Downloading complete for {thread_result.chapter}")
         process_future = self.__PPE.submit(convert_and_zip, thread_result)
-        process_future.add_done_callback(self.on_process_done)
+        process_future.add_done_callback(self.pre_on_process_done)
 
-    def on_process_done(self, future):
-        # def commit(self, future):
+    def pre_on_process_done(self,future):
         try:
             task: DownloadTask = future.result()
         except BrokenProcessPool:
@@ -82,11 +85,14 @@ class TaskManager:
                 print_once_process_exception = True
             print("")
             return
-        except:
-            logger.exception(f"Unhandled exception")
+        return self.on_process_done(task)
+
+    def on_process_done(self, task):
 
         if task.status == DLDChaptersStatus.DOWNLOADED:
             logger.info(f"Processing done for {task.chapter}")
+        if task.status == DLDChaptersStatus.SKIPPED:
+            logger.warning(f"Processing skipped for {task.chapter}")
         else:
             logger.error(f"Process failed for {task.chapter}")
 

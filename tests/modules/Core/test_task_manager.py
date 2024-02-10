@@ -9,18 +9,23 @@ from tests.TestSource.TestSource import TestSource
 
 
 class TestTaskManager(unittest.TestCase):
-    @patch('FMD3.core.TaskManager.download_series_chapter')
-    @patch('FMD3.core.TaskManager.TaskManager.commit')
-    def test_queue_items_processed(self,mocked_commit:MagicMock,*_):
+    @patch('FMD3.core.TaskManager.download_images_for_chapter')
+    @patch('FMD3.core.TaskManager.TaskManager.on_process_done')
+    def test_queue_items_processed(self,on_process_done:MagicMock,*_):
 
 
-        TaskManager().submit_series_chapter(TestSource(), "series_a", TestSource()._debug_get_chapter("series_a","sAcha_1"), "output_file_path",ComicInfo())
+        TaskManager().submit_series_chapter(
+            source=TestSource(),
+            series_id="series_a",
+            chapter=TestSource()._debug_get_chapter("series_a","sAcha_1"),
+            path = "output_file_path",
+            cinfo = ComicInfo())
         # TaskManager().submit(mocked_commit,
         #     (TestSource, "series_a", TestSource()._debug_get_chapter("series_a", "sAcha_1"), "output_file_path"))
 
         #Give it time for the thread to finish
         time.sleep(2)
-        mocked_commit.assert_called()
+        on_process_done.assert_called()
 
     def tearDown(self):
         TaskManager.__instance = None

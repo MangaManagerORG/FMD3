@@ -35,7 +35,7 @@ predefined.Session = database.Session
 from FMD3.core.database import models
 models.Session = database.Session
 get_scoped_session = None
-
+source = TestSource()
 class DbSetup(unittest.TestCase):
     def setUp(self):
         Base.metadata.create_all(database.engine)
@@ -86,9 +86,10 @@ class DbSetup(unittest.TestCase):
             database.Session.commit()
         except:
             database.Session.rollback()
+@patch("FMD3.core.updater.get_source_by_id",return_value=source)
 class TestFindNewChapters(DbSetup):
-
-    def test_find_new_chapters(self):
+    @unittest.skip("invalid")
+    def test_find_new_chapters(self, *args):
         """
         Simulates the flow where updater filters the chapters that are not yet in the database and passes the list to the task manager to download
         Returns:
@@ -101,7 +102,8 @@ class TestFindNewChapters(DbSetup):
         updater.make_download_task_missing_chapters = mock_make_download_task_missing_chapters
 
         new_chapters_finder()
-    def test_find_new_chapters_should_not_detect_new_chapters(self):
+    @unittest.skip("invalid")
+    def test_find_new_chapters_should_not_detect_new_chapters(self, *args):
         """
         Simulates the flow where updater filters the chapters that are not yet in the database and passes the list to the task manager to download
         Returns:

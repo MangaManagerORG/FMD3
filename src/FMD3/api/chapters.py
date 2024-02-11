@@ -5,6 +5,7 @@ from FMD3.core.utils import get_series_folder_name
 from FMD3.models.chapter import Chapter
 from FMD3.models.ddl_chapter_status import DLDChaptersStatus
 
+
 def get_chapters(series_id):
     chapters = [
         {

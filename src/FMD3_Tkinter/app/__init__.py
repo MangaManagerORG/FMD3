@@ -229,7 +229,7 @@ class TkinterUI(App):
                 series_result_tree = self.builder.get_object("series_result")
                 series_result_tree.delete(*series_result_tree.get_children())
                 self.load_queried_data(series_id, data)
-                self.builder.get_object("notebook_widget").select(1)
+                self.builder.get_object("notebook_widget").select(0) # select series tab
 
     # def populate_sources(self, *_):
     #     frame = self.builder.get_object("enabled_sources")

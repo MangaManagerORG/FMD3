@@ -1,7 +1,7 @@
 {
   "FMD3": {
-    "version": "0.0.0.dev10",
-    "commit_hash": "27d325ca2d924b44e042374f5f0c88d808c10f4b"
+    "version": "0.0.0.dev11",
+    "commit_hash": "0c18d1d5132c7de892ec084e69c7b11d6522c4ba"
   },
   "FMD3_API": {
     "version": "0.0.0.dev7",

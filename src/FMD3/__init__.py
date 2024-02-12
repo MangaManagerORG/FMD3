@@ -1,6 +1,5 @@
 import logging
 import sys
-import threading
 from logging import DEBUG, INFO, Handler, StreamHandler, basicConfig, addLevelName, Logger
 from logging.handlers import RotatingFileHandler
 
@@ -8,7 +7,6 @@ from FMD3.constants import LOGFILE_PATH
 from FMD3.core import database
 from FMD3.core.settings import Settings
 from FMD3.sources import get_source, load_sources
-from FMD3.core.scheduler import run_scheduler
 umpumped_events = []
 
 TRACE = 9
@@ -67,5 +65,5 @@ settings = Settings()
 load_sources()
 settings.save()
 
-threading.Thread(target=run_scheduler).start()
+
 

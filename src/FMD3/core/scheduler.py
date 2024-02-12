@@ -1,4 +1,5 @@
 import logging
+import threading
 from time import sleep
 
 import schedule
@@ -23,3 +24,5 @@ def run_scheduler(run_pending_every=120):
         schedule.run_pending()
         sleep(run_pending_every)
 
+def start_scheduler_loop():
+    threading.Thread(target=run_scheduler).start()

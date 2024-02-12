@@ -3,9 +3,8 @@ from pathlib import Path
 
 FMD3_PATH = Path(userpaths.get_local_appdata(), "FMD3")
 
-# CONFIG_PATH = Path(FMD3_PATH, "config")
-#TODO("Change this back")
-CONFIG_PATH = Path("config")
+
+CONFIG_PATH = Path("config")  # TODO("Change this back") # CONFIG_PATH = Path(FMD3_PATH, "config")
 CONFIG_PATH.mkdir(parents=True, exist_ok=True)
 
 
@@ -16,8 +15,10 @@ LOGFILE_PATH = Path(CONFIG_PATH, "logs")
 LOGFILE_PATH.mkdir(parents=True, exist_ok=True)
 
 
-EXTENSION_PATHS = Path(FMD3_PATH, "extensions")
+EXTENSION_PATHS = Path('./../FMD3_Extensions/extensions')  # TODO("Change this back")) # EXTENSION_PATHS = Path(FMD3_PATH, "extensions")
 EXTENSION_PATHS.mkdir(parents=True, exist_ok=True)
+
+
 
 SOURCE_PATHS = Path(EXTENSION_PATHS, "sources")
 SOURCE_PATHS.mkdir(parents=True, exist_ok=True)

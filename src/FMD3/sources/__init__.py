@@ -22,14 +22,14 @@ sources_factory: list[ISource] = []
 logger = logging.getLogger(__name__)
 def import_and_register_source(module_info: pkgutil.ModuleInfo):
     # sys.path.append(os.path.abspath(package_path))
-    sys.path.append(str(EXTENSION_PATHS))
+    sys.path.append(str(EXTENSION_PATHS.resolve()))
 
     module_name = "MangaDex"  # Assuming this is the module name you want to import
     module_path = f"sources.{module_name}"
 
     try:
         importlib.invalidate_caches()
-        module = importlib.import_module(module_path)
+        module = importlib.import_module(module_path,package="sources")
 
         # Now you can access the Source variable from the imported module
         Source = module.Source

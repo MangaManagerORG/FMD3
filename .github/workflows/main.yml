@@ -180,6 +180,7 @@ jobs:
           prerelease: true
           artifacts: "windows/*"
           bodyFile: "body.md"
+          tag: "test3"
 
 
   docker:

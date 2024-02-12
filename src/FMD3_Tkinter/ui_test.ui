@@ -235,6 +235,7 @@
                                       <object class="tkinterweb.HtmlFrame" id="frame_test_image" named="True">
                                         <property name="height">200</property>
                                         <property name="horizontal_scrollbar">false</property>
+                                        <property name="messages_enabled">false</property>
                                         <property name="vertical_scrollbar">false</property>
                                         <property name="width">160</property>
                                         <layout manager="pack">

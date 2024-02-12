@@ -1,3 +1,4 @@
+import logging
 from time import sleep
 
 import schedule
@@ -16,7 +17,8 @@ def start_fav_scan_schedule():
     schedule.every(minutes).seconds.do(new_chapters_finder).run()
 
 
-def run_scheduler(run_pending_every=5):
+def run_scheduler(run_pending_every=120):
+    logging.getLogger(__name__).info("Started scheduler")
     while 1:
         schedule.run_pending()
         sleep(run_pending_every)

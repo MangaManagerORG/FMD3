@@ -126,9 +126,9 @@ jobs:
     with:
         os: ${{ matrix.os }}
 
-  upload_artifacts:
+  download_artifacts:
     runs-on: ubuntu-latest
-    needs: build
+    needs: pyinstaller
     steps:
       #      - name: Download
       #        uses: actions/download-artifact@v4

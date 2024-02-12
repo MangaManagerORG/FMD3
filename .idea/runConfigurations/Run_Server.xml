@@ -1,12 +1,12 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="Run Server" type="Python.FastAPI">
     <option name="additionalOptions" value="--reload --host 0.0.0.0 --port 8000" />
-    <option name="file" value="$PROJECT_DIR$\src\FMD3_API\main.py" />
+    <option name="file" value="$PROJECT_DIR$\src\FMD3_API\app\__init__.py" />
     <module name="FMD3" />
     <option name="ENV_FILES" value="" />
     <option name="INTERPRETER_OPTIONS" value="" />
     <option name="PARENT_ENVS" value="true" />
-    <option name="SDK_HOME" value="$PROJECT_DIR$\venv\Scripts\python.exe" />
+    <option name="SDK_HOME" value="$PROJECT_DIR$\.venv\Scripts\python.exe" />
     <option name="SDK_NAME" value="Python 3.11 (FMD3)" />
     <option name="WORKING_DIRECTORY" value="" />
     <option name="IS_MODULE_SDK" value="false" />

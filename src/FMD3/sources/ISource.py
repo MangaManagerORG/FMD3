@@ -19,15 +19,14 @@ class ISource:
     ...
     ID = None
     NAME = None
-    Name = None
     ROOT_URL = None
     CATEGORY = None
     # OnGetInfo = None
-    MaxTaskLimit = None
     VERSION = None
     MAX_REQUESTS_PER_SECOND = 10
 
     _has_updates = False  # Becomes true once the updater has been called if new version avaialble
+    _session = None
 
     @final
     def get_setting(self, setting_key):
@@ -47,12 +46,6 @@ class ISource:
         self.init_settings()
 
         Settings().load_defaults(self.NAME, self.settings)
-
-    #
-    # Net stuff
-    #
-
-    _session = None
 
     @property
     def session(self):
@@ -74,7 +67,9 @@ class ISource:
         :param url:
         :return:
         """
-
+    @abstractmethod
+    def get_series_id_from_url(self,url) -> str:
+        ...
     @final
     def get_series_info(self, series_id) -> tuple[SeriesInfo | None, None|str]:
         saved_series = db.Session.query(db.Series).filter_by(series_id=series_id).one_or_none()

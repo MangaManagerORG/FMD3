@@ -1,7 +1,9 @@
 from fastapi import APIRouter
-from FMD3.api.sources import get_sources as sup_get_sources, get_source as sup_get_source, get_available_sources as sup_get_available_sources
+from FMD3.api.sources import get_sources as sup_get_sources, get_source as sup_get_source, \
+    get_available_sources as sup_get_available_sources
 from FMD3.api.chapters import get_source_chapters as sup_get_source_chapters
 from FMD3.api.sources import check_source_updates as sup_check_source_updates
+
 router = APIRouter()
 
 
@@ -16,7 +18,7 @@ async def get_source(source_id: str):
 
 
 @router.get("/sources/{source_id}/{series_id}")
-async def get_chapters(source_id: str, series_id: str, get_from:int=None):
+async def get_chapters(source_id: str, series_id: str, get_from: int = -10):
     """
 
     Args:
@@ -27,11 +29,13 @@ async def get_chapters(source_id: str, series_id: str, get_from:int=None):
     Returns:
 
     """
-    return sup_get_source_chapters(source_id, series_id,get_from)
+    return sup_get_source_chapters(source_id, series_id, get_from)
+
 
 @router.get("/sources/available/")
 async def get_available_sources():
     return sup_get_available_sources()
+
 
 @router.get("/sources/check_updates/")
 async def check_source_updates():

@@ -3,7 +3,7 @@ from fastapi.openapi.models import Response
 
 from FMD3.api.series import get_series as sup_get_series, get_series_info as sup_get_series_info, \
     query_series as sup_query_series, get_series_folder_name as sup_get_series_folder_name, \
-    get_cover as sup_get_series_cover
+    get_series_from_url as sup_get_series_from_url
 
 router = APIRouter()
 
@@ -28,6 +28,9 @@ async def query_series(source_id: str, query: str):
 async def get_series_folder_name(website=None, manga=None, author=None, artist=None):
     return sup_get_series_folder_name(website, manga, author, artist)
 
+@router.get("/series/url")
+async def get_series_from_url(url:str):
+    return sup_get_series_from_url(url)
 
 @router.get("/series/cover/{source_id}}",
             responses={

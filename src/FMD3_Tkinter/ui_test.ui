@@ -221,22 +221,23 @@
                                 </layout>
                                 <child>
                                   <object class="ttk.Frame" id="frame17">
-                                    <property name="height">160</property>
-                                    <property name="width">90</property>
+                                    <property name="height">200</property>
+                                    <property name="width">130</property>
                                     <layout manager="pack">
                                       <property name="expand">false</property>
                                       <property name="fill">both</property>
                                       <property name="side">left</property>
                                     </layout>
+                                    <containerlayout manager="pack">
+                                      <property name="propagate">false</property>
+                                    </containerlayout>
                                     <child>
-                                      <object class="tk.Canvas" id="series_detail_cover_canvas" named="True">
-                                        <property name="background">#878787</property>
-                                        <property name="borderwidth">2</property>
+                                      <object class="tkinterweb.HtmlFrame" id="frame_test_image" named="True">
                                         <property name="height">200</property>
-                                        <property name="width">130</property>
-                                        <bind sequence="&lt;&lt;ImageLoaded&gt;&gt;" handler="on_series_detail_image_loaded" add="" />
+                                        <property name="horizontal_scrollbar">false</property>
+                                        <property name="vertical_scrollbar">false</property>
+                                        <property name="width">160</property>
                                         <layout manager="pack">
-                                          <property name="expand">true</property>
                                           <property name="side">top</property>
                                         </layout>
                                       </object>
@@ -255,6 +256,7 @@
                                     <child>
                                       <object class="tk.Text" id="series_detail" named="True">
                                         <property name="height">10</property>
+                                        <property name="state">disabled</property>
                                         <property name="width">50</property>
                                         <layout manager="pack">
                                           <property name="expand">true</property>

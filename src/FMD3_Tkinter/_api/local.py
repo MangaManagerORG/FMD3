@@ -3,7 +3,7 @@ from typing import Literal
 import requests
 from FMD3.api.series import get_series as sup_get_series, get_series_info as sup_get_series_info, \
     query_series as sup_query_series, get_series_folder_name as sup_get_series_folder_name, \
-    get_cover as sup_get_series_cover
+    get_series_from_url as sup_get_series_from_url
 from FMD3.api.sources import get_sources as sup_get_sources, get_source as sup_get_source, get_available_sources as sup_get_available_sources, update_source as sup_update_source, uninstall_source as sup_uninstall_source, check_source_updates as sup_check_source_updates
 from FMD3.api.chapters import get_source_chapters as sup_get_source_chapters
 from FMD3.api.chapters import get_chapters as sup_get_chapters, download_chapters as sup_download_chapters
@@ -28,16 +28,16 @@ class LocalApi(Api):
         return sup_get_series_info(source_id, series_id)
 
     @staticmethod
+    def get_series_from_url(url):
+        return sup_get_series_from_url(url)
+
+    @staticmethod
     def get_series_folder_name(website=None, manga=None, author=None, artist=None):
         return sup_get_series_folder_name(website, manga, author, artist)
 
     @staticmethod
     def query_series(source_id: str, query: str):
         return sup_query_series(source_id, query)
-
-    @staticmethod
-    def get_cover(source_id: str, request_url: str):
-        return sup_get_series_cover(source_id, request_url)
 
     @staticmethod
     def get_sources():

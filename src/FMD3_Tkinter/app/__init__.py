@@ -6,6 +6,7 @@ from tkinter import ttk
 from tkinter.tix import CheckList
 import pygubu
 import sv_ttk
+from tkinterweb.htmlwidgets import HtmlFrame
 
 from FMD3_Tkinter import api
 from FMD3_Tkinter.__version__ import __version__
@@ -235,6 +236,9 @@ class TkinterUI(App):
         series_destination_path.trace_add("write", self.series_update_final_dest)
         super().__init__()
         self.settings_load_save_to_treeview_from_settings()
+        # cover_frame = self.builder.get_object("frame_test_image")
+        # self.cover_web_frame = HtmlFrame(cover_frame,vertical_scrollbar=False)  # create HTML browser
+        # self.cover_web_frame.pack(side=tk.TOP, fill=tk.BOTH,expand=True)
 
         # Library selection field set default
         default_series_downloads_path.set(self.settings["Core"].get("default_downloads_path", None)["value"])

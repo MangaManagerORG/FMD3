@@ -1,8 +1,3 @@
-import io
-import os
-import shutil
-import zipfile
-
 import requests
 
 from FMD3 import get_source as sup_get_source
@@ -38,6 +33,12 @@ def get_source(name=None, source_id=None) -> dict or None:
     return source
 
 
+def get_source_from_url(url: str) -> str:
+    for source in get_sources_list():
+        if source.is_url_from_source(url):
+            return source.ID
+
+
 def get_available_sources():
     return requests.get("https://raw.githubusercontent.com/MangaManagerORG/FMD3-Extensions/repo/sources.json").json()
 
@@ -45,8 +46,10 @@ def get_available_sources():
 def update_source(source_id):
     sup_update_source(source_id=source_id)
 
+
 def uninstall_source(source_id):
     sup_uninstall_source(source_id=source_id)
+
 
 def check_source_updates():
     sup_check_source_updates()

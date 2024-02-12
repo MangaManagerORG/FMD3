@@ -7,7 +7,7 @@ from FMD3 import get_source as sup_get_source
 from FMD3.core import database as db
 from FMD3.core.database.predefined import get_column_from_str
 from FMD3.core.utils import get_series_folder_name as sup_get_series_folder_name
-
+from .sources import get_source_from_url
 
 def get_series(sort=_NoArg.NO_ARG, order: Literal["asc", "desc"] = "desc", limit=None):
     order = desc if order == "desc" else asc
@@ -43,6 +43,7 @@ def get_series_info(source_id, series_id):
         return {}
     return {
         "id": series_info.id,
+        "source_id": source.ID,
         "title": series_info.title,
         "alt_titles": series_info.alt_titles,
         "description": series_info.description,
@@ -73,6 +74,9 @@ def get_series_folder_name(website=None, manga=None, author=None, artist=None):
     return sup_get_series_folder_name(website, manga, author, artist)
 
 
-def get_cover(source_id, request_url):
+def get_series_from_url(series_url):
+    source_id = get_source_from_url(series_url)
     source = sup_get_source(source_id=source_id)
-    return source.session.get(request_url)
+    series_id = source.get_series_id_from_url(series_url)
+
+    return get_series_info(source_id, series_id)

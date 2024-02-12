@@ -49,10 +49,6 @@ class WebApi(Api):
         return session.get(host_url() + f"/series/query/{source_id}/{query}").json()
 
     @staticmethod
-    def get_cover(source_id: str, request_url: str):
-        return session.get(host_url() + f"/series/cover/{source_id}?request_url={request_url}").json()
-
-    @staticmethod
     def get_sources():
         return session.get(host_url() + "/sources/").json()
 
@@ -61,11 +57,15 @@ class WebApi(Api):
         return session.get(host_url() + f"/sources/{source_id}").json()
 
     @staticmethod
+    def get_series_from_url(url) -> str:
+        return session.get(host_url() + f"/series/url?url={url}").json()
+
+    @staticmethod
     def check_source_updates():
         return session.get(host_url() + "/sources/check_updates/")
 
     @staticmethod
-    def get_source_chapters(source_id: str, series_id: str, get_from: int = None):
+    def get_source_chapters(source_id: str, series_id: str, get_from: int = -1):
         return session.get(host_url() + f"/sources/{source_id}/{series_id}?get_from={get_from}").json()
 
     @staticmethod

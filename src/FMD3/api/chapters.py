@@ -24,21 +24,21 @@ def get_chapters(series_id):
     return chapters
 
 
-def get_source_chapters(source_id, series_id, filter: int = None):
+def get_source_chapters(source_id, series_id, filter_ = None):
     """
     Returns the chapters from the source. Will only return sources bigger than filter number
     Args:
         source_id:
         series_id:
-        filter:
+        filter_:
 
     Returns:
         Chapters that are of bigger number else empty list
 
     """
     source = sup_get_source(source_id=source_id)
-    if filter:
-        chapters = source.get_new_chapters(series_id, filter)
+    if filter_:
+        chapters = source.get_new_chapters(series_id, filter_)
     else:
         chapters = source.get_chapters(series_id)
 

@@ -31,11 +31,6 @@ class Api:
 
     @staticmethod
     @abstractmethod
-    def get_cover(source_id: str, request_url: str):
-        ...
-
-    @staticmethod
-    @abstractmethod
     def get_sources():
         ...
 
@@ -92,4 +87,9 @@ class Api:
     @staticmethod
     @abstractmethod
     def check_source_updates():
+        ...
+
+    @staticmethod
+    @abstractmethod
+    def get_series_from_url(url:str):
         ...

@@ -126,6 +126,62 @@ jobs:
     with:
         os: ${{ matrix.os }}
 
+  upload_artifacts:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      #      - name: Download
+      #        uses: actions/download-artifact@v4
+      #        with:
+      #          name: 'ubuntu-latestFMD3-API_SingleExe--dist'
+      #          path: 'ubuntu/'
+      #        continue-on-error: true
+      #      - name: Download
+      #        uses: actions/download-artifact@v4
+      #        with:
+      #          name: 'ubuntu-latestFMD3-Client_SingleExe--dist'
+      #          path: 'ubuntu/'
+      #        continue-on-error: true
+      #      - name: Download
+      #        uses: actions/download-artifact@v4
+      #        with:
+      #          name: 'ubuntu-latestFMD3-WebClient_SingleExe--dist'
+      #          path: 'ubuntu/'
+      #        continue-on-error: true
+      # windows artifacts
+      - name: Download
+        uses: actions/download-artifact@v4
+        with:
+          name: 'windows-latestFMD3-API_SingleExe--dist'
+          path: 'windows/'
+        continue-on-error: true
+      - name: Download
+        uses: actions/download-artifact@v4
+        with:
+          name: 'windows-latestFMD3-Client_SingleExe--dist'
+          path: 'windows/'
+        continue-on-error: true
+      - name: Download
+        uses: actions/download-artifact@v4
+        with:
+          name: 'windows-latestFMD3-WebClient_SingleExe--dist'
+          path: 'windows/'
+        continue-on-error: true
+  create_release:
+    needs: upload_artifacts
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - run: echo "test" > body.md
+      - uses: actions/checkout@v3
+      - uses: ncipollo/release-action@v1
+        with:
+          prerelease: true
+          artifacts: "windows/*"
+          bodyFile: "body.md"
+
+
   docker:
     name: Build and push docker image
     needs: bump_version

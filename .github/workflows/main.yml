@@ -179,7 +179,6 @@ jobs:
         with:
           prerelease: true
           artifacts: "windows/*"
-          bodyFile: "body.md"
           tag: "test3"
 
 

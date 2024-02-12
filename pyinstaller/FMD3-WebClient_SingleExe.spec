@@ -1,7 +1,7 @@
 # -*- mode: python ; coding: utf-8 -*-
 
 from platform import system
-ver_path = "../src/FMD3_Tkinter/__version__.py"
+ver_path = "src/FMD3_Tkinter/__version__.py"
 with open(ver_path, 'r') as version_file:
     version_globals = {}
     exec(version_file.read(), version_globals)

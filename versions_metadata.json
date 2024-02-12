@@ -1,14 +1,14 @@
 {
   "FMD3": {
-    "version": "0.0.0.dev1",
-    "commit_hash": "d471a9af5500089df00534a599a24ef4a471d424"
+    "version": "0.0.0.dev2",
+    "commit_hash": "6190f89821022ae8da57bd85695d05e992eb3f29"
   },
   "FMD3_API": {
-    "version": "0.0.0.dev1",
-    "commit_hash": "d471a9af5500089df00534a599a24ef4a471d424"
+    "version": "0.0.0.dev2",
+    "commit_hash": "6190f89821022ae8da57bd85695d05e992eb3f29"
   },
   "FMD3_Tkinter": {
-    "version": "0.0.0.dev1",
-    "commit_hash": "d471a9af5500089df00534a599a24ef4a471d424"
+    "version": "0.0.0.dev2",
+    "commit_hash": "6190f89821022ae8da57bd85695d05e992eb3f29"
   }
 }

@@ -16,4 +16,4 @@ pyinstaller~=6.3.0
 packaging
 promidius_versioning_utils
 requests-ratelimiter
-tkinterweb
+pygubu-designer[tkinterweb]

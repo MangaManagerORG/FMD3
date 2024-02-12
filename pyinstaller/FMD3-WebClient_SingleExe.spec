@@ -1,5 +1,13 @@
 # -*- mode: python ; coding: utf-8 -*-
 
+from platform import system
+ver_path = "../src/FMD3_Tkinter/__version__.py"
+with open(ver_path, 'r') as version_file:
+    version_globals = {}
+    exec(version_file.read(), version_globals)
+    raw_version = version_globals.get('__version__')
+
+output_name = f'FMD3-Client_{raw_version}_{system()}'
 a = Analysis(
     ['../src/FMD3_Tkinter/run_web_client.py'],
     pathex=[],
@@ -23,7 +31,7 @@ exe = EXE(
     a.binaries,
     a.datas,
     [],
-    name='FMD3-WebClient',
+    name=output_name,
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,

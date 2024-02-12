@@ -176,6 +176,45 @@ jobs:
           name: 'windows-latestFMD3-WebClient_SingleExe--dist'
           path: 'windows/'
         continue-on-error: true
+      # Linux
+      - name: Download
+        uses: actions/download-artifact@v4
+        with:
+          name: 'ubuntu-latestFMD3-API_SingleExe--dist'
+          path: 'ubuntu/'
+        continue-on-error: true
+      - name: Download
+        uses: actions/download-artifact@v4
+        with:
+          name: 'ubuntu-latestFMD3-Client_SingleExe--dist'
+          path: 'ubuntu/'
+        continue-on-error: true
+      - name: Download
+        uses: actions/download-artifact@v4
+        with:
+          name: 'ubuntu-latestFMD3-WebClient_SingleExe--dist'
+          path: 'ubuntu/'
+        continue-on-error: true
+
+      # Mac
+      - name: Download
+        uses: actions/download-artifact@v4
+        with:
+          name: 'ubuntu-latestFMD3-API_SingleExe--dist'
+          path: 'ubuntu/'
+        continue-on-error: true
+      - name: Download
+        uses: actions/download-artifact@v4
+        with:
+          name: 'ubuntu-latestFMD3-Client_SingleExe--dist'
+          path: 'ubuntu/'
+        continue-on-error: true
+      - name: Download
+        uses: actions/download-artifact@v4
+        with:
+          name: 'macOS-latestFMD3-WebClient_SingleExe--dist'
+          path: 'macOS/'
+        continue-on-error: true
 
       - name: Make release
         uses: ncipollo/release-action@v1

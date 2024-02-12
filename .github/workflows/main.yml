@@ -88,9 +88,6 @@ jobs:
           original_versions="${{ steps.store_original_versions.outputs.original_versions }}"
           current_versions=$(jq -r '.[] | "\(.version)"' versions_metadata.json)
           
-          echo "$original_versions"
-          echo "$current_versions"
-          
           # Logic to compare original versions with current versions and detect bump
           bumped_packages=()
           # For example:
@@ -103,11 +100,6 @@ jobs:
 
           echo "::set-output name=bumped_packages::${bumped_packages[*]}"
 
-      - name: Report Bumped Packages
-        if: steps.detect_bump.outputs.bumped_packages != ''
-        run: |
-          echo "Bumped packages for ${{ matrix.os }} - ${{ matrix.version }}:"
-          echo "${{ steps.detect_bump.outputs.bumped_packages }}"
       - name: Bump version and build
         run: |
           export BUMP_TYPE=${BUMP_TYPE:-patch}

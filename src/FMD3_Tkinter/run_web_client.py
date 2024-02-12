@@ -1,3 +1,5 @@
+import requests
+
 import FMD3_Tkinter
 from FMD3_Tkinter.client_settings import Settings
 import tkinter as tk
@@ -21,8 +23,18 @@ def run_web():
         entry.pack()
         tk.Button(dialog, text="Save", command=lambda: save_host(dialog, var)).pack()
         dialog.mainloop()
+
+    # Try to connect
+    try:
+        r = requests.get(Settings().get("settings_client_host_var"))
+        r.raise_for_status()
+    except requests.exceptions.ConnectionError:
+        raise ConnectionError("Could not connect to server")
+
+
     from FMD3_Tkinter.app import app
     app.run()
+
 
 if __name__ == '__main__':
     run_web()

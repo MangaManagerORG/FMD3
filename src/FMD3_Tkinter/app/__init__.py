@@ -143,12 +143,6 @@ class TkinterUI(App):
         toplevel_entry_val.set(None)
         top_level.close()
 
-    def load_client_settings(self):
-        ClientSettings()
-        stw = self.builder.get_variable("is_dark_mode_enabled")
-        val = ClientSettings().get("is_dark_mode_enabled")
-        stw.set(val)
-
     def track_client_setting(self, key):
         var = self.builder.get_variable(key)
         # Set the StringVar's value to the initial value of the corresponding attribute
@@ -176,10 +170,13 @@ class TkinterUI(App):
         # Main widget
         self.mainwindow: tk.Tk = builder.get_object("tk1", master)
 
-        self.load_client_settings()
         if api._type == "local":
             self.builder.get_object("settings_client_host_entry").configure(state=tk.DISABLED)
         else:
+            stw = self.builder.get_variable("settings_client_host_var")
+            val = ClientSettings().get("settings_client_host_var")
+            if val is not None:
+                stw.set(val)
             self.builder.get_object("settings_client_host_entry").configure(state=tk.NORMAL)
         if ClientSettings().get("is_dark_mode_enabled"):
             sv_ttk.set_theme("dark")

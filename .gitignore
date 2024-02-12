@@ -11,3 +11,4 @@
 /tests/test.db*
 venv
 /tests/config/
+/src/FMD3_API/config/

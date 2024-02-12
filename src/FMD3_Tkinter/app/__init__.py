@@ -5,9 +5,11 @@ from pathlib import Path
 from tkinter import ttk
 from tkinter.tix import CheckList
 import pygubu
+import sv_ttk
 
 from FMD3_Tkinter import api
 from FMD3_Tkinter.__version__ import __version__
+from FMD3_Tkinter.client_settings import Settings as ClientSettings
 from .favorites import Favourites
 from .series import Series
 from .settings import Settings
@@ -141,6 +143,29 @@ class TkinterUI(App):
         toplevel_entry_val.set(None)
         top_level.close()
 
+    def load_client_settings(self):
+        ClientSettings()
+        stw = self.builder.get_variable("is_dark_mode_enabled")
+        val = ClientSettings().get("is_dark_mode_enabled")
+        stw.set(val)
+
+    def track_client_setting(self, key):
+        var = self.builder.get_variable(key)
+        # Set the StringVar's value to the initial value of the corresponding attribute
+        val = var.get()
+        if val is not None:
+            var.set(val)
+        # Set up the trace on the StringVar to call a callback when it changes
+        var.trace_add("write", lambda *args: self.update_client_settings(key, var))
+
+    def update_client_settings(self,key,var):
+        ClientSettings().set(key, var.get())
+
+    def apply_settings(self):
+        super().apply_settings()
+
+        ClientSettings().save()
+
     def __init__(self, master=None, translator=None):
 
         self.settings = json.loads(api.get_settings())
@@ -150,6 +175,14 @@ class TkinterUI(App):
         builder.add_from_file(PROJECT_UI)
         # Main widget
         self.mainwindow: tk.Tk = builder.get_object("tk1", master)
+
+        self.load_client_settings()
+        if api._type == "local":
+            self.builder.get_object("settings_client_host_entry").configure(state=tk.DISABLED)
+        else:
+            self.builder.get_object("settings_client_host_entry").configure(state=tk.NORMAL)
+        if ClientSettings().get("is_dark_mode_enabled"):
+            sv_ttk.set_theme("dark")
         self.favourites_treeview = self.builder.get_object("favourites_treeview")
         self.favourites_treeview.bind("<Button-3>", self.do_popup)
         self.favourites_treeview: ttk.Treeview
@@ -191,6 +224,10 @@ class TkinterUI(App):
 
         self.settings_libraries = {}
         self.track_setting("default_downloads_path")  # ,"settings_def_lib_combo")
+
+        self.track_client_setting("settings_client_host_var")
+        self.track_client_setting("is_dark_mode_enabled")
+
 
         # Library selection field
         default_series_downloads_path = builder.get_variable("default_series_downloads_path")

@@ -188,7 +188,7 @@
                                   <property name="side">top</property>
                                 </layout>
                                 <child>
-                                  <object class="tk.Entry" id="entry5">
+                                  <object class="ttk.Entry" id="entry7">
                                     <property name="textvariable">string:series_browser_url_entry_var</property>
                                     <layout manager="pack">
                                       <property name="anchor">w</property>
@@ -231,6 +231,7 @@
                                     <child>
                                       <object class="tk.Canvas" id="series_detail_cover_canvas" named="True">
                                         <property name="background">#878787</property>
+                                        <property name="borderwidth">2</property>
                                         <property name="height">200</property>
                                         <property name="width">130</property>
                                         <bind sequence="&lt;&lt;ImageLoaded&gt;&gt;" handler="on_series_detail_image_loaded" add="" />
@@ -363,6 +364,7 @@
                             </layout>
                             <child>
                               <object class="ttk.Label" id="label10">
+                                <property name="text" translatable="yes">Library:</property>
                                 <layout manager="pack">
                                   <property name="expand">true</property>
                                   <property name="fill">x</property>
@@ -439,7 +441,7 @@
                                   <property name="anchor">s</property>
                                   <property name="expand">true</property>
                                   <property name="fill">y</property>
-                                  <property name="side">bottom</property>
+                                  <property name="side">right</property>
                                 </layout>
                               </object>
                             </child>
@@ -448,14 +450,33 @@
                       </object>
                     </child>
                     <child>
-                      <object class="ttk.Entry" id="entry3">
-                        <property name="state">readonly</property>
-                        <property name="textvariable">string:series_final_download_dest</property>
+                      <object class="ttk.Frame" id="frame31">
+                        <property name="height">200</property>
                         <property name="width">200</property>
                         <layout manager="pack">
-                          <property name="expand">false</property>
+                          <property name="fill">x</property>
+                          <property name="pady">20 5</property>
                           <property name="side">top</property>
                         </layout>
+                        <child>
+                          <object class="ttk.Label" id="label15">
+                            <property name="text" translatable="yes">Final Path:</property>
+                            <layout manager="pack">
+                              <property name="side">top</property>
+                            </layout>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="ttk.Entry" id="entry8">
+                            <property name="state">readonly</property>
+                            <property name="textvariable">string:series_final_download_dest</property>
+                            <property name="width">200</property>
+                            <layout manager="pack">
+                              <property name="expand">false</property>
+                              <property name="side">top</property>
+                            </layout>
+                          </object>
+                        </child>
                       </object>
                     </child>
                   </object>
@@ -1301,6 +1322,55 @@
                                     </child>
                                   </object>
                                 </child>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="ttk.Notebook.Tab" id="tab7">
+                        <property name="text" translatable="yes">Client</property>
+                        <child>
+                          <object class="ttk.Frame" id="frame32">
+                            <property name="height">200</property>
+                            <property name="width">200</property>
+                            <layout manager="pack">
+                              <property name="side">top</property>
+                            </layout>
+                            <child>
+                              <object class="ttk.Frame" id="frame33">
+                                <property name="height">200</property>
+                                <property name="width">200</property>
+                                <layout manager="pack">
+                                  <property name="side">top</property>
+                                </layout>
+                                <child>
+                                  <object class="ttk.Label" id="label16">
+                                    <property name="text" translatable="yes">Host</property>
+                                    <layout manager="pack">
+                                      <property name="side">top</property>
+                                    </layout>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="ttk.Entry" id="settings_client_host_entry" named="True">
+                                    <property name="state">readonly</property>
+                                    <property name="textvariable">string:settings_client_host_var</property>
+                                    <layout manager="pack">
+                                      <property name="side">top</property>
+                                    </layout>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="ttk.Checkbutton" id="checkbutton3">
+                                <property name="text" translatable="yes">Dark Mode</property>
+                                <property name="variable">boolean:is_dark_mode_enabled</property>
+                                <layout manager="pack">
+                                  <property name="side">top</property>
+                                </layout>
                               </object>
                             </child>
                           </object>

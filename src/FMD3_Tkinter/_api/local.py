@@ -14,6 +14,7 @@ from . import Api
 
 
 class LocalApi(Api):
+    _type = "local"
     @staticmethod
     def api_version():
         return f"Local:{__version__}"

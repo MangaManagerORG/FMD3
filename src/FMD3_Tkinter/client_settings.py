@@ -16,13 +16,15 @@ class Settings:
     def __new__(cls, *args, **kwargs):
         if not Settings.__instance:
             Settings.__instance = object.__new__(cls)
-            Settings.__instance._settings_dict = {"host": None}
+            Settings.__instance._settings_dict = {"settings_client_host_var": None,"is_dark_mode_enabled":False}
             Settings._config_file = _json_file
             if not Settings._config_file.exists():
                 Settings.__instance.save()
                 time.sleep(0.5)
-            Settings.__instance.load()
+            Settings.__instance.load_defaults()
         return Settings.__instance
+
+
 
     def set(self, key, value):
         """
@@ -54,3 +56,10 @@ class Settings:
         with open(self._config_file, "r") as f:
             # print(f.readlines())
             self._settings_dict = json.load(f)
+
+    def load_defaults(self):
+        with open(self._config_file, "r") as f:
+            # print(f.readlines())
+            _settings_dict = json.load(f)
+            for key, value in _settings_dict.items():
+                self._settings_dict[key] = value

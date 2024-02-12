@@ -76,6 +76,7 @@ jobs:
           path: 'windows/'
         continue-on-error: true
   create_release:
+    needs: upload_artifacts
     runs-on: ubuntu-latest
     permissions:
       contents: write

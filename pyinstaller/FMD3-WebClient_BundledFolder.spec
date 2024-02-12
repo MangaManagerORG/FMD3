@@ -1,14 +1,24 @@
 # -*- mode: python ; coding: utf-8 -*-
+from PyInstaller.utils.hooks import collect_all
+datas = []
+binaries=[]
+hiddenimports = ["FMD3","PIL.ImageFont","PIL.ImageDraw"]
+collects = [collect_all('tkinterweb'), collect_all('pygubu')]
+for ret in collects:
+    datas += ret[0]
+    binaries += ret[1]
+    hiddenimports += ret[2]
+
 
 a = Analysis(
     ['../src/FMD3_Tkinter/run_web_client.py'],
     pathex=[],
-    binaries=[],
+    binaries=binaries,
     datas=[
         ('../src/FMD3','FMD3'),
         ('../src/FMD3_Tkinter','FMD3_Tkinter')
-    ],
-    hiddenimports=["FMD3"],
+    ] + datas,
+    hiddenimports=hiddenimports,
     hookspath=[],
     hooksconfig={},
     runtime_hooks=[],

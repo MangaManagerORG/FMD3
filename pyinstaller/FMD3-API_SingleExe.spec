@@ -1,4 +1,13 @@
 # -*- mode: python ; coding: utf-8 -*-
+from PyInstaller.utils.hooks import collect_all
+datas = []
+binaries=[]
+hiddenimports = ["FMD3","PIL.ImageFont","PIL.ImageDraw"]
+collects = [collect_all('tkinterweb'), collect_all('pygubu')]
+for ret in collects:
+    datas += ret[0]
+    binaries += ret[1]
+    hiddenimports += ret[2]
 
 from platform import system
 ver_path = "src/FMD3_API/__version__.py"
@@ -12,11 +21,11 @@ output_name = f'FMD3-Server_{raw_version}_{system()}'
 a = Analysis(
     ['../src/FMD3_API/__main__.py'],
     pathex=[],
-    binaries=[],
+    binaries=binaries,
     datas=[('../src/FMD3','FMD3'),
     ('../src/FMD3_API','FMD3_API')
-    ],
-    hiddenimports=["FMD3"],
+    ]+datas,
+    hiddenimports=hiddenimports,
     hookspath=["pyinstaller/extra_hooks"],
     hooksconfig={},
     runtime_hooks=[],

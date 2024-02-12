@@ -32,7 +32,8 @@ class SeriesCache(Base):
         if self.alt_titles:
             mi.alt_titles = self.alt_titles.split(",")
         mi.description = self.description
-        mi.authors = self.authors.split(",")
+        if self.authors:
+            mi.authors = self.authors.split(",")
         if self.artists:
             mi.artists = self.artists.split(",")
 

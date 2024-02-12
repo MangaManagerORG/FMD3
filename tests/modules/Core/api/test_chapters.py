@@ -5,8 +5,8 @@ from unittest.mock import patch, MagicMock
 from FMD3.api.chapters import download_chapters, get_source_chapters, get_chapters
 from FMD3.core.database import Series, DLDChapters
 from FMD3.models.ddl_chapter_status import DLDChaptersStatus
-from TestSource.TestSource import TestSource
-from dbutils import make_session
+from tests.TestSource.TestSource import TestSource
+from tests.dbutils import make_session
 
 source = TestSource()
 s = Series()

@@ -20,6 +20,7 @@ class SeriesInfo:
     status: str
     chapters: list[Chapter]
     url: str
+
     def __init__(self):
         self.title: str = None
         self.alt_titles: list = None

@@ -57,7 +57,8 @@ def convert_and_zip(task: DownloadTask):
             for i, image_data in enumerate(task.img_bytes_list):
                 image_url, image_bytes_io = image_data
                 image_filename = os.path.splitext(os.path.basename(image_url))
-
+                assert image_filename[1] != ''
+                new_filename = f"{i:03}.{image_filename[1]}"
                 if is_convert:
                     try:
                         image_bytes = convert_image(image_bytes_io).getvalue()
@@ -65,10 +66,9 @@ def convert_and_zip(task: DownloadTask):
                     except Exception:
                         logger.exception("Exception converting image. Using not converted_file")
                         image_bytes = image_bytes_io.getvalue()
-                        new_filename = image_filename
                 else:
                     image_bytes = image_bytes_io.getvalue()
-                    new_filename = image_filename
+
                 try:
                     zout.writestr(new_filename, image_bytes)
                     task.status = DLDChaptersStatus.DOWNLOADED

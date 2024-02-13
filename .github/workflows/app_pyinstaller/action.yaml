@@ -26,9 +26,14 @@ runs:
         echo "Building ${{ inputs.spec_file }}..."
         ls -la
         python -m PyInstaller pyinstaller/${{ inputs.spec_file }}.spec
+        mkdir release
+        move dist/* release/FMD3
+        zip -r FMD3${{input.os}}.zip release/FMD3
+        
+
     - name: 'Upload Artifact'
       uses: actions/upload-artifact@v4
       with:
         name: ${{ inputs.os }}${{ inputs.spec_file }}--dist
-        path: dist/*
+        path: FMD3${{input.os}}
         retention-days: 1

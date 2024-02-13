@@ -1,15 +1,7 @@
 # -*- mode: python ; coding: utf-8 -*-
-from PyInstaller.utils.hooks import collect_all
+from pyinstaller.common import binaries,datas,hiddenimports, system, raw_version
 
-datas = []
-binaries = []
-hiddenimports = ["FMD3", "PIL.ImageFont", "PIL.ImageDraw"]
-collects = [collect_all('tkinterweb'), collect_all('pygubu')]
-for ret in collects:
-    datas += ret[0]
-    binaries += ret[1]
-    hiddenimports += ret[2]
-# -*- mode: python ; coding: utf-8 -*-
+output_name = f'FMD3-Server_{raw_version}_{system()}'
 
 
 a = Analysis(

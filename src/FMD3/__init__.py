@@ -60,7 +60,7 @@ logging.getLogger("PIL").setLevel(logging.WARNING)
 logging.getLogger("pygubu").setLevel(logging.WARNING)
 Logger.trace = trace
 
-setup_logging(LOGFILE_PATH.joinpath("log.log"), TRACE)
+setup_logging(LOGFILE_PATH.joinpath("FMD3.log"), TRACE)
 settings = Settings()
 load_sources()
 settings.save()

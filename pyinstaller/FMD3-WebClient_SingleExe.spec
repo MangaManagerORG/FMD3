@@ -1,23 +1,6 @@
-# -*- mode: python ; coding: utf-8 -*-
-from PyInstaller.utils.hooks import collect_all
-datas = []
-binaries=[]
-hiddenimports = ["FMD3","PIL.ImageFont","PIL.ImageDraw"]
-collects = [collect_all('tkinterweb'), collect_all('pygubu')]
-for ret in collects:
-    datas += ret[0]
-    binaries += ret[1]
-    hiddenimports += ret[2]
-
-
-from platform import system
-ver_path = "src/FMD3_Tkinter/__version__.py"
-with open(ver_path, 'r') as version_file:
-    version_globals = {}
-    exec(version_file.read(), version_globals)
-    raw_version = version_globals.get('__version__')
-
+from pyinstaller.common import binaries,datas,hiddenimports, raw_version, system
 output_name = f'FMD3-Client_{raw_version}_{system()}'
+
 a = Analysis(
     ['../src/FMD3_Tkinter/run_web_client.py'],
     pathex=[],

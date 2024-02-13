@@ -12,3 +12,4 @@
 venv
 /tests/config/
 /src/FMD3_API/config/
+/FMD3_Extensions/

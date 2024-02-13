@@ -13,7 +13,7 @@ with open(ver_path, 'r') as version_file:
 datas = []
 binaries = []
 hiddenimports = ["FMD3", "PIL.ImageFont", "PIL.ImageDraw"]
-collects = [collect_all('tkinterweb'), collect_all('pygubu')]
+collects = [collect_all('tkinterweb'), collect_all('pygubu'),collect_all("sv_ttk")]
 for ret in collects:
     datas += ret[0]
     binaries += ret[1]

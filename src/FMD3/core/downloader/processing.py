@@ -54,6 +54,11 @@ def convert_image(image_data:io.BytesIO) -> io.BytesIO:
 def convert_and_zip(task: DownloadTask):
     try:
         with ZipFile(task.output_path, "w") as zout:
+
+            # Append Cinfo
+            zout.writestr("ComicInfo.xml", str(task.cinfo.to_xml()))
+
+            # Append images
             for i, image_data in enumerate(task.img_bytes_list):
                 image_url, image_bytes_io = image_data
                 image_filename = os.path.splitext(os.path.basename(image_url))

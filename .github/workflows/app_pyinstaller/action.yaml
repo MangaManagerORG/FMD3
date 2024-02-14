@@ -27,7 +27,7 @@ runs:
         ls -la
         python -m PyInstaller pyinstaller/${{ inputs.spec_file }}.spec
         mkdir release
-        move dist/* release/FMD3
+        mv dist/* release/FMD3
         zip -r FMD3${{inputs.os}}.zip release/FMD3
         
 

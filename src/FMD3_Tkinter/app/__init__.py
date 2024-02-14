@@ -6,7 +6,7 @@ from tkinter import ttk
 from tkinter.tix import CheckList
 import pygubu
 import sv_ttk
-from tkinterweb.htmlwidgets import HtmlFrame
+from FMD3_Tkinter.i18n import translator
 
 from FMD3_Tkinter import api
 from FMD3_Tkinter.__version__ import __version__
@@ -161,7 +161,7 @@ class TkinterUI(App):
 
         ClientSettings().save()
 
-    def __init__(self, master=None, translator=None):
+    def __init__(self, master=None):
 
         self.settings = json.loads(api.get_settings())
 

@@ -39,18 +39,18 @@ class Analysis(Analysis_):
 
 
 class EXE(EXE_):
-    def __init__(self, a, pyz, name):
+    def __init__(self, a, pyz, name,console=False):
         super().__init__(
             pyz,
             a.scripts,
             [],
             exclude_binaries=True,
             name=name,
-            debug=False,
+            debug=True,
             bootloader_ignore_signals=False,
             strip=False,
             upx=True,
-            console=False,
+            console=console,
             disable_windowed_traceback=False,
             argv_emulation=False,
             target_arch=None,

@@ -10,6 +10,5 @@ a = Analysis(scripts=scripts)
 
 pyz = PYZ(a.pure)
 
-exe = EXE(a, pyz, output_name)
-
+exe = EXE(a, pyz, output_name,True)
 coll = COLLECT(a, exe, output_name)

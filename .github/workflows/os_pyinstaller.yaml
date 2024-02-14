@@ -15,15 +15,15 @@ jobs:
       fail-fast: false
       matrix:
         spec_file:
-          - FMD3-API_SingleExe
-          - FMD3-Client_SingleExe
-          - FMD3-WebClient_SingleExe
+          - FMD3-API_BundledFolder
+          - FMD3-Client_BundledFolder
+          - FMD3-WebClient_BundledFolder
         include:
-          - spec_file: FMD3-API_SingleExe
+          - spec_file: FMD3-API_BundledFolder
             if: contains(steps.detect_bump.outputs.bumped_packages, 'FMD3_API') || contains(steps.detect_bump.outputs.bumped_packages, 'FMD3_Tkinter')
-          - spec_file: FMD3-Client_SingleExe
+          - spec_file: FMD3-Client_BundledFolder
             if: contains(steps.detect_bump.outputs.bumped_packages, 'FMD3_API') || contains(steps.detect_bump.outputs.bumped_packages, 'FMD3_Tkinter')
-          - spec_file: FMD3-WebClient_SingleExe
+          - spec_file: FMD3-WebClient_BundledFolder
             if: contains(steps.detect_bump.outputs.bumped_packages, 'FMD3_API') || contains(steps.detect_bump.outputs.bumped_packages, 'FMD3_Tkinter')
     runs-on: ${{ inputs.os }}
     steps:

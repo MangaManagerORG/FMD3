@@ -35,5 +35,5 @@ runs:
       uses: actions/upload-artifact@v4
       with:
         name: ${{ inputs.os }}${{ inputs.spec_file }}--dist
-        path: FMD3${{input.os}}
+        path: FMD3${{ inputs.os }}
         retention-days: 1

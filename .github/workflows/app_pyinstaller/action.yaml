@@ -28,7 +28,7 @@ runs:
         python -m PyInstaller pyinstaller/${{ inputs.spec_file }}.spec
         mkdir release
         move dist/* release/FMD3
-        zip -r FMD3${{input.os}}.zip release/FMD3
+        zip -r FMD3${{inputs.os}}.zip release/FMD3
         
 
     - name: 'Upload Artifact'

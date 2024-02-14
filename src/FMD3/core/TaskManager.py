@@ -56,7 +56,7 @@ class TaskManager:
         logging.getLogger(__name__).info(f"Adding download task for {series_id} . Ch.{chapter.number}")
         self.active_tasks.add(f"{series_id}/{chapter.chapter_id}")
 
-        dl_obj = DownloadTask(source, series_id, chapter, path, cinfo, *args, **kwargs)
+        dl_obj = DownloadTask(source, series_id, chapter, path, cinfo)
         if analyze_archive(dl_obj.output_path, series_id, chapter):
             self.on_process_done(dl_obj)
             return

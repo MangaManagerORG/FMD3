@@ -24,7 +24,7 @@ class DownloadTask:
         self.series_id = series_id
         self.chapter = chapter
         self.output_path = output_path
-        self.cinfo = None
+        self.cinfo = cinfo
         self._images_url = []
         self.img_bytes_list = []
 

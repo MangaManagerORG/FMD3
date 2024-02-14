@@ -47,7 +47,7 @@ def convert_image(image_data:io.BytesIO) -> io.BytesIO:
         converted_image_data.seek(0)
         return converted_image_data
     except Exception as e:
-        logger.error(f"Exception converting image: {e}")
+        logger.exception("Unhandled exception converting")
         raise
 
 
@@ -77,13 +77,13 @@ def convert_and_zip(task: DownloadTask):
                 try:
                     zout.writestr(new_filename, image_bytes)
                     task.status = DLDChaptersStatus.DOWNLOADED
+                    logger.info(f"Successfully download at {task.output_path}")
                 except Exception:
                     logger.exception("Exception writing to zipfile")
                     task.status = DLDChaptersStatus.ERRORED
                     break
 
-    except Exception as e:
-        print(e)
+    except Exception:
         logger.exception("Unhandled exception converting image bytes")
         task.status = DLDChaptersStatus.ERRORED
     finally:

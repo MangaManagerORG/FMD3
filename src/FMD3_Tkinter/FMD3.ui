@@ -1,24 +1,25 @@
 <?xml version='1.0' encoding='utf-8'?>
 <interface version="1.3">
   <object class="customtkinter.CTk" id="ctk1">
-    <property name="width">500</property>
+    <property name="width">1024</property>
     <child>
       <object class="customtkinter.CTkTabview" id="ctktabview1">
-        <property name="height">400</property>
-        <property name="width">600</property>
+        <property name="height">800</property>
+        <property name="width">1024</property>
         <layout manager="pack">
           <property name="expand">true</property>
           <property name="fill">both</property>
           <property name="side">top</property>
         </layout>
         <child>
-          <object class="customtkinter.CTkTabview.Tab" id="tab1">
+          <object class="customtkinter.CTkTabview.Tab" id="SeriesTab" named="True">
             <property name="label" translatable="yes">Series</property>
             <containerlayout manager="grid">
+              <property name="anchor">n</property>
               <property name="propagate">false</property>
               <property type="col" id="1" name="minsize">300</property>
               <property type="col" id="1" name="weight">1</property>
-              <property type="row" id="1" name="weight">1</property>
+              <property type="row" id="all" name="minsize">400</property>
             </containerlayout>
             <child>
               <object class="customtkinter.CTkFrame" id="ctkframe1">
@@ -31,6 +32,7 @@
                 <child>
                   <object class="customtkinter.CTkComboBox" id="ctkcombobox1">
                     <layout manager="pack">
+                      <property name="fill">x</property>
                       <property name="side">top</property>
                     </layout>
                   </object>
@@ -40,14 +42,16 @@
                     <property name="placeholder_text">Search in</property>
                     <property name="text" translatable="yes">ctkentry1</property>
                     <layout manager="pack">
+                      <property name="fill">x</property>
                       <property name="side">top</property>
                     </layout>
                   </object>
                 </child>
                 <child>
-                  <object class="ttk.Treeview" id="treeview1">
+                  <object class="ttk.Treeview" id="series_result" named="True">
                     <property name="height">10</property>
-                    <property name="selectmode">extended</property>
+                    <property name="selectmode">browse</property>
+                    <property name="show">tree</property>
                     <layout manager="pack">
                       <property name="expand">true</property>
                       <property name="fill">y</property>
@@ -125,12 +129,13 @@
                           <property name="side">top</property>
                         </layout>
                         <child>
-                          <object class="customtkinter.CTkTextbox" id="ctktextbox1">
-                            <property name="text" translatable="yes">ctktextbox1</property>
+                          <object class="customtkinter.CTkTextbox" id="series_detail" named="True">
+                            <property name="state">disabled</property>
                             <layout manager="pack">
+                              <property name="anchor">e</property>
                               <property name="expand">true</property>
                               <property name="fill">both</property>
-                              <property name="side">top</property>
+                              <property name="side">left</property>
                             </layout>
                           </object>
                         </child>
@@ -142,87 +147,806 @@
             </child>
             <child>
               <object class="customtkinter.CTkFrame" id="ctkframe4">
-                <property name="height">125</property>
+                <property name="height">0</property>
                 <layout manager="grid">
                   <property name="column">0</property>
                   <property name="columnspan">2</property>
-                  <property name="pady">20</property>
+                  <property name="padx">20</property>
+                  <property name="pady">0</property>
                   <property name="row">1</property>
-                  <property name="sticky">nsew</property>
+                  <property name="sticky">new</property>
                 </layout>
                 <child>
-                  <object class="ttkwidgets.CheckboxTreeview" id="test_checkbox_tree" named="True">
+                  <object class="customtkinter.CTkFrame" id="ctkframe9">
                     <layout manager="pack">
+                      <property name="anchor">n</property>
+                      <property name="expand">false</property>
                       <property name="fill">x</property>
-                      <property name="padx">30</property>
+                      <property name="padx">10</property>
                       <property name="pady">30</property>
-                      <property name="side">left</property>
+                      <property name="side">top</property>
                     </layout>
                     <child>
-                      <object class="ttk.Treeview.Column" id="column4">
-                        <property name="column_anchor">w</property>
-                        <property name="heading_anchor">w</property>
-                        <property name="minwidth">80</property>
-                        <property name="stretch">false</property>
-                        <property name="text" translatable="yes">Check for download</property>
-                        <property name="tree_column">true</property>
-                        <property name="visible">true</property>
-                        <property name="width">120</property>
+                      <object class="ttkwidgets.CheckboxTreeview" id="selected_series_chapter_treeview" named="True">
+                        <property name="height">6</property>
+                        <layout manager="pack">
+                          <property name="expand">true</property>
+                          <property name="fill">x</property>
+                          <property name="padx">0</property>
+                          <property name="side">left</property>
+                        </layout>
+                        <child>
+                          <object class="ttk.Treeview.Column" id="column4">
+                            <property name="column_anchor">w</property>
+                            <property name="heading_anchor">w</property>
+                            <property name="minwidth">80</property>
+                            <property name="stretch">false</property>
+                            <property name="text" translatable="yes">Check for download</property>
+                            <property name="tree_column">true</property>
+                            <property name="visible">true</property>
+                            <property name="width">120</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="ttk.Treeview.Column" id="column1">
+                            <property name="column_anchor">w</property>
+                            <property name="heading_anchor">w</property>
+                            <property name="minwidth">40</property>
+                            <property name="stretch">false</property>
+                            <property name="text" translatable="yes">Volume</property>
+                            <property name="tree_column">false</property>
+                            <property name="visible">true</property>
+                            <property name="width">80</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="ttk.Treeview.Column" id="column2">
+                            <property name="column_anchor">w</property>
+                            <property name="heading_anchor">w</property>
+                            <property name="minwidth">80</property>
+                            <property name="stretch">false</property>
+                            <property name="text" translatable="yes">Chapter</property>
+                            <property name="tree_column">false</property>
+                            <property name="visible">true</property>
+                            <property name="width">80</property>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="ttk.Treeview.Column" id="column3">
+                            <property name="column_anchor">w</property>
+                            <property name="heading_anchor">w</property>
+                            <property name="minwidth">60</property>
+                            <property name="stretch">true</property>
+                            <property name="text" translatable="yes">Title</property>
+                            <property name="tree_column">false</property>
+                            <property name="visible">true</property>
+                            <property name="width">200</property>
+                          </object>
+                        </child>
                       </object>
                     </child>
                     <child>
-                      <object class="ttk.Treeview.Column" id="column1">
-                        <property name="column_anchor">w</property>
-                        <property name="heading_anchor">w</property>
-                        <property name="minwidth">40</property>
-                        <property name="stretch">false</property>
-                        <property name="text" translatable="yes">Volume</property>
-                        <property name="tree_column">false</property>
-                        <property name="visible">true</property>
-                        <property name="width">80</property>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="ttk.Treeview.Column" id="column2">
-                        <property name="column_anchor">w</property>
-                        <property name="heading_anchor">w</property>
-                        <property name="minwidth">80</property>
-                        <property name="stretch">false</property>
-                        <property name="text" translatable="yes">Chapter</property>
-                        <property name="tree_column">false</property>
-                        <property name="visible">true</property>
-                        <property name="width">80</property>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="ttk.Treeview.Column" id="column3">
-                        <property name="column_anchor">w</property>
-                        <property name="heading_anchor">w</property>
-                        <property name="minwidth">60</property>
-                        <property name="stretch">true</property>
-                        <property name="text" translatable="yes">Title</property>
-                        <property name="tree_column">false</property>
-                        <property name="visible">true</property>
-                        <property name="width">200</property>
+                      <object class="customtkinter.CTkFrame" id="ctkframe6">
+                        <layout manager="pack">
+                          <property name="anchor">n</property>
+                          <property name="padx">0 10</property>
+                          <property name="pady">30 0</property>
+                          <property name="side">right</property>
+                        </layout>
+                        <child>
+                          <object class="customtkinter.CTkButton" id="ctkbutton1">
+                            <property name="text" translatable="yes">Select</property>
+                            <layout manager="pack">
+                              <property name="side">top</property>
+                            </layout>
+                          </object>
+                        </child>
                       </object>
                     </child>
                   </object>
                 </child>
                 <child>
-                  <object class="customtkinter.CTkFrame" id="ctkframe6">
+                  <object class="customtkinter.CTkFrame" id="ctkframe7">
+                    <property name="height">25</property>
                     <layout manager="pack">
-                      <property name="side">right</property>
+                      <property name="anchor">n</property>
+                      <property name="fill">x</property>
+                      <property name="side">top</property>
                     </layout>
                     <child>
-                      <object class="customtkinter.CTkButton" id="ctkbutton2">
-                        <property name="text" translatable="yes">Select</property>
+                      <object class="customtkinter.CTkFrame" id="ctkframe8">
                         <layout manager="pack">
+                          <property name="fill">x</property>
+                          <property name="side">top</property>
+                        </layout>
+                        <child>
+                          <object class="customtkinter.CTkOptionMenu" id="ctkoptionmenu1">
+                            <layout manager="pack">
+                              <property name="side">left</property>
+                            </layout>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="customtkinter.CTkEntry" id="ctkentry3">
+                            <property name="text" translatable="yes">ctkentry3</property>
+                            <layout manager="pack">
+                              <property name="fill">x</property>
+                              <property name="side">top</property>
+                            </layout>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="customtkinter.CTkFrame" id="ctkframe11">
+                        <layout manager="pack">
+                          <property name="fill">x</property>
+                          <property name="side">top</property>
+                        </layout>
+                        <child>
+                          <object class="customtkinter.CTkLabel" id="ctklabel1">
+                            <property name="text" translatable="yes">Downloaded manga will save to:</property>
+                            <layout manager="pack">
+                              <property name="side">top</property>
+                            </layout>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="customtkinter.CTkEntry" id="ctkentry4">
+                            <property name="state">disabled</property>
+                            <property name="text" translatable="yes">ctkentry4</property>
+                            <layout manager="pack">
+                              <property name="fill">x</property>
+                              <property name="side">top</property>
+                            </layout>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="customtkinter.CTkTabview.Tab" id="Settings" named="True">
+            <property name="label" translatable="yes">Settings</property>
+            <child>
+              <object class="customtkinter.CTkTabview" id="ctktabview2">
+                <layout manager="pack">
+                  <property name="fill">both</property>
+                  <property name="side">top</property>
+                </layout>
+                <child>
+                  <object class="customtkinter.CTkTabview.Tab" id="SaveTo" named="True">
+                    <property name="label" translatable="yes">Save to</property>
+                    <child>
+                      <object class="customtkinter.CTkFrame" id="ctkframe10">
+                        <layout manager="pack">
+                          <property name="anchor">n</property>
+                          <property name="expand">true</property>
+                          <property name="fill">both</property>
+                          <property name="padx">10 10</property>
+                          <property name="pady">25 0</property>
+                          <property name="side">top</property>
+                        </layout>
+                        <child>
+                          <object class="customtkinter.CTkFrame" id="ctkframe12">
+                            <layout manager="pack">
+                              <property name="fill">x</property>
+                              <property name="side">top</property>
+                            </layout>
+                            <child>
+                              <object class="customtkinter.CTkEntry" id="ctkentry5">
+                                <property name="placeholder_text">Library alias</property>
+                                <property name="textvariable">string:settings_lib_alias_entry</property>
+                                <layout manager="pack">
+                                  <property name="side">left</property>
+                                </layout>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="customtkinter.CTkEntry" id="ctkentry6">
+                                <property name="placeholder_text">Library path</property>
+                                <property name="textvariable">string:settings_lib_path_entry</property>
+                                <layout manager="pack">
+                                  <property name="expand">true</property>
+                                  <property name="fill">x</property>
+                                  <property name="side">left</property>
+                                </layout>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="customtkinter.CTkButton" id="settings_sources_search_url_button" named="True">
+                                <property name="command" type="command" cbtype="simple">add_library_to_treeview</property>
+                                <property name="text" translatable="yes">Add library</property>
+                                <layout manager="pack">
+                                  <property name="anchor">e</property>
+                                  <property name="side">right</property>
+                                </layout>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="ttk.Treeview" id="settings_libraries_treeview" named="True">
+                            <property name="height">3</property>
+                            <property name="selectmode">extended</property>
+                            <property name="show">headings</property>
+                            <layout manager="pack">
+                              <property name="fill">x</property>
+                              <property name="side">top</property>
+                            </layout>
+                            <child>
+                              <object class="ttk.Treeview.Column" id="column5">
+                                <property name="column_anchor">w</property>
+                                <property name="heading_anchor">w</property>
+                                <property name="minwidth">20</property>
+                                <property name="stretch">true</property>
+                                <property name="text" translatable="yes">Library alias</property>
+                                <property name="tree_column">false</property>
+                                <property name="visible">true</property>
+                                <property name="width">30</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="ttk.Treeview.Column" id="column6">
+                                <property name="column_anchor">w</property>
+                                <property name="heading_anchor">w</property>
+                                <property name="minwidth">20</property>
+                                <property name="stretch">true</property>
+                                <property name="text" translatable="yes">Library path</property>
+                                <property name="tree_column">false</property>
+                                <property name="visible">true</property>
+                                <property name="width">200</property>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="ttk.Separator" id="separator1">
+                            <property name="orient">horizontal</property>
+                            <layout manager="pack">
+                              <property name="fill">x</property>
+                              <property name="pady">20</property>
+                              <property name="side">top</property>
+                            </layout>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="customtkinter.CTkLabel" id="ctklabel2">
+                            <property name="text" translatable="yes">Renaming</property>
+                            <layout manager="pack">
+                              <property name="side">top</property>
+                            </layout>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="customtkinter.CTkComboBox" id="ctkcombobox2">
+                            <property name="state">readonly</property>
+                            <property name="variable">string:default_downloads_path</property>
+                            <layout manager="pack">
+                              <property name="fill">x</property>
+                              <property name="pady">10</property>
+                              <property name="side">top</property>
+                            </layout>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="customtkinter.CTkSwitch" id="ctkswitch1">
+                            <property name="text" translatable="yes">Replace unicode characters</property>
+                            <layout manager="pack">
+                              <property name="anchor">w</property>
+                              <property name="pady">10</property>
+                              <property name="side">top</property>
+                            </layout>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="customtkinter.CTkFrame" id="ctkframe13">
+                            <layout manager="pack">
+                              <property name="anchor">w</property>
+                              <property name="pady">0 10</property>
+                              <property name="side">top</property>
+                            </layout>
+                            <child>
+                              <object class="ttk.Separator" id="separator3">
+                                <property name="orient">vertical</property>
+                                <layout manager="pack">
+                                  <property name="anchor">w</property>
+                                  <property name="fill">y</property>
+                                  <property name="padx">10 20</property>
+                                  <property name="side">left</property>
+                                </layout>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="customtkinter.CTkFrame" id="ctkframe16">
+                                <layout manager="pack">
+                                  <property name="side">top</property>
+                                </layout>
+                                <child>
+                                  <object class="customtkinter.CTkLabel" id="ctklabel4">
+                                    <property name="text" translatable="yes">Replace with:</property>
+                                    <layout manager="pack">
+                                      <property name="padx">0 20</property>
+                                      <property name="side">left</property>
+                                    </layout>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="customtkinter.CTkEntry" id="ctkentry8">
+                                    <property name="text" translatable="yes">ctkentry8</property>
+                                    <layout manager="pack">
+                                      <property name="side">left</property>
+                                    </layout>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="customtkinter.CTkSwitch" id="ctkswitch2">
+                            <property name="text" translatable="yes">Auto generate folder based on manga name</property>
+                            <layout manager="pack">
+                              <property name="anchor">w</property>
+                              <property name="pady">20 0</property>
+                              <property name="side">top</property>
+                            </layout>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="customtkinter.CTkFrame" id="ctkframe14">
+                            <layout manager="pack">
+                              <property name="anchor">w</property>
+                              <property name="pady">5 0</property>
+                              <property name="side">top</property>
+                            </layout>
+                            <child>
+                              <object class="ttk.Separator" id="separator2">
+                                <property name="orient">vertical</property>
+                                <layout manager="pack">
+                                  <property name="anchor">w</property>
+                                  <property name="fill">y</property>
+                                  <property name="padx">10 20</property>
+                                  <property name="side">left</property>
+                                </layout>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="customtkinter.CTkFrame" id="ctkframe15">
+                                <layout manager="pack">
+                                  <property name="side">right</property>
+                                </layout>
+                                <child>
+                                  <object class="customtkinter.CTkLabel" id="ctklabel5">
+                                    <property name="text" translatable="yes">Manga folder name</property>
+                                    <layout manager="pack">
+                                      <property name="anchor">w</property>
+                                      <property name="side">top</property>
+                                    </layout>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="customtkinter.CTkEntry" id="ctkentry9">
+                                    <property name="text" translatable="yes">ctkentry9</property>
+                                    <property name="width">650</property>
+                                    <layout manager="pack">
+                                      <property name="anchor">w</property>
+                                      <property name="side">top</property>
+                                    </layout>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="customtkinter.CTkLabel" id="ctklabel6">
+                            <property name="text" translatable="yes">Chapter name</property>
+                            <layout manager="pack">
+                              <property name="anchor">w</property>
+                              <property name="pady">20 0</property>
+                              <property name="side">top</property>
+                            </layout>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="customtkinter.CTkEntry" id="ctkentry11">
+                            <property name="text" translatable="yes">ctkentry11</property>
+                            <property name="width">650</property>
+                            <layout manager="pack">
+                              <property name="anchor">w</property>
+                              <property name="side">top</property>
+                            </layout>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="customtkinter.CTkLabel" id="ctklabel3">
+                            <property name="text" translatable="yes">Rename digits</property>
+                            <layout manager="pack">
+                              <property name="anchor">w</property>
+                              <property name="pady">20 0</property>
+                              <property name="side">top</property>
+                            </layout>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="customtkinter.CTkFrame" id="ctkframe17">
+                            <layout manager="pack">
+                              <property name="anchor">w</property>
+                              <property name="pady">5 0</property>
+                              <property name="side">top</property>
+                            </layout>
+                            <child>
+                              <object class="ttk.Separator" id="separator4">
+                                <property name="orient">vertical</property>
+                                <layout manager="pack">
+                                  <property name="anchor">w</property>
+                                  <property name="fill">y</property>
+                                  <property name="padx">10 20</property>
+                                  <property name="side">left</property>
+                                </layout>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="customtkinter.CTkFrame" id="ctkframe18">
+                                <layout manager="pack">
+                                  <property name="side">right</property>
+                                </layout>
+                                <child>
+                                  <object class="customtkinter.CTkSwitch" id="ctkswitch4">
+                                    <property name="state">normal</property>
+                                    <property name="text" translatable="yes">Volume</property>
+                                    <layout manager="pack">
+                                      <property name="side">top</property>
+                                    </layout>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="customtkinter.CTkEntry" id="ctkentry12">
+                                    <property name="text" translatable="yes">ctkentry12</property>
+                                    <layout manager="pack">
+                                      <property name="side">top</property>
+                                    </layout>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="customtkinter.CTkSwitch" id="ctkswitch5">
+                                    <property name="text" translatable="yes">Volume</property>
+                                    <layout manager="pack">
+                                      <property name="side">top</property>
+                                    </layout>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="customtkinter.CTkEntry" id="ctkentry13">
+                                    <property name="text" translatable="yes">ctkentry13</property>
+                                    <layout manager="pack">
+                                      <property name="side">top</property>
+                                    </layout>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+                <child>
+                  <object class="customtkinter.CTkTabview.Tab" id="tab1">
+                    <property name="label" translatable="yes">Client</property>
+                    <child>
+                      <object class="customtkinter.CTkLabel" id="ctklabel9">
+                        <property name="text" translatable="yes">Host</property>
+                        <layout manager="pack">
+                          <property name="side">top</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="customtkinter.CTkEntry" id="settings_client_host_entry" named="True">
+                        <property name="text" translatable="yes">ctkentry14</property>
+                        <layout manager="pack">
+                          <property name="side">top</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="customtkinter.CTkLabel" id="ctklabel10">
+                        <property name="text" translatable="yes">Appearance:</property>
+                        <layout manager="pack">
+                          <property name="pady">20 0</property>
+                          <property name="side">top</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="customtkinter.CTkOptionMenu" id="appearance_mode_optionemenu" named="True">
+                        <property name="command" type="command" cbtype="simple">change_appearance_mode_event</property>
+                        <property name="values">["Light", "Dark", "System"]</property>
+                        <property name="variable">string:appearance_var</property>
+                        <layout manager="pack">
+                          <property name="side">top</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="customtkinter.CTkLabel" id="ctklabel11">
+                        <property name="text" translatable="yes">UI Scaling:</property>
+                        <layout manager="pack">
+                          <property name="pady">20 0</property>
+                          <property name="side">top</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="customtkinter.CTkOptionMenu" id="scaling_option_menu" named="True">
+                        <property name="command" type="command" cbtype="simple">change_scaling_event</property>
+                        <property name="values">["80%", "90%", "100%", "110%", "120%"]</property>
+                        <property name="variable">string:scaling_var</property>
+                        <layout manager="pack">
+                          <property name="pady">0 30</property>
                           <property name="side">top</property>
                         </layout>
                       </object>
                     </child>
                   </object>
                 </child>
+                <child>
+                  <object class="customtkinter.CTkTabview.Tab" id="tab2">
+                    <property name="label" translatable="yes">Sources</property>
+                    <child>
+                      <object class="customtkinter.CTkTabview" id="ctktabview4">
+                        <layout manager="pack">
+                          <property name="fill">both</property>
+                          <property name="side">top</property>
+                        </layout>
+                        <child>
+                          <object class="customtkinter.CTkTabview.Tab" id="tab3">
+                            <property name="label" translatable="yes">Sources List</property>
+                            <child>
+                              <object class="customtkinter.CTkFrame" id="ctkframe21">
+                                <layout manager="pack">
+                                  <property name="expand">true</property>
+                                  <property name="fill">both</property>
+                                  <property name="padx">0</property>
+                                  <property name="side">left</property>
+                                </layout>
+                                <child>
+                                  <object class="customtkinter.CTkLabel" id="ctklabel12">
+                                    <property name="text" translatable="yes">Installed</property>
+                                    <layout manager="pack">
+                                      <property name="pady">20 0</property>
+                                      <property name="side">top</property>
+                                    </layout>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="ttkwidgets.CheckboxTreeview" id="installed_sources_treeview" named="True">
+                                    <layout manager="pack">
+                                      <property name="side">top</property>
+                                    </layout>
+                                    <child>
+                                      <object class="ttk.Treeview.Column" id="column11">
+                                        <property name="column_anchor">w</property>
+                                        <property name="heading_anchor">w</property>
+                                        <property name="minwidth">20</property>
+                                        <property name="stretch">false</property>
+                                        <property name="text" translatable="yes"> </property>
+                                        <property name="tree_column">true</property>
+                                        <property name="visible">true</property>
+                                        <property name="width">45</property>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="ttk.Treeview.Column" id="column7">
+                                        <property name="column_anchor">w</property>
+                                        <property name="heading_anchor">w</property>
+                                        <property name="minwidth">20</property>
+                                        <property name="stretch">true</property>
+                                        <property name="text" translatable="yes">Name</property>
+                                        <property name="tree_column">false</property>
+                                        <property name="visible">true</property>
+                                        <property name="width">200</property>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="ttk.Treeview.Column" id="column8">
+                                        <property name="column_anchor">w</property>
+                                        <property name="heading_anchor">w</property>
+                                        <property name="minwidth">20</property>
+                                        <property name="stretch">true</property>
+                                        <property name="text" translatable="yes">Current version</property>
+                                        <property name="tree_column">false</property>
+                                        <property name="visible">true</property>
+                                        <property name="width">200</property>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="ttk.Treeview.Column" id="column9">
+                                        <property name="column_anchor">w</property>
+                                        <property name="heading_anchor">w</property>
+                                        <property name="minwidth">20</property>
+                                        <property name="stretch">true</property>
+                                        <property name="text" translatable="yes">Has updates</property>
+                                        <property name="tree_column">false</property>
+                                        <property name="visible">true</property>
+                                        <property name="width">200</property>
+                                      </object>
+                                    </child>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="customtkinter.CTkLabel" id="ctklabel13">
+                                    <property name="text" translatable="yes">Not Installed</property>
+                                    <layout manager="pack">
+                                      <property name="pady">20 0</property>
+                                      <property name="side">top</property>
+                                    </layout>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="ttkwidgets.CheckboxTreeview" id="checkboxtreeview2" named="True">
+                                    <layout manager="pack">
+                                      <property name="side">top</property>
+                                    </layout>
+                                    <child>
+                                      <object class="ttk.Treeview.Column" id="column12">
+                                        <property name="column_anchor">w</property>
+                                        <property name="heading_anchor">w</property>
+                                        <property name="minwidth">20</property>
+                                        <property name="stretch">false</property>
+                                        <property name="text" translatable="yes"> </property>
+                                        <property name="tree_column">true</property>
+                                        <property name="visible">true</property>
+                                        <property name="width">45</property>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="ttk.Treeview.Column" id="column13">
+                                        <property name="column_anchor">w</property>
+                                        <property name="heading_anchor">w</property>
+                                        <property name="minwidth">20</property>
+                                        <property name="stretch">true</property>
+                                        <property name="text" translatable="yes">Name</property>
+                                        <property name="tree_column">false</property>
+                                        <property name="visible">true</property>
+                                        <property name="width">200</property>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="ttk.Treeview.Column" id="column14">
+                                        <property name="column_anchor">w</property>
+                                        <property name="heading_anchor">w</property>
+                                        <property name="minwidth">20</property>
+                                        <property name="stretch">true</property>
+                                        <property name="text" translatable="yes">Current version</property>
+                                        <property name="tree_column">false</property>
+                                        <property name="visible">true</property>
+                                        <property name="width">200</property>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="ttk.Treeview.Column" id="column15">
+                                        <property name="column_anchor">w</property>
+                                        <property name="heading_anchor">w</property>
+                                        <property name="minwidth">20</property>
+                                        <property name="stretch">true</property>
+                                        <property name="text" translatable="yes">Has updates</property>
+                                        <property name="tree_column">false</property>
+                                        <property name="visible">true</property>
+                                        <property name="width">200</property>
+                                      </object>
+                                    </child>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="ttk.Separator" id="separator8">
+                                <property name="orient">vertical</property>
+                                <layout manager="pack">
+                                  <property name="fill">y</property>
+                                  <property name="ipadx">0</property>
+                                  <property name="padx">20</property>
+                                  <property name="pady">100</property>
+                                  <property name="side">left</property>
+                                </layout>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="customtkinter.CTkFrame" id="ctkframe22">
+                                <layout manager="pack">
+                                  <property name="anchor">e</property>
+                                  <property name="side">right</property>
+                                </layout>
+                                <child>
+                                  <object class="customtkinter.CTkFrame" id="ctkframe23">
+                                    <layout manager="pack">
+                                      <property name="expand">true</property>
+                                      <property name="fill">x</property>
+                                      <property name="pady">10</property>
+                                      <property name="side">top</property>
+                                    </layout>
+                                    <child>
+                                      <object class="customtkinter.CTkButton" id="ctkbutton6">
+                                        <property name="text" translatable="yes">Select
+all</property>
+                                        <property name="width">20</property>
+                                        <layout manager="pack">
+                                          <property name="expand">true</property>
+                                          <property name="fill">x</property>
+                                          <property name="side">left</property>
+                                        </layout>
+                                      </object>
+                                    </child>
+                                    <child>
+                                      <object class="customtkinter.CTkButton" id="ctkbutton5">
+                                        <property name="text" translatable="yes">Clear
+selection</property>
+                                        <property name="width">20</property>
+                                        <layout manager="pack">
+                                          <property name="expand">true</property>
+                                          <property name="fill">x</property>
+                                          <property name="side">right</property>
+                                        </layout>
+                                      </object>
+                                    </child>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="customtkinter.CTkButton" id="ctkbutton7">
+                                    <property name="fg_color">green</property>
+                                    <property name="text" translatable="yes">Install | Update
+Selected</property>
+                                    <layout manager="pack">
+                                      <property name="fill">x</property>
+                                      <property name="pady">10</property>
+                                      <property name="side">top</property>
+                                    </layout>
+                                  </object>
+                                </child>
+                                <child>
+                                  <object class="customtkinter.CTkButton" id="ctkbutton8">
+                                    <property name="background_corner_colors">red</property>
+                                    <property name="bg_color">red</property>
+                                    <property name="border_color">red</property>
+                                    <property name="fg_color">red</property>
+                                    <property name="hover_color">pink</property>
+                                    <property name="text" translatable="yes">Uninstall Selected</property>
+                                    <layout manager="pack">
+                                      <property name="fill">x</property>
+                                      <property name="pady">10</property>
+                                      <property name="side">top</property>
+                                    </layout>
+                                  </object>
+                                </child>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="customtkinter.CTkTabview.Tab" id="tab4">
+                            <property name="label" translatable="yes">Options</property>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="customtkinter.CTkButton" id="ctkbutton3">
+                <property name="text" translatable="yes">Save Settings</property>
+                <layout manager="pack">
+                  <property name="side">bottom</property>
+                </layout>
               </object>
             </child>
           </object>

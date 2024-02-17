@@ -30,7 +30,9 @@
                   <property name="sticky">ns</property>
                 </layout>
                 <child>
-                  <object class="customtkinter.CTkComboBox" id="ctkcombobox1">
+                  <object class="customtkinter.CTkOptionMenu" id="source_selector_optionmenu" named="True">
+                    <property name="command" type="command" cbtype="simple">on_source_selected</property>
+                    <property name="variable">string:selected_source_name</property>
                     <layout manager="pack">
                       <property name="fill">x</property>
                       <property name="side">top</property>
@@ -40,7 +42,8 @@
                 <child>
                   <object class="customtkinter.CTkEntry" id="ctkentry1">
                     <property name="placeholder_text">Search in</property>
-                    <property name="text" translatable="yes">ctkentry1</property>
+                    <property name="takefocus">true</property>
+                    <property name="textvariable">string:query_stringvar</property>
                     <layout manager="pack">
                       <property name="fill">x</property>
                       <property name="side">top</property>
@@ -52,6 +55,7 @@
                     <property name="height">10</property>
                     <property name="selectmode">browse</property>
                     <property name="show">tree</property>
+                    <bind sequence="&lt;&lt;TreeviewSelect&gt;&gt;" handler="on_series_result_selected" add="" />
                     <layout manager="pack">
                       <property name="expand">true</property>
                       <property name="fill">y</property>
@@ -70,14 +74,31 @@
                   <property name="sticky">nsew</property>
                 </layout>
                 <child>
-                  <object class="customtkinter.CTkEntry" id="ctkentry2">
-                    <property name="placeholder_text">Series Url</property>
-                    <property name="text" translatable="yes">ctkentry2</property>
+                  <object class="customtkinter.CTkFrame" id="ctkframe19">
                     <layout manager="pack">
-                      <property name="expand">true</property>
                       <property name="fill">x</property>
                       <property name="side">top</property>
                     </layout>
+                    <child>
+                      <object class="customtkinter.CTkButton" id="seetings_sources_search_url_button" named="True">
+                        <property name="command" type="command" cbtype="simple">series_tab_search_by_url</property>
+                        <property name="text" translatable="yes">Search</property>
+                        <layout manager="pack">
+                          <property name="side">right</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="customtkinter.CTkEntry" id="ctkentry2">
+                        <property name="placeholder_text">Series Url</property>
+                        <property name="textvariable">string:series_browser_url_entry_var</property>
+                        <layout manager="pack">
+                          <property name="expand">true</property>
+                          <property name="fill">x</property>
+                          <property name="side">top</property>
+                        </layout>
+                      </object>
+                    </child>
                   </object>
                 </child>
                 <child>
@@ -260,15 +281,18 @@
                           <property name="side">top</property>
                         </layout>
                         <child>
-                          <object class="customtkinter.CTkOptionMenu" id="ctkoptionmenu1">
+                          <object class="customtkinter.CTkOptionMenu" id="settings_def_series_lib_combobox" named="True">
+                            <property name="command" type="command" cbtype="simple">settings_load_libs_from_treeview</property>
+                            <property name="values">[]</property>
+                            <property name="variable">string:default_series_downloads_path</property>
                             <layout manager="pack">
                               <property name="side">left</property>
                             </layout>
                           </object>
                         </child>
                         <child>
-                          <object class="customtkinter.CTkEntry" id="ctkentry3">
-                            <property name="text" translatable="yes">ctkentry3</property>
+                          <object class="customtkinter.CTkEntry" id="series_output_save_to_entry" named="True">
+                            <property name="textvariable">string:series_destination_path</property>
                             <layout manager="pack">
                               <property name="fill">x</property>
                               <property name="side">top</property>
@@ -294,7 +318,7 @@
                         <child>
                           <object class="customtkinter.CTkEntry" id="ctkentry4">
                             <property name="state">disabled</property>
-                            <property name="text" translatable="yes">ctkentry4</property>
+                            <property name="textvariable">string:series_final_download_dest</property>
                             <layout manager="pack">
                               <property name="fill">x</property>
                               <property name="side">top</property>
@@ -913,9 +937,6 @@ Selected</property>
                                 </child>
                                 <child>
                                   <object class="customtkinter.CTkButton" id="ctkbutton8">
-                                    <property name="background_corner_colors">red</property>
-                                    <property name="bg_color">red</property>
-                                    <property name="border_color">red</property>
                                     <property name="fg_color">red</property>
                                     <property name="hover_color">pink</property>
                                     <property name="text" translatable="yes">Uninstall Selected</property>
@@ -947,6 +968,160 @@ Selected</property>
                 <layout manager="pack">
                   <property name="side">bottom</property>
                 </layout>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="customtkinter.CTkTabview.Tab" id="tab5">
+            <property name="label" translatable="yes">Favourites</property>
+            <child>
+              <object class="customtkinter.CTkFrame" id="ctkframe20">
+                <layout manager="pack">
+                  <property name="fill">x</property>
+                  <property name="side">top</property>
+                </layout>
+                <child>
+                  <object class="customtkinter.CTkEntry" id="ctkentry3">
+                    <property name="placeholder_text">Write here to filter by series name</property>
+                    <property name="text" translatable="yes">ctkentry3</property>
+                    <property name="validate">all</property>
+                    <property name="validatecommand" type="command" cbtype="entry_validate" args="">filter_favourites_treeview</property>
+                    <property name="width">350</property>
+                    <layout manager="pack">
+                      <property name="anchor">w</property>
+                      <property name="side">left</property>
+                    </layout>
+                  </object>
+                </child>
+                <child>
+                  <object class="customtkinter.CTkButton" id="ctkbutton2">
+                    <property name="text" translatable="yes">Show selected in series tab</property>
+                    <layout manager="pack">
+                      <property name="side">left</property>
+                    </layout>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Treeview" id="favourites_treeview" named="True">
+                <property name="padding">10</property>
+                <property name="selectmode">extended</property>
+                <bind sequence="&lt;&lt;TreeviewOpen&gt;&gt;" handler="child_opened_fav_treeview" add="" />
+                <layout manager="pack">
+                  <property name="anchor">center</property>
+                  <property name="expand">true</property>
+                  <property name="fill">both</property>
+                  <property name="side">top</property>
+                </layout>
+                <child>
+                  <object class="ttk.Treeview.Column" id="column10">
+                    <property name="column_anchor">w</property>
+                    <property name="heading_anchor">center</property>
+                    <property name="stretch">true</property>
+                    <property name="text" translatable="yes">Title</property>
+                    <property name="tree_column">true</property>
+                    <property name="visible">true</property>
+                    <property name="width">400</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="ttk.Treeview.Column" id="column16">
+                    <property name="column_anchor">w</property>
+                    <property name="heading_anchor">center</property>
+                    <property name="stretch">true</property>
+                    <property name="text" translatable="yes">Max chapter</property>
+                    <property name="tree_column">false</property>
+                    <property name="visible">true</property>
+                    <property name="width">75</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="ttk.Treeview.Column" id="column17">
+                    <property name="column_anchor">w</property>
+                    <property name="heading_anchor">center</property>
+                    <property name="minwidth">20</property>
+                    <property name="stretch">true</property>
+                    <property name="text" translatable="yes">Website</property>
+                    <property name="tree_column">false</property>
+                    <property name="visible">true</property>
+                    <property name="width">170</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="ttk.Treeview.Column" id="column18">
+                    <property name="column_anchor">w</property>
+                    <property name="heading_anchor">center</property>
+                    <property name="minwidth">20</property>
+                    <property name="stretch">true</property>
+                    <property name="text" translatable="yes">Save to</property>
+                    <property name="tree_column">false</property>
+                    <property name="visible">true</property>
+                    <property name="width">200</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="ttk.Treeview.Column" id="dateadded" named="True">
+                    <property name="column_anchor">w</property>
+                    <property name="command" type="command" cbtype="simple">fav_sort_date_added</property>
+                    <property name="heading_anchor">center</property>
+                    <property name="minwidth">20</property>
+                    <property name="stretch">true</property>
+                    <property name="text" translatable="yes">Date added</property>
+                    <property name="tree_column">false</property>
+                    <property name="visible">true</property>
+                    <property name="width">200</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="ttk.Treeview.Column" id="column19">
+                    <property name="column_anchor">w</property>
+                    <property name="heading_anchor">center</property>
+                    <property name="minwidth">20</property>
+                    <property name="stretch">true</property>
+                    <property name="text" translatable="yes">Status</property>
+                    <property name="tree_column">false</property>
+                    <property name="visible">true</property>
+                    <property name="width">200</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="ttk.Treeview.Column" id="column20">
+                    <property name="column_anchor">w</property>
+                    <property name="heading_anchor">w</property>
+                    <property name="minwidth">20</property>
+                    <property name="stretch">true</property>
+                    <property name="text" translatable="yes">Last checked date</property>
+                    <property name="tree_column">false</property>
+                    <property name="visible">true</property>
+                    <property name="width">200</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="ttk.Treeview.Column" id="column21">
+                    <property name="column_anchor">w</property>
+                    <property name="heading_anchor">w</property>
+                    <property name="minwidth">20</property>
+                    <property name="stretch">true</property>
+                    <property name="text" translatable="yes">Last updated date</property>
+                    <property name="tree_column">false</property>
+                    <property name="visible">true</property>
+                    <property name="width">200</property>
+                  </object>
+                </child>
+                <child>
+                  <object class="ttk.Treeview.Column" id="column22">
+                    <property name="column_anchor">w</property>
+                    <property name="heading_anchor">w</property>
+                    <property name="minwidth">20</property>
+                    <property name="stretch">true</property>
+                    <property name="text" translatable="yes">source_id</property>
+                    <property name="tree_column">false</property>
+                    <property name="visible">false</property>
+                    <property name="width">200</property>
+                  </object>
+                </child>
               </object>
             </child>
           </object>

@@ -3,7 +3,7 @@ from tkinter import END, NW
 
 from PIL import ImageTk, Image
 from FMD3_Tkinter import api
-from FMD3_Tkinter.utils import get_sanitized_download
+from FMD3_Tkinter.app.utils import get_sanitized_download
 
 
 def add_detail_entry(widget, data, title, data_key, tag=""):
@@ -111,16 +111,12 @@ class Series:
             chapters = api.get_source_chapters(data["source_id"], series_id)
             list_chapters_treeview(chapters_treeview, chapters, ("not_downloaded",))
 
-
-
-        # self.load_queried_cover(data.get("cover_url"))
         frame = self.builder.get_object("frame_test_image")
         frame.load_website(data.get("cover_url"))
 
         output_var = self.builder.get_variable("series_destination_path")
         output_widget = self.builder.get_object("series_output_save_to_entry")
         output_lib_widget = self.builder.get_object("settings_def_series_lib_combo")
-
 
         sanitized_download = get_sanitized_download(self.settings["Core"].get("default_download_path", "")["value"],manga=data.get("title"))
 

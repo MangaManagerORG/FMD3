@@ -24,7 +24,7 @@ def import_and_register_source(module_info: pkgutil.ModuleInfo):
     # sys.path.append(os.path.abspath(package_path))
     sys.path.append(str(EXTENSION_PATHS.resolve()))
 
-    module_name = "MangaDex"  # Assuming this is the module name you want to import
+    module_name = module_info.name  # Assuming this is the module name you want to import
     module_path = f"sources.{module_name}"
 
     try:
@@ -51,7 +51,6 @@ def reload_sources():
 
 def load_sources():
     for module in list(pkgutil.iter_modules(path=[SOURCE_PATHS])):
-
         import_and_register_source(module)
 
 def get_extension(name) -> ISource:

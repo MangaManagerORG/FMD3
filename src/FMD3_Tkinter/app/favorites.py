@@ -3,21 +3,19 @@ from datetime import datetime
 from FMD3_Tkinter import api
 
 
-def _str_to_datetime(string):
-    return datetime.strptime(string, "%Y-%m-%dT%H:%M:%S" if "T" in string else "%Y-%m-%d %H:%M:%S")
 
 
 class Favourites:
     favourites_treeview: type[""]
     builder: type[""]
-
-    def __init__(self):
-        self.fav_tree_loaded_parents = {}
-        self.favourites_treeview.tag_bind('lazy', '<<TreeviewOpen>>', self.child_opened_fav_treeview)
-        self.favourites_treeview.bind('<Button-1>', self.child_opened_fav_treeview)
-        self.favourites_treeview.tag_configure('favourites_child_chapters', background='#B6B7B7')
-        self.load_favourites()
-        self._detached_fav_filter = set()
+    #
+    # def __init__(self):
+    #     self.fav_tree_loaded_parents = {}
+    #     self.favourites_treeview.tag_bind('lazy', '<<TreeviewOpen>>', self.child_opened_fav_treeview)
+    #     self.favourites_treeview.bind('<Button-1>', self.child_opened_fav_treeview)
+    #     self.favourites_treeview.tag_configure('favourites_child_chapters', background='#B6B7B7')
+    #     self.load_favourites()
+    #     self._detached_fav_filter = set()
 
     def load_favourites(self, series_list=api.get_series(sort="dateadded", order="desc")):
         for series in series_list:
@@ -107,26 +105,26 @@ class Favourites:
                                                            chapter.get("status"), "", "", ""),
                                                        tags=("favourites_child_chapters",))
 
-    def fav_sort_date_added(self, *_):
-        tv = self.builder.get_object("favourites_treeview")
-        col = "dateadded"
-        print("sadas")
-
-        reverse = True
-
-        l = [
-            (_str_to_datetime(tv.set(k, col)), k)
-            for k in tv.get_children('')]
-        l.sort(reverse=reverse)
-
-        # rearrange items in sorted positions
-        for index, (val, k) in enumerate(l):
-            tv.move(k, '', index)
-
-        #
-        #
-        #
-        #
-        # # reverse sort next time
-        # tv.heading(col, text=col, command=lambda _col=col: \
-        #     treeview_sort_column(tv, _col, not reverse))
+    # def fav_sort_date_added(self, *_):
+    #     tv = self.builder.get_object("favourites_treeview")
+    #     col = "dateadded"
+    #     print("sadas")
+    #
+    #     reverse = True
+    #
+    #     l = [
+    #         (_str_to_datetime(tv.set(k, col)), k)
+    #         for k in tv.get_children('')]
+    #     l.sort(reverse=reverse)
+    #
+    #     # rearrange items in sorted positions
+    #     for index, (val, k) in enumerate(l):
+    #         tv.move(k, '', index)
+    #
+    #     #
+    #     #
+    #     #
+    #     #
+    #     # # reverse sort next time
+    #     # tv.heading(col, text=col, command=lambda _col=col: \
+    #     #     treeview_sort_column(tv, _col, not reverse))

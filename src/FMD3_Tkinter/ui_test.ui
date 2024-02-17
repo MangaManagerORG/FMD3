@@ -1370,7 +1370,6 @@
                             <child>
                               <object class="ttk.Checkbutton" id="checkbutton3">
                                 <property name="text" translatable="yes">Dark Mode</property>
-                                <property name="variable">boolean:is_dark_mode_enabled</property>
                                 <layout manager="pack">
                                   <property name="side">top</property>
                                 </layout>

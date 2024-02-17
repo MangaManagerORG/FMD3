@@ -22,8 +22,8 @@ LOGFILE_PATH = Path(CONFIG_PATH, "logs")
 LOGFILE_PATH.mkdir(parents=True, exist_ok=True)
 
 
-# EXTENSION_PATHS = Path('./../FMD3_Extensions/extensions')  # TODO("Change this back")) #
-EXTENSION_PATHS = Path(FMD3_PATH, "extensions")
+EXTENSION_PATHS = Path('./../FMD3_Extensions/extensions')  # TODO("Change this back")) #
+# EXTENSION_PATHS = Path(FMD3_PATH, "extensions")
 EXTENSION_PATHS.mkdir(parents=True, exist_ok=True)
 
 

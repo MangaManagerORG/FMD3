@@ -32,7 +32,9 @@ def run_web():
         raise ConnectionError("Could not connect to server")
 
 
-    from FMD3_Tkinter.app import app
+    # from FMD3_Tkinter.app import app
+    from FMD3_Tkinter.app.main import Fmd3App
+    app = Fmd3App()
     app.run()
 
 

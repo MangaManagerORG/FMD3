@@ -1,16 +1,23 @@
 #!/usr/bin/python3
+import asyncio
 import json
 import pathlib
+import queue
+import threading
 import tkinter as tk
 from abc import abstractmethod
+from concurrent.futures import ThreadPoolExecutor
 
 import pygubu
 import customtkinter
 from FMD3_Tkinter import styles
 from FMD3_Tkinter import api
+from FMD3_Tkinter import widgets
+from FMD3_Tkinter.app.taskmanager import TaskManager
 
 PROJECT_PATH = pathlib.Path(__file__).parent.parent
 PROJECT_UI = PROJECT_PATH / "FMD3.ui"
+loop = asyncio.get_event_loop()
 
 
 class BaseUi:
@@ -29,6 +36,7 @@ class BaseUi:
         builder.add_from_file(PROJECT_UI)
         # Main widget
         self.mainwindow: customtkinter.CTk = builder.get_object("ctk1", master)
+        self.task_manager = TaskManager()
 
         self.selected_source_name: tk.StringVar = None
         self.query_stringvar: tk.StringVar = None
@@ -41,8 +49,13 @@ class BaseUi:
         self.default_downloads_path: tk.StringVar = None
         self.appearance_var: tk.StringVar = None
         self.scaling_var: tk.StringVar = None
-
+        self.series_chapter_selection_action: tk.StringVar = None
+        self.series_chapter_download_action:tk.StringVar = None
+        self.series_chapter_favourites_action:tk.StringVar = None
         builder.import_variables(self)
+        self.series_chapter_selection_action.set("Select")
+        self.series_chapter_download_action.set("Download")
+        self.series_chapter_favourites_action.set("Favourite")
 
 
 

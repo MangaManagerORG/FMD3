@@ -9,7 +9,7 @@ import ttkwidgets
 PROJECT_PATH = pathlib.Path(__file__).parent
 PROJECT_UI = PROJECT_PATH / "FMD3.ui"
 import styles
-
+import widgets
 
 class Fmd3App:
     def __init__(self, master=None):
@@ -24,7 +24,7 @@ class Fmd3App:
         # style = ttk.Style()
         # style.theme_use('default')
 
-        tree: ttk.Treeview = self.builder.get_object("selected_series_chapter_treeview")
+        tree: ttk.Treeview = self.builder.get_object("series_chapterlist_treeview")
         tree.insert("", "end", values=("Vol.2", "Ch.45", "Title of the chapter"))
         tree.insert("", "end", values=("Vol.2", "Ch.46", "Title of the chapter"))
         tree.insert("", "end", values=("Vol.2", "Ch.47", "Title of the chapter"))

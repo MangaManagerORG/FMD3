@@ -86,6 +86,7 @@ def setup_ttk_styles(master=None):
     # style.map('Treeview', background=[('selected', bg_color)], foreground=[('selected', selected_color)])
     style.map('Treeview', background=[('selected', '#22559b')])
 
+
     #
     #
 

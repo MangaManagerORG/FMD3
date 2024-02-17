@@ -5,7 +5,22 @@ import requests
 from . import Api
 from FMD3_Tkinter.client_settings import Settings
 
+from requests.adapters import HTTPAdapter
+try:
+    from requests.packages.urllib3.util.retry import Retry
+except ImportError:
+    ...
+
+retry_strategy = Retry(
+    total=3,
+    backoff_factor=1,
+    status_forcelist=[500, 502, 503, 504],
+)
+
 session = requests.Session()
+adapter = HTTPAdapter(max_retries=retry_strategy)
+session.mount("http://", adapter)
+session.mount("https://", adapter)
 host_url = lambda :Settings().get("host")
 
 

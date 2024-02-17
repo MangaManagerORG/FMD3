@@ -99,7 +99,7 @@ class Series:
         self.is_delayed_search = False
 
     def load_queried_data(self, series_id, data):
-        chapters_treeview = self.builder.get_object("selected_series_chapter_treeview")
+        chapters_treeview = self.builder.get_object("series_chapterlist_treeview")
         chapters_treeview.delete(*chapters_treeview.get_children())
 
         if dld_chapters := api.get_chapters(series_id):
@@ -133,7 +133,7 @@ class Series:
 
     def download_selected_chapters(self):
         self.builder.get_object("series_output_save_to_entry").configure(state="readonly")
-        chapters_treeview = self.builder.get_object("selected_series_chapter_treeview")
+        chapters_treeview = self.builder.get_object("series_chapterlist_treeview")
         to_download_ids = chapters_treeview.selection()
         to_download_series = self.selected_series_id
         self.builder.get_object("series_output_save_to_entry").configure(state="disabled")

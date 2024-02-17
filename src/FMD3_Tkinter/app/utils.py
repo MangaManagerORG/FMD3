@@ -1,3 +1,5 @@
+import logging
+import tkinter
 from datetime import datetime
 from pathlib import Path
 from tkinter import END
@@ -36,7 +38,7 @@ def add_detail_entry_array(widget, data, title, data_key, tag=""):
     else:
         data_ = ""
     widget.insert("end", f"{data_}\n\n")
-
+from customtkinter import CTkTextbox
 
 def add_series_detail(series_detail_widget, data: dict):
     """
@@ -45,7 +47,7 @@ def add_series_detail(series_detail_widget, data: dict):
     :param data: dict containing: ["title","authors","artists","generes,"status","description"]
     :return:
     """
-    series_detail_widget.configure(state="normal")
+    series_detail_widget.configure(state=tkinter.NORMAL)
     series_detail_widget.delete('1.0', END)
 
     add_detail_entry(series_detail_widget, data, "Title", "title", tag="")
@@ -59,8 +61,11 @@ def add_series_detail(series_detail_widget, data: dict):
 
 def list_chapters_treeview(widget, chapter_list: list, tags: tuple[str]):
     for chapter in chapter_list:
-        widget.insert('', 'end', chapter.get("chapter_id"),
+        try:
+            widget.insert('', 'end', chapter.get("chapter_id"),
                       values=(chapter.get("volume"), chapter.get("number"), chapter.get("title")), tags=tags)
+        except Exception as e:
+            logging.getLogger().error(f"Unhandled exception inserting one chapter: '{e} - {chapter.get('number')}  {chapter.get('title')}'")
 
 
 

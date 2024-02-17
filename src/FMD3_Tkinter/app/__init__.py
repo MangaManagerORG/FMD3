@@ -188,7 +188,7 @@
 #         self.search_results = {}
 #         self.is_delayed_search = False
 #         self.builder.get_object("series_detail").tag_configure("bold", font="Helvetica 12 bold")
-#         chapters_treeview = self.builder.get_object("selected_series_chapter_treeview")
+#         chapters_treeview = self.builder.get_object("series_chapterlist_treeview")
 #         chapters_treeview.tag_configure('downloaded', background='lime')
 #         chapters_treeview.tag_configure('not_downloaded', background='grey')
 #         self.series_detail_cover_image = None

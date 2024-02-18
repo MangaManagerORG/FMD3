@@ -14,13 +14,13 @@ class CommandMenu(CTkOptionMenu):
     def _dropdown_callback(self, value: str):
         # self._current_value = value
         # self._text_label.configure(text=self._current_value)
-        if self._variable is not None:
-            self._variable_callback_blocked = True
-            self._variable.set(self._current_value)
-            self._variable_callback_blocked = False
+        # if self._variable is not None:
+        #     self._variable_callback_blocked = True
+        #     self._variable.set(self._current_value)
+        #     self._variable_callback_blocked = False
 
         if self._command is not None:
-            self._command(value)
+            self._command(self._current_value, value)
 
 _list_dto = ListDTO()
 

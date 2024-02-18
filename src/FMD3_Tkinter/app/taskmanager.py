@@ -1,5 +1,5 @@
 import logging
-from concurrent.futures import ThreadPoolExecutor
+from concurrent.futures import ThreadPoolExecutor, ProcessPoolExecutor
 
 logger = logging.getLogger()
 
@@ -13,13 +13,11 @@ def try_func(func, *args, **kwargs):
 
 class TaskManager:
     def __init__(self):
-        self.__DPE = ThreadPoolExecutor(max_workers=2)
+        self.__DPE = ThreadPoolExecutor(max_workers=1)
         self.__instance = self
         self.active_tasks = set()
 
     def submit(self, func, callback, *args, **kwargs):
         thread_future = self.__DPE.submit(try_func, func, *args, **kwargs)
         if callback is not None:
-            thread_future.add_done_callback(lambda future=thread_future: callback(future.result()))
-        else:
-            thread_future.result()
+            thread_future.add_done_callback(callback)

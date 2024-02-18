@@ -42,7 +42,6 @@
                 <child>
                   <object class="customtkinter.CTkEntry" id="series_search_series_entry" named="True">
                     <property name="placeholder_text">Search in</property>
-                    <property name="takefocus">true</property>
                     <property name="textvariable">string:query_stringvar</property>
                     <layout manager="pack">
                       <property name="fill">x</property>
@@ -52,13 +51,10 @@
                 </child>
                 <child>
                   <object class="ttk.Treeview" id="series_result" named="True">
-                    <property name="height">10</property>
-                    <property name="selectmode">browse</property>
-                    <property name="show">tree</property>
+                    <property name="height">15</property>
+                    <property name="selectmode">extended</property>
                     <bind sequence="&lt;&lt;TreeviewSelect&gt;&gt;" handler="on_series_result_selected" add="" />
                     <layout manager="pack">
-                      <property name="expand">true</property>
-                      <property name="fill">y</property>
                       <property name="side">top</property>
                     </layout>
                   </object>
@@ -188,6 +184,106 @@
                       <property name="side">top</property>
                     </layout>
                     <child>
+                      <object class="customtkinter.CTkFrame" id="ctkframe3">
+                        <layout manager="pack">
+                          <property name="expand">true</property>
+                          <property name="fill">both</property>
+                          <property name="side">left</property>
+                        </layout>
+                        <child>
+                          <object class="FMD3_Tkinter.CheckboxTreeview" id="series_chapterlist_treeview" named="True">
+                            <property name="height">6</property>
+                            <layout manager="pack">
+                              <property name="expand">true</property>
+                              <property name="fill">both</property>
+                              <property name="side">top</property>
+                            </layout>
+                            <child>
+                              <object class="ttk.Treeview.Column" id="column23">
+                                <property name="column_anchor">w</property>
+                                <property name="heading_anchor">w</property>
+                                <property name="minwidth">80</property>
+                                <property name="stretch">false</property>
+                                <property name="text" translatable="yes">Check for download</property>
+                                <property name="tree_column">true</property>
+                                <property name="visible">true</property>
+                                <property name="width">120</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="ttk.Treeview.Column" id="column24">
+                                <property name="column_anchor">w</property>
+                                <property name="heading_anchor">w</property>
+                                <property name="minwidth">40</property>
+                                <property name="stretch">false</property>
+                                <property name="text" translatable="yes">Volume</property>
+                                <property name="tree_column">false</property>
+                                <property name="visible">true</property>
+                                <property name="width">80</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="ttk.Treeview.Column" id="column25">
+                                <property name="column_anchor">w</property>
+                                <property name="heading_anchor">w</property>
+                                <property name="minwidth">80</property>
+                                <property name="stretch">false</property>
+                                <property name="text" translatable="yes">Chapter</property>
+                                <property name="tree_column">false</property>
+                                <property name="visible">true</property>
+                                <property name="width">80</property>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="ttk.Treeview.Column" id="column26">
+                                <property name="column_anchor">w</property>
+                                <property name="heading_anchor">w</property>
+                                <property name="minwidth">60</property>
+                                <property name="stretch">true</property>
+                                <property name="text" translatable="yes">Title</property>
+                                <property name="tree_column">false</property>
+                                <property name="visible">true</property>
+                                <property name="width">200</property>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="ttk.Frame" id="no_chapters_frame" named="True">
+                            <property name="relief">raised</property>
+                            <property name="takefocus">false</property>
+                            <property name="width">200</property>
+                            <layout manager="place">
+                              <property name="anchor">center</property>
+                              <property name="relheight">0.6</property>
+                              <property name="relwidth">0.3</property>
+                              <property name="relx">0.5</property>
+                              <property name="rely">0.5</property>
+                              <property name="x">0</property>
+                              <property name="y">0</property>
+                            </layout>
+                            <child>
+                              <object class="ttk.Label" id="label1">
+                                <property name="anchor">center</property>
+                                <property name="background">#343638</property>
+                                <property name="font">{roboto} 12 {}</property>
+                                <property name="foreground">gray84</property>
+                                <property name="relief">raised</property>
+                                <property name="state">disabled</property>
+                                <property name="takefocus">false</property>
+                                <property name="text" translatable="yes">Series has no chapters</property>
+                                <layout manager="pack">
+                                  <property name="expand">true</property>
+                                  <property name="fill">both</property>
+                                  <property name="side">top</property>
+                                </layout>
+                              </object>
+                            </child>
+                          </object>
+                        </child>
+                      </object>
+                    </child>
+                    <child>
                       <object class="customtkinter.CTkFrame" id="ctkframe6">
                         <layout manager="pack">
                           <property name="anchor">center</property>
@@ -196,9 +292,9 @@
                         </layout>
                         <child>
                           <object class="FMD3_Tkinter.CommandMenu" id="commandmenu1">
-                            <property name="command" type="command" cbtype="simple">_series_on_select</property>
+                            <property name="command" type="command" cbtype="simple">series_on_menu_select</property>
                             <property name="state">readonly</property>
-                            <property name="values">["All","None","Invert Selection"]</property>
+                            <property name="values">["All","None"]</property>
                             <property name="variable">string:series_chapter_selection_action</property>
                             <layout manager="pack">
                               <property name="anchor">center</property>
@@ -209,7 +305,7 @@
                         </child>
                         <child>
                           <object class="FMD3_Tkinter.CommandMenu" id="commandmenu2">
-                            <property name="command" type="command" cbtype="simple">on_series_action</property>
+                            <property name="command" type="command" cbtype="simple">series_on_menu_select</property>
                             <property name="state">readonly</property>
                             <property name="values">["Download Selected","Download All"]</property>
                             <property name="variable">string:series_chapter_download_action</property>
@@ -221,70 +317,13 @@
                         </child>
                         <child>
                           <object class="FMD3_Tkinter.CommandMenu" id="commandmenu3">
-                            <property name="command" type="command" cbtype="simple">on_series_action</property>
+                            <property name="command" type="command" cbtype="simple">series_on_menu_select</property>
                             <property name="values">["Add to fav", "Add to fav &amp; add to download queue"]</property>
                             <property name="variable">string:series_chapter_favourites_action</property>
                             <layout manager="pack">
                               <property name="pady">2</property>
                               <property name="side">top</property>
                             </layout>
-                          </object>
-                        </child>
-                      </object>
-                    </child>
-                    <child>
-                      <object class="FMD3_Tkinter.CheckboxTreeview" id="series_chapterlist_treeview" named="True">
-                        <property name="height">6</property>
-                        <layout manager="pack">
-                          <property name="fill">x</property>
-                          <property name="side">top</property>
-                        </layout>
-                        <child>
-                          <object class="ttk.Treeview.Column" id="column23">
-                            <property name="column_anchor">w</property>
-                            <property name="heading_anchor">w</property>
-                            <property name="minwidth">80</property>
-                            <property name="stretch">false</property>
-                            <property name="text" translatable="yes">Check for download</property>
-                            <property name="tree_column">true</property>
-                            <property name="visible">true</property>
-                            <property name="width">120</property>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="ttk.Treeview.Column" id="column24">
-                            <property name="column_anchor">w</property>
-                            <property name="heading_anchor">w</property>
-                            <property name="minwidth">40</property>
-                            <property name="stretch">false</property>
-                            <property name="text" translatable="yes">Volume</property>
-                            <property name="tree_column">false</property>
-                            <property name="visible">true</property>
-                            <property name="width">80</property>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="ttk.Treeview.Column" id="column25">
-                            <property name="column_anchor">w</property>
-                            <property name="heading_anchor">w</property>
-                            <property name="minwidth">80</property>
-                            <property name="stretch">false</property>
-                            <property name="text" translatable="yes">Chapter</property>
-                            <property name="tree_column">false</property>
-                            <property name="visible">true</property>
-                            <property name="width">80</property>
-                          </object>
-                        </child>
-                        <child>
-                          <object class="ttk.Treeview.Column" id="column26">
-                            <property name="column_anchor">w</property>
-                            <property name="heading_anchor">w</property>
-                            <property name="minwidth">60</property>
-                            <property name="stretch">true</property>
-                            <property name="text" translatable="yes">Title</property>
-                            <property name="tree_column">false</property>
-                            <property name="visible">true</property>
-                            <property name="width">200</property>
                           </object>
                         </child>
                       </object>
@@ -1154,6 +1193,4 @@ Selected</property>
       </object>
     </child>
   </object>
-  <object class="tk.Menu" id="menu1" />
-  <object class="customtkinter.CTkToplevel" id="ctktoplevel1" />
 </interface>

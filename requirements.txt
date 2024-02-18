@@ -18,3 +18,5 @@ pygubu
 promidius_versioning_utils
 requests-ratelimiter
 pygubu-designer[all]
+ttkwidgets~=0.13.0
+customtkinter~=5.2.2

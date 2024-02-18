@@ -1,7 +1,7 @@
 from typing import Literal
 
 import requests
-from FMD3.api.series import get_series as sup_get_series, get_series_info as sup_get_series_info, \
+from FMD3.api.series import get_fav_series as sup_get_series, get_series_info as sup_get_series_info, \
     query_series as sup_query_series, get_series_folder_name as sup_get_series_folder_name, \
     get_series_from_url as sup_get_series_from_url
 from FMD3.api.sources import get_sources as sup_get_sources, get_source as sup_get_source, get_available_sources as sup_get_available_sources, update_source as sup_update_source, uninstall_source as sup_uninstall_source, check_source_updates as sup_check_source_updates

@@ -9,9 +9,9 @@ from FMD3.core.database.predefined import get_column_from_str
 from FMD3.core.utils import get_series_folder_name as sup_get_series_folder_name
 from .sources import get_source_from_url
 
-def get_series(sort=_NoArg.NO_ARG, order: Literal["asc", "desc"] = "desc", limit=None):
+def get_fav_series(sort=_NoArg.NO_ARG, order: Literal["asc", "desc"] = "desc", limit=None):
     order = desc if order == "desc" else asc
-    q = db.Session().query(db.Series)
+    q = db.Session().query(db.Series).filter_by(favourited=True)
     if sort != _NoArg.NO_ARG:
         q = q.order_by(order(get_column_from_str("series", sort)))
     if limit:

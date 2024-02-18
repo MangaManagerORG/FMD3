@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 from fastapi.openapi.models import Response
 
-from FMD3.api.series import get_series as sup_get_series, get_series_info as sup_get_series_info, \
+from FMD3.api.series import get_fav_series as sup_get_series, get_series_info as sup_get_series_info, \
     query_series as sup_query_series, get_series_folder_name as sup_get_series_folder_name, \
     get_series_from_url as sup_get_series_from_url
 

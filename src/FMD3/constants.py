@@ -1,14 +1,13 @@
 import userpaths
 from pathlib import Path
 
-print(__file__)
 
 import sys
 
 # is_api = "FMD3_API" in sys.argv[0]
 
-FMD3_PATH = Path(".")
-
+FMD3_PATH = Path(__file__).parent.parent.parent
+print("FMD3_PATH:", FMD3_PATH)
 
 # CONFIG_PATH = Path("config")  # TODO("Change this back") #
 CONFIG_PATH = Path(FMD3_PATH, "config")
@@ -22,7 +21,7 @@ LOGFILE_PATH = Path(CONFIG_PATH, "logs")
 LOGFILE_PATH.mkdir(parents=True, exist_ok=True)
 
 
-EXTENSION_PATHS = Path('./../FMD3_Extensions/extensions')  # TODO("Change this back")) #
+EXTENSION_PATHS = Path(FMD3_PATH,'../FMD3_Extensions/extensions')  # TODO("Change this back")) #
 # EXTENSION_PATHS = Path(FMD3_PATH, "extensions")
 EXTENSION_PATHS.mkdir(parents=True, exist_ok=True)
 

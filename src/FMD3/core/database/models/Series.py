@@ -17,6 +17,7 @@ class Series(Base):
     # id = Column(Integer, autoincrement=True)
     series_id = Column(Text, nullable=False, primary_key=True)  # Used
     enabled = Column(Boolean)  # Used
+    favourited = Column(Boolean,default=False)
     source_id = Column(String(255),  nullable=False)  # Used
     title = Column(Text, nullable=False)  # Used
     status = Column(SmallInteger)  # Used

@@ -98,14 +98,8 @@ def scan_new_chapters():
         # get all series in favourites that are from this extension
         s = Session()
         logger.debug(f"Found source: {source.NAME}")
-        series_list: list[Series] = s.query(Series).filter_by(source_id=source.ID).all()
+        series_list: list[Series] = s.query(Series).filter_by(source_id=source.ID,favourited=True,enabled=True).filter(Series.status != SeriesStatus.FULLY_DOWNLOADED.value).all()
         for series in series_list:
-            if series.status == SeriesStatus.FULLY_DOWNLOADED.value:
-                logger.debug(f"Skipping chapter check for '{series.title}' (series is fully downloaded)")
-                continue
-            if not series.enabled:
-                logger.debug(f"Skipping chapter check for '{series.title}' (series is disabled)")
-                continue
             if series.datelastchecked:
                 if series.datelastchecked + timedelta(hours=23) > datetime.now():
                     logger.debug(f"Skipping chapter check for '{series.title}' (checked less than 24 hours ago)")

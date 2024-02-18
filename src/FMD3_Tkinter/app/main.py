@@ -1,23 +1,18 @@
 #!/usr/bin/python3
-import asyncio
 import logging
-import pathlib
-import time
-from threading import Thread
-from typing import Literal
-
 from ttkwidgets import CheckboxTreeview
 
 from customtkinter import CTkComboBox, CTkOptionMenu, CTkEntry
 
 from FMD3_Tkinter import api
 from FMD3_Tkinter.app.baseui import BaseUi
-from FMD3_Tkinter.app.utils import add_series_detail, list_chapters_treeview, get_sanitized_download, _str_to_datetime, \
-    throttle
+from FMD3_Tkinter.app.utils import add_series_detail, list_chapters_treeview, get_sanitized_download, _str_to_datetime
 from pathlib import Path
 sources = api.get_sources()
 assets_path = Path(Path(__file__).parent.parent, "assets")
 logger = logging.getLogger(__name__)
+
+
 class Fmd3App(BaseUi):
     def __init__(self, master=None, translator=None):
         super().__init__(master, translator)
@@ -52,8 +47,6 @@ class Fmd3App(BaseUi):
         # self.series_search_series_entry.bind("<Return>", self.search_series)
         self.query_stringvar.trace_add("write", self.search_series)  # Triggers search on each keystroke
 
-
-
         # load sources
         self.selected_source_id = None
         self.source_selector_optionmenu.configure(values=[s["name"] for s in sources])
@@ -69,12 +62,6 @@ class Fmd3App(BaseUi):
         self._detached_fav_filter = set()
         self.search_delay = False
         self.last_search_selected_item = None
-
-    def loading(self,state):
-        if state:
-            self.mainwindow.config(cursor="wait")
-        else:
-            self.mainwindow.config(cursor="")
 
 
     def run(self):
@@ -105,7 +92,6 @@ class Fmd3App(BaseUi):
         self.fetch_series_by_name(source_id, value)
         # self.fetch_series_by_name_callback(None)
 
-    @throttle(2.3)
     def fetch_series_by_name(self,source_id, query):
         self.series_result.delete(*self.series_result.get_children())
         self.task_manager.submit(api.query_series, self.fetch_series_by_name_callback, source_id, query)
@@ -134,7 +120,6 @@ class Fmd3App(BaseUi):
             self.search_results[result.get("series_id")] = result
             tree.insert('', 'end', result.get("series_id"), text=result.get("title"))
         self.is_delayed_search = False
-        self.loading(False)
 
     def series_tab_search_by_url(self):
         if series_url := self.series_browser_url_entry_var.get():
@@ -278,6 +263,11 @@ class Fmd3App(BaseUi):
                 self.fav_tree_loaded_parents[item_id] = False
         self.fav_sort_date_added()
 
+    #################################################
+    #       Handle series action menu-buttons       #
+    #################################################
+
+
     def series_on_menu_select(self,action,argument):
         match action:
             case "Select":
@@ -296,6 +286,20 @@ class Fmd3App(BaseUi):
             tree.check_all()
 
     def _cb_series_on_download(self, value):
+        if value == "All":
+            return
+
+        if value == "Selected":
+            self.builder.get_object("series_output_save_to_entry").configure(state="readonly")
+            chapters_treeview = self.builder.get_object("series_chapterlist_treeview")
+            to_download_ids = chapters_treeview.selection()
+            to_download_series = self.selected_series_id
+            self.builder.get_object("series_output_save_to_entry").configure(state="disabled")
+            self.builder.get_object("settings_def_series_lib_combo").configure(state="disabled")
+            api.download_chapters(self.selected_source_id, to_download_series, to_download_ids,
+                                  output_path=self.builder.get_variable(
+                                      "series_final_download_dest").get())  # Todo save to
+
         ...
 
     def _cb_series_on_fav(self, value):

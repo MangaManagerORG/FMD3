@@ -1039,6 +1039,9 @@ Selected</property>
         <child>
           <object class="customtkinter.CTkTabview.Tab" id="tab5">
             <property name="label" translatable="yes">Favourites</property>
+            <containerlayout manager="pack">
+              <property name="propagate">false</property>
+            </containerlayout>
             <child>
               <object class="customtkinter.CTkFrame" id="ctkframe20">
                 <layout manager="pack">
@@ -1071,13 +1074,13 @@ Selected</property>
             <child>
               <object class="ttk.Treeview" id="favourites_treeview" named="True">
                 <property name="padding">10</property>
-                <property name="selectmode">extended</property>
+                <property name="selectmode">none</property>
                 <bind sequence="&lt;&lt;TreeviewOpen&gt;&gt;" handler="child_opened_fav_treeview" add="" />
                 <layout manager="pack">
-                  <property name="anchor">center</property>
+                  <property name="anchor">w</property>
                   <property name="expand">true</property>
                   <property name="fill">both</property>
-                  <property name="side">top</property>
+                  <property name="side">left</property>
                 </layout>
                 <child>
                   <object class="ttk.Treeview.Column" id="column10">
@@ -1087,7 +1090,6 @@ Selected</property>
                     <property name="text" translatable="yes">Title</property>
                     <property name="tree_column">true</property>
                     <property name="visible">true</property>
-                    <property name="width">400</property>
                   </object>
                 </child>
                 <child>
@@ -1122,7 +1124,7 @@ Selected</property>
                     <property name="text" translatable="yes">Save to</property>
                     <property name="tree_column">false</property>
                     <property name="visible">true</property>
-                    <property name="width">200</property>
+                    <property name="width">20</property>
                   </object>
                 </child>
                 <child>
@@ -1135,7 +1137,7 @@ Selected</property>
                     <property name="text" translatable="yes">Date added</property>
                     <property name="tree_column">false</property>
                     <property name="visible">true</property>
-                    <property name="width">200</property>
+                    <property name="width">20</property>
                   </object>
                 </child>
                 <child>
@@ -1147,7 +1149,7 @@ Selected</property>
                     <property name="text" translatable="yes">Status</property>
                     <property name="tree_column">false</property>
                     <property name="visible">true</property>
-                    <property name="width">200</property>
+                    <property name="width">20</property>
                   </object>
                 </child>
                 <child>
@@ -1159,7 +1161,7 @@ Selected</property>
                     <property name="text" translatable="yes">Last checked date</property>
                     <property name="tree_column">false</property>
                     <property name="visible">true</property>
-                    <property name="width">200</property>
+                    <property name="width">20</property>
                   </object>
                 </child>
                 <child>
@@ -1171,7 +1173,7 @@ Selected</property>
                     <property name="text" translatable="yes">Last updated date</property>
                     <property name="tree_column">false</property>
                     <property name="visible">true</property>
-                    <property name="width">200</property>
+                    <property name="width">20</property>
                   </object>
                 </child>
                 <child>
@@ -1183,7 +1185,7 @@ Selected</property>
                     <property name="text" translatable="yes">source_id</property>
                     <property name="tree_column">false</property>
                     <property name="visible">false</property>
-                    <property name="width">200</property>
+                    <property name="width">20</property>
                   </object>
                 </child>
               </object>

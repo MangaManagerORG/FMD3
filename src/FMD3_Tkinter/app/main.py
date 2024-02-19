@@ -138,6 +138,11 @@ class Fmd3App(BaseUi):
     def _get_series_info(self,series_id):
         return api.get_series_info(self.selected_source_id, series_id)
 
+    def pre_settings_load_libs_from_treeview(self,*args,**kwargs):
+        widget = self.builder.get_object("settings_def_series_lib_combobox")
+        widget.configure(values=["eres", "puto"])
+        print("asdsa")
+
     def settings_load_libs_from_treeview(self, current_value):
         libs = self.settings_libraries
         self.builder.get_object("settings_def_lib_combo")['values'] = list(libs)

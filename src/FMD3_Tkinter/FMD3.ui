@@ -345,7 +345,7 @@
                           <property name="side">top</property>
                         </layout>
                         <child>
-                          <object class="customtkinter.FMD3_Tkinter.OptionMenu" id="optionmenu1">
+                          <object class="customtkinter.FMD3_Tkinter.OptionMenu" id="settings_def_series_lib_combobox" named="True">
                             <property name="command" type="command" cbtype="simple">settings_load_libs_from_treeview</property>
                             <property name="postcommand" type="command" cbtype="simple">pre_settings_load_libs_from_treeview</property>
                             <property name="values">[]</property>

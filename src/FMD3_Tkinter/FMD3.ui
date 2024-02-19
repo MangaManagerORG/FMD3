@@ -345,8 +345,9 @@
                           <property name="side">top</property>
                         </layout>
                         <child>
-                          <object class="customtkinter.CTkOptionMenu" id="settings_def_series_lib_combobox" named="True">
+                          <object class="customtkinter.FMD3_Tkinter.OptionMenu" id="optionmenu1">
                             <property name="command" type="command" cbtype="simple">settings_load_libs_from_treeview</property>
+                            <property name="postcommand" type="command" cbtype="simple">pre_settings_load_libs_from_treeview</property>
                             <property name="values">[]</property>
                             <property name="variable">string:default_series_downloads_path</property>
                             <layout manager="pack">

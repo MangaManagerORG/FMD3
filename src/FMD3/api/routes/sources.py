@@ -6,15 +6,7 @@ from FMD3.sources.updater import check_source_updates as sup_check_source_update
 
 
 def get_sources():
-    return [
-        {
-            "id": source.ID,
-            "name": source.NAME,
-            "version": source.VERSION,
-            "has_updates": source._has_updates,
-        }
-        for source in get_sources_list()
-    ]
+    return get_sources_list()
 
 
 def get_source(name=None, source_id=None) -> dict or None:

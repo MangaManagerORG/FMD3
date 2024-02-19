@@ -1,6 +1,9 @@
 from abc import abstractmethod
 from typing import Literal
 
+from FMD3.sources import ISource
+from FMD3.sources.SearchResult import SearchResult
+
 
 class ApiInterface:
     @staticmethod
@@ -10,7 +13,7 @@ class ApiInterface:
 
     @staticmethod
     @abstractmethod
-    def get_series(sort=None, order: Literal["asc", "desc"] = "desc", limit=None):
+    def get_series(sort=None, order: Literal["asc", "desc"] = "desc", limit=None) -> list[SearchResult]:
         ...
 
     @staticmethod
@@ -20,17 +23,17 @@ class ApiInterface:
 
     @staticmethod
     @abstractmethod
-    def get_series_folder_name(website=None, manga=None, author=None, artist=None):
+    def get_series_folder_name(website=None, manga=None, author=None, artist=None) -> str:
         ...
 
     @staticmethod
     @abstractmethod
-    def query_series(source_id: str, query: str):
+    def query_series(source_id: str, query: str) -> list[SearchResult]:
         ...
 
     @staticmethod
     @abstractmethod
-    def get_sources():
+    def get_sources() -> list[ISource]:
         ...
 
     @staticmethod

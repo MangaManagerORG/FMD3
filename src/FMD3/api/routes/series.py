@@ -67,12 +67,7 @@ def get_series_info(source_id, series_id):
 def query_series(source_id, series_query):
     source = sup_get_source(source_id=source_id)
     series_list = source.find_series(series_query)
-    return [{
-        "series_id": series.series_id,
-        "title": series.title,
-        "cover_url": series.cover_url
-    }
-        for series in series_list]
+    return series_list
 
 
 def get_series_folder_name(website=None, manga=None, author=None, artist=None):

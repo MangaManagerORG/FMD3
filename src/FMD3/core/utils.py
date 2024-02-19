@@ -42,7 +42,7 @@ def cleanup_final_string(string):
     return string.replace("[]", "").replace("{}", "").replace("  ", " ")
 
 
-def get_series_folder_name(website=None, manga=None, author=None, artist=None):
+def get_series_folder_name(website=None, manga=None, author=None, artist=None) -> str:
     user_pref_template = Settings().get(Keys.SERIES_FOLDER_NAME)
     if manga is None:
         raise KeyError("manga attribute cannot be empty")
@@ -57,7 +57,7 @@ def get_series_folder_name(website=None, manga=None, author=None, artist=None):
         AUTHOR=author if author else "",
         ARTIST=artist if artist else ""
     )
-    return pathvalidate.sanitize_filename(cleanup_final_string(folder_name))
+    return str(pathvalidate.sanitize_filename(cleanup_final_string(folder_name)))
 
 
 def get_chapter_name(website=None, manga=None, chapter=None, author=None, artist=None, volume=None):

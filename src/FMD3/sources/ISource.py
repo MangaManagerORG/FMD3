@@ -11,6 +11,7 @@ from FMD3.core.settings import Settings, SettingControl
 from FMD3.core import database as db
 from FMD3.models.chapter import Chapter
 from FMD3.models.series_info import SeriesInfo
+from FMD3.sources.SearchResult import SearchResult
 
 SOURCES_SECTIONS_PREFIX = "source_"
 
@@ -185,7 +186,7 @@ class ISource:
         ...
 
     @abstractmethod
-    def find_series(self, query: str):
+    def find_series(self, query: str) -> list[SearchResult]:
         ...
 
     @abstractmethod

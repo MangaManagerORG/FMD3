@@ -19,6 +19,10 @@ def get_fav_series(sort=_NoArg.NO_ARG, order: Literal["asc", "desc"] = "desc", l
     if limit:
         q = q.limit(limit)
     return jsonpickle.encode(q.all())
+
+
+
+
         # [
         # {
         #     "series_id": series.series_id,

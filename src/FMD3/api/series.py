@@ -2,6 +2,7 @@ from typing import Literal
 
 from sqlalchemy import desc, asc
 from sqlalchemy.sql.base import _NoArg
+import jsonpickle
 
 from FMD3 import get_source as sup_get_source
 from FMD3.core import database as db
@@ -9,31 +10,31 @@ from FMD3.core.database.predefined import get_column_from_str
 from FMD3.core.utils import get_series_folder_name as sup_get_series_folder_name
 from .sources import get_source_from_url
 
+
 def get_fav_series(sort=_NoArg.NO_ARG, order: Literal["asc", "desc"] = "desc", limit=None):
     order = desc if order == "desc" else asc
-    q = db.Session().query(db.Series).filter_by(favourited=True)
+    q = db.Session().query(db.Series)#.filter_by(favourited=True)
     if sort != _NoArg.NO_ARG:
         q = q.order_by(order(get_column_from_str("series", sort)))
     if limit:
         q = q.limit(limit)
-
-    return [
-        {
-            "series_id": series.series_id,
-            "enabled": series.enabled,
-            "source_id": series.source_id,
-            "title": series.title,
-            "status": series.status,
-            "max_chapter": None if not series.chapters else max(series.chapters, key=lambda x: x.number,
-                                                                default=0).number,
-            "save_to": series.save_to,
-            "dateadded": series.dateadded,
-            "datelastchecked": series.datelastchecked,
-            "datelastupdated": series.datelastupdated,
-
-        }
-        for series in q.all()
-    ]
+    return jsonpickle.encode(q.all())
+        # [
+        # {
+        #     "series_id": series.series_id,
+        #     "enabled": series.enabled,
+        #     "source_id": series.source_id,
+        #     "title": series.title,
+        #     "status": series.status,
+        #     "max_chapter":
+        #     "save_to": series.save_to,
+        #     "dateadded": series.dateadded,
+        #     "datelastchecked": series.datelastchecked,
+        #     "datelastupdated": series.datelastupdated,
+        #
+        # }
+        # for series in
+    # ])
 
 
 def get_series_info(source_id, series_id):

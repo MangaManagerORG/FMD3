@@ -1,5 +1,5 @@
 from typing import Literal
-
+import jsonpickle
 import requests
 from FMD3.api.series import get_fav_series as sup_get_series, get_series_info as sup_get_series_info, \
     query_series as sup_query_series, get_series_folder_name as sup_get_series_folder_name, \
@@ -21,7 +21,8 @@ class LocalApi(Api):
 
     @staticmethod
     def get_series(sort=None, order: Literal["asc", "desc"] = "desc", limit=None):
-        return sup_get_series()
+        a = jsonpickle.decode(sup_get_series())
+        return a
 
     @staticmethod
     def get_series_info(source_id: str, series_id: str):

@@ -8,8 +8,6 @@ import shutil
 import sys
 import zipfile
 
-from importlib.metadata import entry_points
-
 import requests
 
 from .ISource import ISource

@@ -30,10 +30,9 @@ The code below shows the minimal example definition file.
 
 """
 
-import tkinter as tk
 import tkinter.ttk as ttk
 
-from customtkinter import ThemeManager, CTkComboBox, CTkFont
+from customtkinter import ThemeManager, CTkFont
 
 
 def setup_ttk_styles(master=None):

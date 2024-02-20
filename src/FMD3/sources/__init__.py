@@ -18,6 +18,8 @@ from ..constants import SOURCE_PATHS, EXTENSION_PATHS
 sources_factory: list[ISource] = []
 
 logger = logging.getLogger(__name__)
+
+
 def import_and_register_source(module_info: pkgutil.ModuleInfo):
     # sys.path.append(os.path.abspath(package_path))
     sys.path.append(str(EXTENSION_PATHS.resolve()))
@@ -27,7 +29,7 @@ def import_and_register_source(module_info: pkgutil.ModuleInfo):
 
     try:
         importlib.invalidate_caches()
-        module = importlib.import_module(module_path,package="sources")
+        module = importlib.import_module(module_path, package="sources")
 
         # Now you can access the Source variable from the imported module
         Source = module.Source
@@ -43,13 +45,16 @@ def import_and_register_source(module_info: pkgutil.ModuleInfo):
         except ValueError:
             pass
 
+
 def reload_sources():
     sources_factory.clear()
     load_sources()
 
+
 def load_sources():
     for module in list(pkgutil.iter_modules(path=[SOURCE_PATHS])):
         import_and_register_source(module)
+
 
 def get_extension(name) -> ISource:
     for ext in sources_factory:
@@ -57,7 +62,7 @@ def get_extension(name) -> ISource:
             return ext
 
 
-def get_source(name=None, source_id=None) -> ISource|None:
+def get_source(name=None, source_id=None) -> ISource | None:
     if name is None and source_id is None:
         raise ValueError("At least one parameter needs to be fulfilled: name or id. None provided")
 
@@ -111,25 +116,26 @@ def load_source():
     :return:
     """
 
+
 def update_source(source_id):
-
-
     if not os.path.exists(SOURCE_PATHS):
         os.makedirs(SOURCE_PATHS)
 
     # "https://raw.githubusercontent.com/MangaManagerORG/FMD3-Extensions/repo/output"
-    r = requests.get("https://raw.githubusercontent.com/MangaManagerORG/FMD3-Extensions/repo/output/" + source_id + ".zip")
+    r = requests.get(
+        "https://raw.githubusercontent.com/MangaManagerORG/FMD3-Extensions/repo/output/" + source_id + ".zip")
 
     # Save the zip file
 
-        # Extract the contents of the zip file directly from memory
+    # Extract the contents of the zip file directly from memory
     with zipfile.ZipFile(io.BytesIO(r.content), 'r') as zip_ref:
         top_level_folder = list({item.split('/')[0] + '/' for item in zip_ref.namelist() if '/' in item})[0]
-        if os.path.exists(source_path:=os.path.join(SOURCE_PATHS,top_level_folder)):
+        if os.path.exists(source_path := os.path.join(SOURCE_PATHS, top_level_folder)):
             shutil.rmtree(source_path)
         zip_ref.extractall(SOURCE_PATHS)
 
     reload_sources()
+
 
 def uninstall_source(source_id):
     for ext in sources_factory:

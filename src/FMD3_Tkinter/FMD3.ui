@@ -31,7 +31,7 @@
                 </layout>
                 <child>
                   <object class="customtkinter.CTkOptionMenu" id="widget_series_source_optionmenu" named="True">
-                    <property name="command" type="command" cbtype="simple">on_source_selected</property>
+                    <property name="command" type="command" cbtype="simple">on_series_source_selected</property>
                     <property name="variable">string:var_series_selected_source_name</property>
                     <layout manager="pack">
                       <property name="fill">x</property>
@@ -349,7 +349,7 @@
                           <object class="customtkinter.FMD3_Tkinter.OptionMenu" id="widget_series_saveto_lib_optionmenu" named="True">
                             <property name="command" type="command" cbtype="simple">settings_load_libs_from_treeview</property>
                             <property name="postcommand" type="command" cbtype="simple">pre_settings_load_libs_from_treeview</property>
-                            <property name="values">[]</property>
+                            <property name="values">[""]</property>
                             <property name="variable">string:default_series_downloads_path</property>
                             <layout manager="pack">
                               <property name="side">left</property>

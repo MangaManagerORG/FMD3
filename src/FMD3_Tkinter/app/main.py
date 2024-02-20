@@ -1,13 +1,13 @@
 import json
 import logging
 from pathlib import Path
-from tkinter import TclError
-from tkinter.ttk import Treeview
 
 from FMD3.sources.SearchResult import SearchResult
 from .baseui import BaseUI
 from .taskmanager import TaskManager
 from .. import api
+from . import widgets
+widgets.do_not_clear_import = None
 
 sources = api.get_sources()
 
@@ -35,6 +35,8 @@ class App(BaseUI):
 
         """Track variables to them callbacks"""
         self.var_series_search_entry.trace_add('write', self.on_series_search_entry_input)
+
+
 
     """
     Settings SaveTo
@@ -196,3 +198,12 @@ class App(BaseUI):
         else:
             # If no chapters show series has no chapters frame on top
             self.widget_series_chapter_nochapters_frame.lift()
+
+    """
+    On output library selected
+    """
+    def pre_settings_load_libs_from_treeview(self):
+        """
+        Fills the OptionMenu with the current loaded libraries
+        :return:
+        """

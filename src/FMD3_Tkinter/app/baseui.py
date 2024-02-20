@@ -40,6 +40,12 @@ class BaseUI:
         Variable definitions
         """
 
+        #Static variables
+        self.var_series_chapter_selection_action_menu = tk.StringVar(name="series_chapter_selection_action", value=None)
+        self.var_series_chapter_download_action_menu = tk.StringVar(name="series_chapter_download_action", value=None)
+        self.var_series_chapter_favourites_action_menu = tk.StringVar(name="series_chapter_favourites_action", value=None)
+
+
         # Variables used in settings_saveto
         self.var_settings_saveto_lib_path = tk.StringVar(name="var_settings_saveto_lib_path", value=None)
         self.var_settings_saveto_lib_alias = tk.StringVar(name="var_settings_saveto_lib_alias", value=None)
@@ -52,6 +58,10 @@ class BaseUI:
         self.var_series_saveto_final_path = tk.StringVar(name="var_series_saveto_final_path", value=None)
         builder.connect_callbacks(self)
         builder.import_variables(self)
+
+        self.var_series_chapter_selection_action_menu.set("Select")
+        self.var_series_chapter_download_action_menu.set("Download")
+        self.var_series_chapter_favourites_action_menu.set("Favourite")
 
     @staticmethod
     def change_appearance_mode_event(new_appearance_mode):
@@ -97,6 +107,42 @@ class BaseUI:
                               values=(chapter.get("volume"), chapter.get("number"), chapter.get("title")), tags=tags)
             except Exception as e:
                 logging.getLogger().error(f"Unhandled exception inserting one chapter: '{e} - {chapter.get('number')}  {chapter.get('title')}'")
+
+    def on_series_chapters_actionmenu(self, menu, value):
+        match menu:
+            case "Select":
+                self.on_series_chapters_actionmenu_select(value)
+            case "Download":
+                self.on_series_chapters_actionmenu_select(value)
+            case "Favourite":
+                self.on_series_chapters_actionmenu_favourite(value)
+
+    def on_series_chapters_actionmenu_select(self, value):
+        tree = self.builder.get_object("series_chapterlist_treeview")
+        if value == "None":
+            tree.uncheck_all()
+        if value == "All":
+            tree.check_all()
+
+    def on_series_chapters_actionmenu_download(self, action):
+        ...
+        # if value == "All":
+        #     return
+        #
+        # if value == "Selected":
+        #     self.builder.get_object("series_output_save_to_entry").configure(state="readonly")
+        #     chapters_treeview = self.builder.get_object("series_chapterlist_treeview")
+        #     to_download_ids = chapters_treeview.selection()
+        #     to_download_series = self.selected_series_id
+        #     self.builder.get_object("series_output_save_to_entry").configure(state="disabled")
+        #     self.builder.get_object("settings_def_series_lib_combo").configure(state="disabled")
+        #     api.download_chapters(self.selected_source_id, to_download_series, to_download_ids,
+        #                           output_path=self.builder.get_variable(
+        #                               "series_final_download_dest").get())  # Todo save to
+
+    def on_series_chapters_actionmenu_favourite(self, action):
+        ...
+
 
 """Helper functions"""
 

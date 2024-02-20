@@ -9,7 +9,6 @@ from .baseui import BaseUI
 from .taskmanager import TaskManager
 from .. import api
 
-
 sources = api.get_sources()
 
 
@@ -26,7 +25,6 @@ class App(BaseUI):
         self.settings_libraries = {}
         self.task_manager = TaskManager()
 
-
         """Dictionary storing the series object identified by the series id"""
         self.data_series_search_results: dict[str, SearchResult] = {}
 
@@ -37,7 +35,6 @@ class App(BaseUI):
 
         """Track variables to them callbacks"""
         self.var_series_search_entry.trace_add('write', self.on_series_search_entry_input)
-
 
     """
     Settings SaveTo
@@ -64,7 +61,6 @@ class App(BaseUI):
         path_var.set("")
         alias_var.set("")
 
-
     """
     #########################
     Series Tab implementation
@@ -74,7 +70,8 @@ class App(BaseUI):
     """
     On source selected
     """
-    def on_series_source_selected(self,*_):
+
+    def on_series_source_selected(self, *_):
         selected_value = self.var_series_selected_source_name.get()
         source = list(filter(lambda s: s.NAME == selected_value, sources))
         if not source:
@@ -101,7 +98,7 @@ class App(BaseUI):
     def cb__fetch_series_by_name(self, future):
         self.proc_update_search_list(future.result())
 
-    def proc_update_search_list(self, series_list:list[SearchResult]):
+    def proc_update_search_list(self, series_list: list[SearchResult]):
         self.widget_series_search_treeview.delete(*self.widget_series_search_treeview.get_children())
         self.search_delay = False
         logging.debug("updating search list")
@@ -119,7 +116,6 @@ class App(BaseUI):
         # widget_series_search_treeview:Treeview = self.widget_series_search_treeview
         # widget_series_search_treeview.selection_get()
 
-
         selected_series_id = event.widget.selection()[0]
         selected_series = self.data_series_search_results[selected_series_id]
 
@@ -128,7 +124,8 @@ class App(BaseUI):
             if series_id == self.last_search_selected_item:
                 return
         self.last_search_selected_item = series_id
-        self.task_manager.submit(api.get_series_info, self.cb__get_series_info_from_data, self.selected_source_id, series_id)
+        self.task_manager.submit(api.get_series_info, self.cb__get_series_info_from_data, self.selected_source_id,
+                                 series_id)
 
     def cb__get_series_info_from_data(self, future):
         self.mainwindow.after(0, self.proc_get_series_info_from_data, future.result())

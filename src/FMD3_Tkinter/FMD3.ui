@@ -31,7 +31,7 @@
                 </layout>
                 <child>
                   <object class="customtkinter.CTkOptionMenu" id="widget_series_source_optionmenu" named="True">
-                    <property name="command" type="command" cbtype="simple">on_series_source_selected</property>
+                    <property name="command" type="command" cbtype="simple">on_source_selected</property>
                     <property name="variable">string:var_series_selected_source_name</property>
                     <layout manager="pack">
                       <property name="fill">x</property>
@@ -293,10 +293,10 @@
                         </layout>
                         <child>
                           <object class="FMD3_Tkinter.CommandMenu" id="commandmenu1">
-                            <property name="command" type="command" cbtype="simple">series_on_menu_select</property>
+                            <property name="command" type="command" cbtype="simple">on_series_chapters_actionmenu</property>
                             <property name="state">readonly</property>
                             <property name="values">["All","None"]</property>
-                            <property name="variable">string:series_chapter_selection_action</property>
+                            <property name="variable">string:var_series_chapter_selection_action_menu</property>
                             <layout manager="pack">
                               <property name="anchor">center</property>
                               <property name="pady">2</property>
@@ -306,10 +306,10 @@
                         </child>
                         <child>
                           <object class="FMD3_Tkinter.CommandMenu" id="commandmenu2">
-                            <property name="command" type="command" cbtype="simple">series_on_menu_select</property>
+                            <property name="command" type="command" cbtype="simple">on_series_chapters_actionmenu</property>
                             <property name="state">readonly</property>
                             <property name="values">["Download Selected","Download All"]</property>
-                            <property name="variable">string:series_chapter_download_action</property>
+                            <property name="variable">string:var_series_chapter_download_action_menu</property>
                             <layout manager="pack">
                               <property name="pady">2</property>
                               <property name="side">top</property>
@@ -318,9 +318,9 @@
                         </child>
                         <child>
                           <object class="FMD3_Tkinter.CommandMenu" id="commandmenu3">
-                            <property name="command" type="command" cbtype="simple">series_on_menu_select</property>
+                            <property name="command" type="command" cbtype="simple">on_series_chapters_actionmenu</property>
                             <property name="values">["Add to fav", "Add to fav &amp; add to download queue"]</property>
-                            <property name="variable">string:series_chapter_favourites_action</property>
+                            <property name="variable">string:var_series_chapter_favourites_action_menu</property>
                             <layout manager="pack">
                               <property name="pady">2</property>
                               <property name="side">top</property>

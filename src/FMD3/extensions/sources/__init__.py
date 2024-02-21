@@ -11,7 +11,7 @@ import zipfile
 import requests
 
 from .ISource import ISource
-from ..constants import SOURCE_PATHS, EXTENSION_PATHS
+from FMD3.constants import SOURCE_PATHS, EXTENSION_PATHS
 
 """Module with methods related with extensions"""
 

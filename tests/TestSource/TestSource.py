@@ -1,7 +1,7 @@
 from FMD3.core.database import DLDChapters
 from FMD3.models.chapter import Chapter
 from FMD3.models.series_info import SeriesInfo
-from FMD3.sources import ISource
+from FMD3.extensions.sources import ISource
 
 test_data = {
     "series_a": {

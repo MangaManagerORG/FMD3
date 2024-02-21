@@ -6,7 +6,7 @@ from logging.handlers import RotatingFileHandler
 from FMD3.constants import LOGFILE_PATH
 from FMD3.core import database
 from FMD3.core.settings import Settings
-from FMD3.sources import get_source, load_sources
+from FMD3.extensions.sources import get_source, load_sources
 umpumped_events = []
 
 TRACE = 9

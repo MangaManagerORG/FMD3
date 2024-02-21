@@ -6,24 +6,20 @@
 #         return
 #     minutes = int(minutes)
 #     schedule.every(minutes).seconds.do(new_chapters_finder).run()
-import multiprocessing
-import os
-import threading
-import time
 import unittest
 from unittest.mock import MagicMock, patch
 
-import schedule
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, scoped_session
 
-from FMD3.core.database import Base, Series
+from FMD3.core.database import Base
 from FMD3.core.updater import new_chapters_finder, create_download_task
-from FMD3.sources import ISource, get_source
+from FMD3.extensions.sources import get_source
 from FMD3.core import updater, TaskManager
-from FMD3 import sources
+from FMD3.extensions import sources
 from tests.TestSource.TestSource import TestSource
-from FMD3.core import database, scheduler
+from FMD3.core import database
+
 sources.sources_factory = [TestSource()]
 
 database.engine = create_engine('sqlite:///', isolation_level="SERIALIZABLE")

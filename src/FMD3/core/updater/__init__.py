@@ -8,10 +8,10 @@ from FMD3.core.TaskManager import TaskManager
 from FMD3.core.database import Series, DLDChapters, Session, SeriesCache
 from FMD3.core.database.models import SeriesStatus
 from FMD3.models.ddl_chapter_status import DLDChaptersStatus
-from FMD3.core.database.predefined import chapter_exists, max_chapter_number
+from FMD3.core.database.predefined import max_chapter_number
 from FMD3.core.utils import make_output_path
 from FMD3.models.chapter import Chapter
-from FMD3.sources import get_sources_list, ISource, get_source_by_id
+from FMD3.extensions.sources import get_sources_list, ISource, get_source_by_id
 
 logger = logging.getLogger(__name__)
 

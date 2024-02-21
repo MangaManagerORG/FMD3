@@ -1,8 +1,8 @@
 from abc import abstractmethod
 from typing import Literal
 
-from FMD3.sources import ISource
-from FMD3.sources.SearchResult import SearchResult
+from FMD3.extensions.sources import ISource
+from FMD3.extensions.sources.SearchResult import SearchResult
 
 
 class ApiInterface:

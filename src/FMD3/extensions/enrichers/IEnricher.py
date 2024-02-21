@@ -1,0 +1,3 @@
+class IEnricher:
+    NAME:str
+

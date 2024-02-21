@@ -1,11 +1,9 @@
-import logging
-
 from FMD3.core import database as db
 from FMD3.core.database import Session
 from FMD3.core.settings import Settings
 from FMD3.core.settings import Keys
-from FMD3.sources import get_extension, load_sources, get_source
-from FMD3.sources.updater import check_source_updates
+from FMD3.extensions.sources import get_extension, get_source
+from FMD3.extensions.sources.updater import check_source_updates
 
 # load_sources()
 

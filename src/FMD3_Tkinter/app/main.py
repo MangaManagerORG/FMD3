@@ -1,9 +1,8 @@
 import json
 import logging
-import tkinter
 from pathlib import Path
 
-from FMD3.sources.SearchResult import SearchResult
+from FMD3.extensions.sources.SearchResult import SearchResult
 from .utils import get_sanitized_download
 
 from .baseui import BaseUI

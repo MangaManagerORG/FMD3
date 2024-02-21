@@ -107,8 +107,10 @@ class App(BaseUI):
         if not data:
             return
         series_id = data["id"]
-        self.selected_source_id = data.get("source_id")
-        self.selected_series_id = series_id
+        # todo: fill ource id from data
+        # self.var_series_selected_source.set(KeyPair("SavedSource",data.get("source_id")))
+        # self.selected_source_id = data.get("source_id")
+        # self.selected_series_id = series_id
         self.add_series_detail(data)
         # Clear chapter treeview
         self.widget_series_chapter_treeview.delete(*self.widget_series_chapter_treeview.get_children())

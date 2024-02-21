@@ -80,7 +80,6 @@ class BaseUI:
         builder.import_variables(self)
         # Variable used to store selected source
 
-
         self.var_series_chapter_selection_action_menu.set("Select")
         self.var_series_chapter_download_action_menu.set("Download")
         self.var_series_chapter_favourites_action_menu.set("Favourite")
@@ -117,9 +116,9 @@ class BaseUI:
         series_detail_widget.configure(state="disabled")
 
     def enable_series_saveto_inputs(self, value: bool):
-        self.builder.get_object("widget_series_saveto_lib_optionmenu").configure(
+        self.builder.get_object("widget_series_saveto_library_optionmenu").configure(
             state="normal" if value else "disabled")
-        self.builder.get_object("widget_series_saveto_series_folder_entry").configure(
+        self.builder.get_object("widget_series_saveto_seriesfolder_entry").configure(
             state="normal" if value else "disabled")
 
     def list_chapters_treeview(self,widget, chapter_list: list, tags: tuple[str]):

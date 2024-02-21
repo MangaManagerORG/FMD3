@@ -121,6 +121,7 @@ class App(BaseUI):
         if data.get("save_to", None) is not None:
             # Disable both inputs as there is already one saved in the db
             self.enable_series_saveto_inputs(False)
+            self.var_series_saveto_seriesfolder.set("")
             self.var_series_saveto_final_path.set(data.get("save_to"))
         else:
             parent = self.settings["Core"].get("default_download_path", "")["value"]
@@ -128,8 +129,10 @@ class App(BaseUI):
             author = None
             artist = None
             manga = data.get("title")
+
             sanitized_folder_name = api.get_series_folder_name(website=website, manga=manga, author=author,
                                                                artist=artist)
+            self.var_series_saveto_seriesfolder.set(sanitized_folder_name)
             final_path = Path(parent, sanitized_folder_name)
             self.enable_series_saveto_inputs(True)
             self.var_series_saveto_final_path.set(str(final_path))

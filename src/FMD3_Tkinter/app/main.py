@@ -1,12 +1,17 @@
 import json
 import logging
+import tkinter
 from pathlib import Path
 
 from FMD3.sources.SearchResult import SearchResult
+from .utils import get_sanitized_download
+
 from .baseui import BaseUI
 from .taskmanager import TaskManager
 from .. import api
 from . import widgets
+from .widgets.custom_tk_variables import KeyPair
+
 widgets.do_not_clear_import = None
 
 sources = api.get_sources()
@@ -18,11 +23,10 @@ class App(BaseUI):
         super().__init__()
 
         self.settings = {}
-        self.selected_source_id = None
-
         """Stores keypair values of libraries"""
         self.settings = json.loads(api.get_settings())
-        self.settings_libraries = {}
+        self.settings_saveto_libraries= {}
+        self.init_settings_saveto_libraries()
         self.task_manager = TaskManager()
 
         """Dictionary storing the series object identified by the series id"""
@@ -31,37 +35,10 @@ class App(BaseUI):
         self.last_search_selected_item = None  # Stores the last selected item to later check and not reload a loaded series on double click
 
         """Initialization of values"""
-        self.widget_series_source_optionmenu.configure(values=[s.NAME for s in sources])
 
         """Track variables to them callbacks"""
         self.var_series_search_entry.trace_add('write', self.on_series_search_entry_input)
-
-
-
-    """
-    Settings SaveTo
-    """
-
-    def on_settings_saveto_add_library(self):
-        # Get variables
-        path_var = self.var_settings_saveto_lib_path
-        alias_var = self.var_settings_saveto_lib_alias
-        path = path_var.get()
-        alias = alias_var.get()
-
-        # Update localdict
-        self.settings_libraries[alias] = path
-
-        # Fetch and insert lib in treeview
-        tree = self.builder.get_object("widget_settings_saveto_lib_treeview")
-        tree.insert('', 'end', path, values=(alias, path))
-
-        # Append to settings
-        self.settings["Core"].get("libraries_alias_paths_list")["value"].append({"alias": alias, "path": path})
-
-        # Clear entries
-        path_var.set("")
-        alias_var.set("")
+        self.var_series_saveto_seriesfolder.trace_add("write", self.on_series_saveto_seriesfolder_updated)
 
     """
     #########################
@@ -69,33 +46,27 @@ class App(BaseUI):
     #########################
     """
 
-    """
-    On source selected
-    """
+    def pre_series_sources_loaded_sources(self, *_):
+        # self.widget_series_source_optionmenu
+        sources_list = [KeyPair(s.NAME, s.ID)
+                        for s in sources]
+        self.widget_series_source_optionmenu.configure(values=sources_list)
 
-    def on_series_source_selected(self, *_):
-        selected_value = self.var_series_selected_source_name.get()
-        source = list(filter(lambda s: s.NAME == selected_value, sources))
-        if not source:
-            self.selected_source_id = None
-        else:
-            self.selected_source_id = source[0].ID
-            # selected_value = values[selected_index][1]  # Extract the second element of the tuple
+    @property
+    def selected_source_id(self):
+        return self.var_series_selected_source.get().value
+
 
     """
     Series search implementation
     """
 
     def on_series_search_entry_input(self, *_):
-        value = self.var_series_search_entry.get()
-        if not value or len(value) <= 2:
+        if self.selected_source_id is None:
             return
-
-        ext = self.selected_source_id
-        if not ext:
+        if len(value := self.var_series_search_entry.get()) <= 2:
             return
-        source_id = self.selected_source_id
-        self.task_manager.submit(api.query_series, self.cb__fetch_series_by_name, source_id, value)
+        self.task_manager.submit(api.query_series, self.cb__fetch_series_by_name, self.selected_source_id, value)
 
     def cb__fetch_series_by_name(self, future):
         self.proc_update_search_list(future.result())
@@ -202,8 +173,155 @@ class App(BaseUI):
     """
     On output library selected
     """
-    def pre_settings_load_libs_from_treeview(self):
+
+    def pre_series_saveto_library_selected(self,*_):
         """
         Fills the OptionMenu with the current loaded libraries
         :return:
         """
+        widget = self.widget_series_saveto_library_optionmenu
+        libs = []
+        for id_ in self.settings_saveto_libraries:
+            libs.append(KeyPair(self.settings_saveto_libraries[id_]["alias"], str(id_)))
+
+        widget.configure(values=libs)
+
+    def on_series_saveto_library_selected(self,*args):
+        self.cb__update_series_saveto_final_path()
+
+    def on_series_saveto_seriesfolder_updated(self,*args):
+        self.cb__update_series_saveto_final_path()
+    def cb__update_series_saveto_final_path(self,*_,data=None):
+
+        if data:
+            folder_name = data.get("title")
+            self.var_series_saveto_library.set(folder_name)
+        else:
+            folder_name = self.var_series_saveto_seriesfolder.get()
+
+        # todo fetch def library from settings
+        # lib_path = self.settings_libraries.get(self.default_series_downloads_path.get(), '.')
+        keypair = self.var_series_saveto_library.get()
+        if keypair.is_label() is False:
+            lib_path = self.settings_saveto_libraries[int(keypair.value)]["path"]
+        else:
+            lib_path = "."
+
+
+        series_path_or_modifie = folder_name
+
+        sanitized_download_lib_path = get_sanitized_download(lib_path, manga=series_path_or_modifie)
+        if data:
+            if data.get("save_to", None) is not None:
+                self.widget_series_saveto_seriesfolder_entry.configure(state="disabled")
+                self.widget_series_saveto_library_optionmenu.configure(state="disabled")
+                self.var_series_saveto_final_path.set(data.get("save_to"))
+                # self.series_destination_path.set(data.get("save_to"))
+                return
+        self.widget_series_saveto_seriesfolder_entry.configure(state="normal")
+        self.widget_series_saveto_library_optionmenu.configure(state="readonly")
+        self.var_series_saveto_final_path.set(str(sanitized_download_lib_path.resolve()))
+
+
+    """
+    #########################
+    SETTINGS TAB IMPLEMENTATION
+    #########################
+    """
+
+    """
+    CUSTOM LIBRARIES
+    """
+
+    def init_settings_saveto_libraries(self):
+        # I'll be saving these settings in the UI category. I don't feel they fit in the core section as all this
+        # custom lib thingy is a helper for users to comfortably choose where to download
+        if self.settings.get("UI", None) is None:
+            self.settings["UI"] = {
+                "user_libraries": {
+                    "key": "user_libraries",
+                    "name": "User defined libraries",
+                    "value": [],
+                    "type": 1,
+                    "tooltip": "",
+                    "def_value": [],
+                }
+            }
+        items = []
+        for library in self.settings["UI"].get("user_libraries", )["value"]:
+            id_ = id(library)
+            self.settings_saveto_libraries[id_] = {"alias":library["alias"], "path":library["path"]}
+            # items.append(KeyPair(library["alias"], id_))
+            self.widget_settings_saveto_libraries_treeview.insert('', 'end', id_, values=(library["alias"], library["path"]))
+
+
+
+        # self.settings["UI"]["user_libraries"] = {
+        #     "key": "user_libraries",
+        #     "name": "User defined libraries",
+        #     "value": [],
+        #     "type": 1,
+        #     "tooltip": "",
+        #     "def_value": [],
+        #     "values": []
+        # }
+
+    """
+    Settings SaveTo
+    """
+
+    def on_settings_saveto_libraries_add_library(self, *_):
+        # Get variables
+        path_var = self.var_settings_saveto_lib_path
+        alias_var = self.var_settings_saveto_lib_alias
+
+        path = path_var.get()
+        alias = alias_var.get()
+        if path is None or alias is None:
+            return
+        lib = {"alias": alias, "path": path}
+
+
+        filter_alias = [id_ for id_ in self.settings_saveto_libraries if alias == self.settings_saveto_libraries[id_]["alias"]]
+
+        tree = self.builder.get_object("widget_settings_saveto_libraries_treeview")
+
+        if filter_alias:
+            id_ = filter_alias[0]
+            tree.item(str(id_), values=(alias, path))
+        else:
+            id_ = id(lib)
+            tree.insert('', 'end', str(id_), values=(alias, path))
+        # Append to loaded lib
+        self.settings_saveto_libraries[id_] = lib
+        # Fetch and insert lib in treeview
+
+        # Append to settings
+        self.settings["UI"]["user_libraries"]["value"].append({"alias": alias, "path": path})
+
+        # Clear entries
+        path_var.set("")
+        alias_var.set("")
+
+    def settings_saveto_libraries_default_optionmenu(self, keypair):
+        """
+        Called when the user changes default download library. Updates def download path in settings
+        :param _:
+        :return:
+        """
+        new_path = self.settings_saveto_libraries[int(keypair.value)]["path"]
+        self.settings["Core"]["default_download_path"]["value"] = new_path
+
+        # TODO: Add call to update settings
+
+    def pre_settings_saveto_libraries_default_optionmenu(self, *_):
+        """
+        Fills the optionmenu widget with values from user libraries
+        :return:
+        """
+        widget = self.widget_settings_saveto_libraries_default_optionmenu
+        libs = []
+        for id_ in self.settings_saveto_libraries:
+            libs.append(KeyPair(self.settings_saveto_libraries[id_]["alias"], str(id_)))
+
+        widget.configure(values=libs)

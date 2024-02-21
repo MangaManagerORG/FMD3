@@ -30,9 +30,9 @@
                   <property name="sticky">ns</property>
                 </layout>
                 <child>
-                  <object class="customtkinter.CTkOptionMenu" id="widget_series_source_optionmenu" named="True">
+                  <object class="customtkinter.FMD3_Tkinter.OptionMenu" id="widget_series_source_optionmenu" named="True">
                     <property name="command" type="command" cbtype="simple">on_series_source_selected</property>
-                    <property name="variable">string:var_series_selected_source_name</property>
+                    <property name="postcommand" type="command" cbtype="simple">pre_series_sources_loaded_sources</property>
                     <layout manager="pack">
                       <property name="fill">x</property>
                       <property name="side">top</property>
@@ -346,19 +346,17 @@
                           <property name="side">top</property>
                         </layout>
                         <child>
-                          <object class="customtkinter.FMD3_Tkinter.OptionMenu" id="widget_series_saveto_lib_optionmenu" named="True">
-                            <property name="command" type="command" cbtype="simple">settings_load_libs_from_treeview</property>
-                            <property name="postcommand" type="command" cbtype="simple">pre_settings_load_libs_from_treeview</property>
-                            <property name="values">[""]</property>
-                            <property name="variable">string:default_series_downloads_path</property>
+                          <object class="customtkinter.FMD3_Tkinter.OptionMenu" id="widget_series_saveto_library_optionmenu" named="True">
+                            <property name="command" type="command" cbtype="simple">on_series_saveto_library_selected</property>
+                            <property name="postcommand" type="command" cbtype="simple">pre_series_saveto_library_selected</property>
                             <layout manager="pack">
                               <property name="side">left</property>
                             </layout>
                           </object>
                         </child>
                         <child>
-                          <object class="customtkinter.CTkEntry" id="widget_series_saveto_series_folder_entry" named="True">
-                            <property name="textvariable">string:series_destination_path</property>
+                          <object class="customtkinter.CTkEntry" id="widget_series_saveto_seriesfolder_entry" named="True">
+                            <property name="textvariable">string:var_series_saveto_seriesfolder</property>
                             <layout manager="pack">
                               <property name="fill">x</property>
                               <property name="side">top</property>
@@ -449,7 +447,7 @@
                             </child>
                             <child>
                               <object class="customtkinter.CTkButton" id="settings_sources_search_url_button" named="True">
-                                <property name="command" type="command" cbtype="simple">on_settings_saveto_add_library</property>
+                                <property name="command" type="command" cbtype="simple">on_settings_saveto_libraries_add_library</property>
                                 <property name="text" translatable="yes">Add library</property>
                                 <layout manager="pack">
                                   <property name="anchor">e</property>
@@ -460,7 +458,7 @@
                           </object>
                         </child>
                         <child>
-                          <object class="ttk.Treeview" id="widget_settings_saveto_lib_treeview" named="True">
+                          <object class="ttk.Treeview" id="widget_settings_saveto_libraries_treeview" named="True">
                             <property name="height">3</property>
                             <property name="selectmode">extended</property>
                             <property name="show">headings</property>
@@ -513,12 +511,21 @@
                           </object>
                         </child>
                         <child>
-                          <object class="customtkinter.CTkComboBox" id="ctkcombobox2">
-                            <property name="state">readonly</property>
-                            <property name="variable">string:default_downloads_path</property>
+                          <object class="customtkinter.CTkLabel" id="ctklabel7">
+                            <property name="text" translatable="yes">Default download library</property>
                             <layout manager="pack">
-                              <property name="fill">x</property>
-                              <property name="pady">10</property>
+                              <property name="anchor">w</property>
+                              <property name="side">top</property>
+                            </layout>
+                          </object>
+                        </child>
+                        <child>
+                          <object class="customtkinter.FMD3_Tkinter.OptionMenu" id="widget_settings_saveto_libraries_default_optionmenu" named="True">
+                            <property name="command" type="command" cbtype="simple">settings_saveto_libraries_default_optionmenu</property>
+                            <property name="postcommand" type="command" cbtype="simple">pre_settings_saveto_libraries_default_optionmenu</property>
+                            <property name="width">350</property>
+                            <layout manager="pack">
+                              <property name="anchor">w</property>
                               <property name="side">top</property>
                             </layout>
                           </object>

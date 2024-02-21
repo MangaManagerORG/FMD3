@@ -8,11 +8,14 @@ from tkinter import END
 import pygubu
 
 import customtkinter
+
+from .widgets.custom_tk_variables import KeyPairVar, KeyPair
 from .styles import setup_ttk_styles
 from . import widgets
 
 PROJECT_PATH = pathlib.Path(__file__).parent.parent
 PROJECT_UI = PROJECT_PATH / "FMD3.ui"
+
 
 
 class BaseUI:
@@ -28,14 +31,29 @@ class BaseUI:
         """
         Widgets definitions
         """
-
         self.widget_series_source_optionmenu = self.builder.get_object("widget_series_source_optionmenu")
         self.widget_series_search_treeview = self.builder.get_object("widget_series_search_treeview")
         self.widget_series_cover = self.builder.get_object("widget_series_cover")
         self.widget_series_chapter_treeview = self.builder.get_object("widget_series_chapter_treeview")
         self.widget_series_chapter_nochapters_frame = self.builder.get_object("widget_series_chapter_nochapters_frame")
+        self.widget_series_saveto_library_optionmenu = self.builder.get_object("widget_series_saveto_library_optionmenu")
+        self.widget_series_saveto_seriesfolder_entry = self.builder.get_object("widget_series_saveto_seriesfolder_entry")
+        # Settings
+        self.widget_settings_saveto_libraries_treeview = self.builder.get_object("widget_settings_saveto_libraries_treeview")
 
+        self.widget_settings_saveto_libraries_default_optionmenu = self.builder.get_object("widget_settings_saveto_libraries_default_optionmenu")
 
+        """
+        Custom variable definition and track to widget
+        """
+        self.var_series_selected_source = KeyPairVar(name="series_selected_source", value=KeyPair("Select Source",None,True))
+        self.widget_series_source_optionmenu.configure(variable=self.var_series_selected_source)
+
+        self.var_series_saveto_library = KeyPairVar(name="series_saveto_library", value=KeyPair("No library selected",None,True))
+        self.widget_series_saveto_library_optionmenu.configure(variable=self.var_series_saveto_library)
+
+        self.var_settings_saveto_lib_default = KeyPairVar(name="var_settings_saveto_lib_default", value=KeyPair("Select default download library",True))
+        self.widget_settings_saveto_libraries_default_optionmenu.configure(variable=self.var_settings_saveto_lib_default)
         """
         Variable definitions
         """
@@ -45,19 +63,23 @@ class BaseUI:
         self.var_series_chapter_download_action_menu = tk.StringVar(name="series_chapter_download_action", value=None)
         self.var_series_chapter_favourites_action_menu = tk.StringVar(name="series_chapter_favourites_action", value=None)
 
-
         # Variables used in settings_saveto
-        self.var_settings_saveto_lib_path = tk.StringVar(name="var_settings_saveto_lib_path", value=None)
         self.var_settings_saveto_lib_alias = tk.StringVar(name="var_settings_saveto_lib_alias", value=None)
+        self.var_settings_saveto_lib_path = tk.StringVar(name="var_settings_saveto_lib_path", value=None)
+        self.var_settings_saveto_lib_default = tk.Variable(name="var_settings_saveto_lib_default", value=None)
+
 
         # Variables used for series search
-        self.var_series_selected_source_name = tk.StringVar(name="var_series_selected_source",value=None)
         self.var_series_search_entry = tk.StringVar(name="var_series_search_entry",value=None)
 
         # Variables used in series_saveto
         self.var_series_saveto_final_path = tk.StringVar(name="var_series_saveto_final_path", value=None)
+        self.var_series_saveto_seriesfolder = tk.StringVar(name="var_series_saveto_seriesfolder", value=None)
+
         builder.connect_callbacks(self)
         builder.import_variables(self)
+        # Variable used to store selected source
+
 
         self.var_series_chapter_selection_action_menu.set("Select")
         self.var_series_chapter_download_action_menu.set("Download")

@@ -5,7 +5,6 @@ from . import SettingKeys, SettingControl, SettingType
 
 class Keys(SettingKeys):
     LIBRARY_PATH = "default_downloads_path"
-    LIBRARIES_LIST = "libraries_alias_paths_list"
     LANGUAGE = "language"
     ACTION_AFTER_DOWNLOAD = "action_after_download"
     NEW_MANGA_BASED_ON_UPDATE_TIME = "new_manga_based_on_its_update_time"
@@ -123,12 +122,6 @@ default_settings = [
         name="",
         def_value=3,
         type_=SettingType.Number
-    ),
-    SettingControl.create(
-        key=Keys.LIBRARIES_LIST,
-        name="Libraries_list",
-        def_value=[],
-        type_=SettingType.STR_ARRAY
     )
-
 ]
+

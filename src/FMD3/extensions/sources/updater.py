@@ -17,7 +17,7 @@ def check_source_updates():
             "version": version.parse(source.VERSION),
         }
 
-    r = requests.get("https://raw.githubusercontent.com/MangaManagerORG/FMD3-Extensions/repo/sources.json")
+    r = requests.get("https://raw.githubusercontent.com/MangaManagerORG/FMD3-Extensions/repo/extensions.json")
     available_sources = r.json()
 
     for source in installed_sources:

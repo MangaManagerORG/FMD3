@@ -32,7 +32,7 @@ def get_source_from_url(url: str) -> str:
 
 
 def get_available_sources():
-    return requests.get("https://raw.githubusercontent.com/MangaManagerORG/FMD3-Extensions/repo/sources.json").json()
+    return requests.get("https://raw.githubusercontent.com/MangaManagerORG/FMD3-Extensions/repo/extensions.json").json()
 
 
 def update_source(source_id):

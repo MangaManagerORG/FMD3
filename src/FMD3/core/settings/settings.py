@@ -13,6 +13,9 @@ class Settings:
     _settings_dict = {}
     __instance = None
 
+    def get_setting_dict_or_extension(self,extension):
+        return self._settings_dict if extension is None else self._settings_dict[extension]
+
     def __new__(cls):
         if Settings.__instance is None:
             Settings.__instance = object.__new__(cls)
@@ -27,35 +30,37 @@ class Settings:
 
         return Settings.__instance
 
-    def check_section_or_create(self, section):
-        if self._settings_dict.get(section, None) is None:
-            self._settings_dict[section] = {}
+    def check_section_or_create(self, section, extension=None):
+        d = self._settings_dict if extension is None else self._settings_dict[extension]
+        if d.get(section, None) is None:
+            (self._settings_dict if extension is None else self._settings_dict[extension])[section] = {}
 
-    def add_control(self, section, control: SettingControl):
-        self.check_section_or_create(section)
-        if self._settings_dict[section].get(control.key.value, None) is None:
-            self._settings_dict[section][control.key.value] = control.to_dict()
+    def add_control(self, section, control: SettingControl, extension=None):
+        self.check_section_or_create(section,extension)
+        if self.get_setting_dict_or_extension(extension)[section].get(control.key.value, None) is None:
+            (self._settings_dict if extension is None else self._settings_dict[extension])[section][control.key.value] = control.to_dict()
 
-    def check_key(self, section, key):
-        if not isinstance(key,str):
+    def check_key(self, section, key, extension=None):
+        if not isinstance(key, str):
             key = key.value
-        if self._settings_dict[section].get(key, None) is None:
-            raise Exception(f"Setting key not found '{section}.{key}'")
+        if self.get_setting_dict_or_extension(extension)[section].get(key,
+                                                                                                       None) is None:
+            raise Exception(f"Setting key not found {extension} '{section}.{key}'")
 
     def check_section(self, section):
         if self._settings_dict.get(section, None) is None:
             raise Exception(f"Setting section not found '{section}'")
 
-    def set_value(self, section: str, key: SettingKeys, value):
-        self.check_section_or_create(section)
-        self._settings_dict[section][key.value]["value"] = value
+    def set_value(self, section: str, key: SettingKeys, value, extension=None):
+        self.check_section_or_create(section, extension)
+        (self._settings_dict[section] if extension is None else self._settings_dict[extension][section])[key.value]["value"] = value
 
-    def get_value(self, section, key):
-        self.check_section(section)
-        self.check_key(section, key)
-
-        return self._settings_dict[section][key.value].get("value",
-                                                           self._settings_dict[section][key.value].get("def_value", None))
+    def get_value(self, section, key, extension=None):
+        if self.get_setting_dict_or_extension(extension).get(section, None) is None:
+            self.check_key(section, key, extension)
+        return self.get_setting_dict_or_extension(extension)[section][
+            key.value].get("value",
+                           self._settings_dict[section][key.value].get("def_value", None))
 
     def set(self, key: SettingKeys, value):
         """
@@ -88,18 +93,13 @@ class Settings:
             # print(f.readlines())
             self._settings_dict = json.load(f)
 
-    def load_defaults(self, section: str, default_controls: list[SettingControl]):
+    def load_defaults(self, section: str, default_controls: list[SettingControl], extension=None):
         for control in default_controls:
-            if control.key.value not in self._settings_dict:
-                self.add_control(section, control)
-
+            if control.key.value not in self.get_setting_dict_or_extension(extension):
+                self.add_control(section, control, extension)
 
     def update(self, new_dict):
-        for section in new_dict:
-            self.check_section(section)
-            for key in new_dict[section]:
-                self.check_key(section,key)
-                self._settings_dict[section][key]["value"] = new_dict[section][key]["value"]
+        self._settings_dict = new_dict
         self.save()
 
     def to_json(self):

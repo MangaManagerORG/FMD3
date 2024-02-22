@@ -1037,6 +1037,7 @@ Selected</property>
             </child>
             <child>
               <object class="customtkinter.CTkButton" id="ctkbutton3">
+                <property name="command" type="command" cbtype="simple">on_settings_save_pressed</property>
                 <property name="text" translatable="yes">Save Settings</property>
                 <layout manager="pack">
                   <property name="side">bottom</property>

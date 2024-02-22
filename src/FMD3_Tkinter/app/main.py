@@ -87,9 +87,10 @@ class App(BaseUI):
     def on_series_search_item_selected(self, event):
         # widget_series_search_treeview:Treeview = self.widget_series_search_treeview
         # widget_series_search_treeview.selection_get()
-
-        selected_series_id = event.widget.selection()[0]
-        selected_series = self.data_series_search_results[selected_series_id]
+        selected_series_id = event.widget.selection()
+        if not selected_series_id:
+            return
+        selected_series = self.data_series_search_results[selected_series_id[0]]
 
         series_id = selected_series.series_id
         if self.last_search_selected_item:
@@ -329,3 +330,15 @@ class App(BaseUI):
             libs.append(KeyPair(self.settings_saveto_libraries[id_]["alias"], str(id_)))
 
         widget.configure(values=libs)
+
+    """
+    Save settings
+    """
+
+    def on_settings_save_pressed(self,*_):
+        api.update_settings(json.dumps(self.settings))
+
+
+
+
+

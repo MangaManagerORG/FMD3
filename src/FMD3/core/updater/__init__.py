@@ -98,7 +98,7 @@ def scan_new_chapters():
         # get all series in favourites that are from this extension
         s = Session()
         logger.debug(f"Found source: {source.NAME}")
-        series_list: list[Series] = s.query(Series).filter_by(source_id=source.ID,favourited=True,enabled=True).filter(Series.status != SeriesStatus.FULLY_DOWNLOADED.value).all()
+        series_list: list[Series] = s.query(Series).filter_by(source_id=source.ID,favourited=True,enabled=True).filter(Series.status is not SeriesStatus.FULLY_DOWNLOADED.value).all()
         for series in series_list:
             if series.datelastchecked:
                 if series.datelastchecked + timedelta(hours=23) > datetime.now():

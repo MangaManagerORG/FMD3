@@ -25,15 +25,14 @@ def import_and_register_source(module_info: pkgutil.ModuleInfo):
     sys.path.append(str(EXTENSION_PATHS.resolve()))
 
     module_name = module_info.name  # Assuming this is the module name you want to import
-    module_path = f"sources.{module_name}"
+    module_path = f"sources.{module_name}.{module_name}"
 
     try:
         importlib.invalidate_caches()
         module = importlib.import_module(module_path, package="sources")
+        module.load_source()
 
         # Now you can access the Source variable from the imported module
-        Source = module.Source
-        sources_factory.append(module.Source())
         logger.info(f"Source module '{module_info.name}' imported and registered successfully.")
     except ImportError as e:
         logger.exception(f"Error importing source module '{module_info.name}': {e}")

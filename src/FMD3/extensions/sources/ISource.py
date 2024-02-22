@@ -31,11 +31,11 @@ class ISource:
 
     @final
     def get_setting(self, setting_key):
-        return Settings().get_value(self.NAME, setting_key)
+        return Settings().get_value(self.NAME, setting_key,extension="sources")
 
     @final
     def set_setting(self, setting_key, value):
-        return Settings().set_value(self.NAME, setting_key, value)
+        return Settings().set_value(self.NAME, setting_key, value, extension="sources")
 
     @final
     def __init__(self):
@@ -46,7 +46,7 @@ class ISource:
         self.settings: list[SettingControl] | None = []
         self.init_settings()
 
-        Settings().load_defaults(self.NAME, self.settings)
+        Settings().load_defaults(self.NAME, self.settings,extension="sources")
 
     @property
     def session(self):

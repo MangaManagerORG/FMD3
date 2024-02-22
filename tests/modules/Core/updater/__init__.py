@@ -43,6 +43,7 @@ class TestScanHangingTasks(unittest.TestCase):
 class TestScanNewChapters(unittest.TestCase):
     @patch("FMD3.core.updater.Session", new_callable=make_session)
     def test_scan_new_chapters(self, mock_session, mock_create_download_task: MagicMock, *_):
+
         # Create and add series
         source = TestSource()
         s = Series()
@@ -50,6 +51,7 @@ class TestScanNewChapters(unittest.TestCase):
         s.series_id = "series_a"
         s.source_id = source.ID
         s.enabled = True
+        s.favourited = True
         mock_session().add(s)
         mock_session().commit()
 
@@ -80,27 +82,31 @@ class TestCreateDownloadTask(unittest.TestCase):
 
 @patch("FMD3.core.updater.get_sources_list", return_value=[TestSource()])
 @patch("FMD3.core.updater.Session", new_callable=make_session)
-@patch("FMD3.core.updater.TaskManager.submit_series_chapter")
+@patch("FMD3.core.updater.TaskManager")
 class TestNewChapterFinder(unittest.TestCase):
-
-    def test_new_chapters_finder(self, mock_submit_series_chapter: MagicMock, mock_session, *_):
+    @patch("FMD3.core.updater.create_download_task")
+    def test_new_chapters_finder(self,mock_download_task, mock_task_mngr: MagicMock, mock_session, *_):
+        mock_task_mngr().submit_series_chapter = MagicMock()
         source = TestSource()
         s = Series()
         s.title = "Series A"
         s.series_id = "series_a"
         s.source_id = source.ID
         s.enabled = True
+        s.favourited = True
         s.save_to = "Series a Folder"
         mock_session().add(s)
         mock_session().commit()
         # ch_list = [source._debug_get_chapter(s.series_id, "sAcha_1"), source._debug_get_chapter(s.series_id, "sAcha_2")]
 
         new_chapters_finder()
-        mock_submit_series_chapter.assert_called()
+        # mock_download_task
+        mock_download_task.assert_called()
+        # mock_task_mngr().submit_series_chapter.assert_called()
     @patch("FMD3.core.updater.create_download_task")
     @patch("FMD3.core.updater.max_chapter_number",return_value=1)
     @patch("FMD3.core.updater.__no_new_chapters")
-    def test_new_chapters_finder_should_have_no_more_chapters(self,mock_no_new_chapters:MagicMock,mock_max_ch_num, mock_create_download_task:MagicMock ,mock_submit_series_chapter: MagicMock, mock_session, *_):
+    def test_new_chapters_finder_should_have_no_more_chapters(self, mock_no_new_chapters: MagicMock, mock_max_ch_num, mock_create_download_task:MagicMock ,mock_submit_series_chapter: MagicMock, mock_session, *_):
         source = TestSource()
         s = Series()
         s.title = "Series B"

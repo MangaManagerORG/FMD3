@@ -14,7 +14,7 @@ class Settings:
     __instance = None
 
     def get_setting_dict_or_extension(self,extension):
-        return self._settings_dict if extension is None else self._settings_dict[extension]
+        return self._settings_dict if extension is None else self._settings_dict.get(extension,{})
 
     def __new__(cls):
         if Settings.__instance is None:
@@ -31,7 +31,9 @@ class Settings:
         return Settings.__instance
 
     def check_section_or_create(self, section, extension=None):
-        d = self._settings_dict if extension is None else self._settings_dict[extension]
+        d = self._settings_dict if extension is None else self._settings_dict.get(extension,None)
+        if d is None:
+            d = self._settings_dict[extension] = {}
         if d.get(section, None) is None:
             (self._settings_dict if extension is None else self._settings_dict[extension])[section] = {}
 
@@ -60,7 +62,7 @@ class Settings:
             self.check_key(section, key, extension)
         return self.get_setting_dict_or_extension(extension)[section][
             key.value].get("value",
-                           self._settings_dict[section][key.value].get("def_value", None))
+                           self.get_setting_dict_or_extension(extension)[section][key.value].get("def_value", None))
 
     def set(self, key: SettingKeys, value):
         """

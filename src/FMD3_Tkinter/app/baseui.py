@@ -139,7 +139,7 @@ class BaseUI:
                 self.on_series_chapters_actionmenu_favourite(value)
 
     def on_series_chapters_actionmenu_select(self, value):
-        tree = self.builder.get_object("series_chapterlist_treeview")
+        tree = self.widget_series_chapter_treeview
         if value == "None":
             tree.uncheck_all()
         if value == "All":

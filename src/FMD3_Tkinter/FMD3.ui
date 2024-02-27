@@ -532,6 +532,7 @@
                         </child>
                         <child>
                           <object class="customtkinter.CTkSwitch" id="ctkswitch1">
+                            <property name="state">disabled</property>
                             <property name="text" translatable="yes">Replace unicode characters</property>
                             <layout manager="pack">
                               <property name="anchor">w</property>
@@ -574,6 +575,7 @@
                                 </child>
                                 <child>
                                   <object class="customtkinter.CTkEntry" id="ctkentry8">
+                                    <property name="state">disabled</property>
                                     <property name="text" translatable="yes">ctkentry8</property>
                                     <layout manager="pack">
                                       <property name="side">left</property>
@@ -586,7 +588,9 @@
                         </child>
                         <child>
                           <object class="customtkinter.CTkSwitch" id="ctkswitch2">
+                            <property name="state">disabled</property>
                             <property name="text" translatable="yes">Auto generate folder based on manga name</property>
+                            <property name="variable">boolean:var_settings_saveto_dogenerate_manga_folder</property>
                             <layout manager="pack">
                               <property name="anchor">w</property>
                               <property name="pady">20 0</property>
@@ -628,7 +632,9 @@
                                 </child>
                                 <child>
                                   <object class="customtkinter.CTkEntry" id="ctkentry9">
+                                    <property name="state">normal</property>
                                     <property name="text" translatable="yes">ctkentry9</property>
+                                    <property name="textvariable">string:var_settings_saveto_mangafolder_name</property>
                                     <property name="width">650</property>
                                     <layout manager="pack">
                                       <property name="anchor">w</property>
@@ -652,7 +658,9 @@
                         </child>
                         <child>
                           <object class="customtkinter.CTkEntry" id="ctkentry11">
+                            <property name="state">normal</property>
                             <property name="text" translatable="yes">ctkentry11</property>
+                            <property name="textvariable">string:var_settings_saveto_chapter_name</property>
                             <property name="width">650</property>
                             <layout manager="pack">
                               <property name="anchor">w</property>
@@ -695,7 +703,7 @@
                                 </layout>
                                 <child>
                                   <object class="customtkinter.CTkSwitch" id="ctkswitch4">
-                                    <property name="state">normal</property>
+                                    <property name="state">disabled</property>
                                     <property name="text" translatable="yes">Volume</property>
                                     <layout manager="pack">
                                       <property name="side">top</property>
@@ -704,6 +712,7 @@
                                 </child>
                                 <child>
                                   <object class="customtkinter.CTkEntry" id="ctkentry12">
+                                    <property name="state">disabled</property>
                                     <property name="text" translatable="yes">ctkentry12</property>
                                     <layout manager="pack">
                                       <property name="side">top</property>
@@ -712,6 +721,7 @@
                                 </child>
                                 <child>
                                   <object class="customtkinter.CTkSwitch" id="ctkswitch5">
+                                    <property name="state">disabled</property>
                                     <property name="text" translatable="yes">Volume</property>
                                     <layout manager="pack">
                                       <property name="side">top</property>
@@ -720,6 +730,7 @@
                                 </child>
                                 <child>
                                   <object class="customtkinter.CTkEntry" id="ctkentry13">
+                                    <property name="state">disabled</property>
                                     <property name="text" translatable="yes">ctkentry13</property>
                                     <layout manager="pack">
                                       <property name="side">top</property>

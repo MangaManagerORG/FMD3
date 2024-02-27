@@ -75,8 +75,9 @@ class BaseUI:
         self.var_settings_saveto_lib_alias = tk.StringVar(name="var_settings_saveto_lib_alias", value=None)
         self.var_settings_saveto_lib_path = tk.StringVar(name="var_settings_saveto_lib_path", value=None)
         self.var_settings_saveto_lib_default = tk.Variable(name="var_settings_saveto_lib_default", value=None)
-
-
+        self.var_settings_saveto_mangafolder_name = tk.StringVar(name="var_settings_saveto_mangafolder_name", value=None)
+        self.var_settings_saveto_chapter_name = tk.StringVar(name="var_settings_saveto_chapter_name", value=None)
+        self.var_settings_saveto_dogenerate_manga_folder = tk.Variable()
         # Variables used for series search
         self.var_series_search_entry = tk.StringVar(name="var_series_search_entry",value=None)
 

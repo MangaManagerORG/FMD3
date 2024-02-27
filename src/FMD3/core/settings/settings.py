@@ -60,8 +60,7 @@ class Settings:
     def get_value(self, section, key, extension=None):
         if self.get_setting_dict_or_extension(extension).get(section, None) is None:
             self.check_key(section, key, extension)
-        return self.get_setting_dict_or_extension(extension)[section][
-            key.value].get("value",
+        return self.get_setting_dict_or_extension(extension)[section][key.value].get("value",
                            self.get_setting_dict_or_extension(extension)[section][key.value].get("def_value", None))
 
     def set(self, key: SettingKeys, value):

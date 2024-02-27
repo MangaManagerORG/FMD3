@@ -175,7 +175,7 @@ class App(BaseUI):
             # Disable both inputs as there is already one saved in the db
             self.enable_series_saveto_inputs(False)
             self.var_series_saveto_seriesfolder.set("")
-            self.var_series_saveto_final_path.set(data.get("save_to"))
+            self.var_series_saveto_final_path.set(Path(data.get("save_to")).resolve())
         else:
             parent = self.settings["Core"].get("default_download_path", "")["value"]
             website = None
@@ -186,7 +186,7 @@ class App(BaseUI):
             sanitized_folder_name = api.get_series_folder_name(website=website, manga=manga, author=author,
                                                                artist=artist)
             self.var_series_saveto_seriesfolder.set(sanitized_folder_name)
-            final_path = Path(parent, sanitized_folder_name)
+            final_path = Path(parent, sanitized_folder_name).resolve()
             self.enable_series_saveto_inputs(True)
             self.var_series_saveto_final_path.set(str(final_path))
 
@@ -262,13 +262,13 @@ class App(BaseUI):
         # lib_path = self.settings_libraries.get(self.default_series_downloads_path.get(), '.')
         keypair = self.var_series_saveto_library.get()
         if keypair.is_label() is False:
-            lib_path = self.settings_saveto_libraries[int(keypair.value)]["path"]
+            lib_path = Path(self.settings_saveto_libraries[int(keypair.value)]["path"]).resolve()
         else:
-            lib_path = "."
+            lib_path = Path(".").resolve()
 
         series_path_or_modifie = folder_name
 
-        sanitized_download_lib_path = get_sanitized_download(lib_path, manga=series_path_or_modifie)
+        sanitized_download_lib_path = Path(lib_path,series_path_or_modifie)
         if data:
             if data.get("save_to", None) is not None:
                 self.widget_series_saveto_seriesfolder_entry.configure(state="disabled")
@@ -339,18 +339,19 @@ class App(BaseUI):
 
         # Load default download library
 
-        default_lib = self.settings["UI"].get("user_libraries",None)["value"]
-        id_ = id(default_lib)
-        self.settings_saveto_libraries[id_] = {"alias": default_lib["alias"], "path": default_lib["path"]}
-        self.widget_settings_saveto_libraries_treeview.insert('', 'end', id_,
-                                                              values=(default_lib["alias"], default_lib["path"]))
-        def_keypair = KeyPair(self.settings_saveto_libraries[id_]["alias"], str(id_))
-        self.var_settings_saveto_lib_default.set(def_keypair)
+        default_lib = self.settings["UI"].get("user_libraries", {}).get("value")
+        if default_lib is not None:
+            id_ = id(default_lib)
+            self.settings_saveto_libraries[id_] = {"alias": default_lib["alias"], "path": default_lib["path"]}
+            self.widget_settings_saveto_libraries_treeview.insert('', 'end', id_,
+                                                                  values=(default_lib["alias"], default_lib["path"]))
+            def_keypair = KeyPair(self.settings_saveto_libraries[id_]["alias"], str(id_))
+            self.var_settings_saveto_lib_default.set(def_keypair)
 
-        # fill def download library comboboxes
-        self.widget_settings_saveto_libraries_default_optionmenu.set(def_keypair)
-        self.widget_series_saveto_library_optionmenu.set(def_keypair)
-        self.on_series_saveto_library_selected()
+            # fill def download library comboboxes
+            self.widget_settings_saveto_libraries_default_optionmenu.set(def_keypair)
+            self.widget_series_saveto_library_optionmenu.set(def_keypair)
+
 
         # Load the rest of user-defined libraries
 
@@ -362,6 +363,15 @@ class App(BaseUI):
             # items.append(KeyPair(library["alias"], id_))
             self.widget_settings_saveto_libraries_treeview.insert('', 'end', id_,
                                                                   values=(library["alias"], library["path"]))
+        core = self.settings["Core"]
+
+        self.var_settings_saveto_dogenerate_manga_folder.set(core["generate_series_folder"].get("value",core["series_folder_name"]["def_value"]))
+        self.var_settings_saveto_mangafolder_name.set(core["series_folder_name"].get("value",core["series_folder_name"]["def_value"]))
+        self.var_settings_saveto_chapter_name.set(core["chapter_name"].get("value",core["chapter_name"]["def_value"]))
+        self.on_series_saveto_library_selected()
+        self.on_series_saveto_seriesfolder_updated()
+
+
 
     """
     Settings SaveTo
@@ -429,6 +439,10 @@ class App(BaseUI):
     """
 
     def on_settings_save_pressed(self, *_):
+        chapter_name = self.var_settings_saveto_chapter_name.get()
+        self.settings["Core"]["chapter_name"]["value"] = chapter_name
+
+
         api.update_settings(json.dumps(self.settings))
 
     """

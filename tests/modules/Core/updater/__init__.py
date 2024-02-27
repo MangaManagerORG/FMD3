@@ -144,7 +144,7 @@ class TestNewChapterFinder(unittest.TestCase):
         s.series_id = "series_b"
         s.source_id = source.ID
         s.enabled = True
-        s.status = SeriesStatus.FULLY_DOWNLOADED.value
+        s.status = SeriesStatus.FINISHED_AND_DOWNLOADED
         s.save_to = "Series b Folder"
         mock_session().add(s)
         mock_session().commit()

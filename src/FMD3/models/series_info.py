@@ -1,6 +1,15 @@
 import dataclasses
+import enum
+
 from ComicInfo import ComicInfo
 from FMD3.models.chapter import Chapter
+
+
+class SeriesInfoStatus(enum.Enum):
+    ONGOING = 1
+    COMPLETED = 2
+    HIATUS = 3
+    CANCELLED = 4
 
 
 @dataclasses.dataclass(init=False)
@@ -17,7 +26,7 @@ class SeriesInfo:
     genres: list[str]
     demographic: str
     rating: str
-    status: str
+    status: SeriesInfoStatus
     chapters: list[Chapter]
     url: str
 
@@ -31,7 +40,7 @@ class SeriesInfo:
         self.genres: list[str] = None
         self.demographic: str = None
         self.rating: str = None
-        self.status: str = None
+        self.status: SeriesInfoStatus = None
         self.chapters: list[Chapter] = None
         self.url: str = None
 

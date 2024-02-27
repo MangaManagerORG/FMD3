@@ -107,8 +107,7 @@ def scan_new_chapters():
         s = Session()
         logger.debug(f"Found source: {source.NAME}")
         series_list: list[Series] = s.query(Series).filter_by(source_id=source.ID, favourited=True,
-                                                              enabled=True).filter(
-            Series.status is not SeriesStatus.FULLY_DOWNLOADED.value).all()
+                                                              enabled=True).filter(Series.status != SeriesStatus.FINISHED_AND_DOWNLOADED).all()
         for series in series_list:
             if series.datelastchecked:
                 if series.datelastchecked + timedelta(hours=23) > datetime.now():
@@ -118,9 +117,14 @@ def scan_new_chapters():
             last_db_chapter = max_chapter_number(series.series_id)
             new_chapter_list = source.get_new_chapters(series.series_id, last_db_chapter or -1)
             if source.get_max_chapter(series.series_id, new_chapter_list) == last_db_chapter:
+
+                series_info = source.get_series_info(series.series_id)
+                if series_info:
+                    if series_info[0].status == SeriesInfoStatus.COMPLETED:
+                        series.status = SeriesStatus.FINISHED
                 logger.debug(f"Marking series '{series.title}' as fully downloaded (source max chapter is the same as "
                              f"last chapter in db and series is marked as complete)")
-                series.status = SeriesStatus.FULLY_DOWNLOADED.value
+                series.datelastchecked = datetime.now()
                 s.commit()
                 continue
 

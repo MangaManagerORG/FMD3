@@ -1,9 +1,9 @@
 from datetime import datetime
 
-from sqlalchemy import Column, Text, DateTime, func
+from sqlalchemy import Column, Text, DateTime, func, Enum
 
 from FMD3.core.database import Base
-from FMD3.models.series_info import SeriesInfo
+from FMD3.models.series_info import SeriesInfo, SeriesInfoStatus
 
 
 class SeriesCache(Base):
@@ -20,7 +20,7 @@ class SeriesCache(Base):
     genres = Column(Text)  # Assuming a JSON-serialized list
     demographic = Column(Text)
     rating = Column(Text)
-    status = Column(Text)
+    status = Column(Enum(SeriesInfoStatus))
     url = Column(Text)
 
     @property
@@ -46,7 +46,7 @@ class SeriesCache(Base):
         mi.chapters = []  # Assuming you don't have a direct Chapter relationship in SeriesCache
         return mi
 
-    def update(self, manga_info):
+    def update(self, manga_info: SeriesInfo):
         self.cached_date = datetime.now()
 
         self.title = manga_info.title

@@ -1,6 +1,6 @@
 import enum
 
-from sqlalchemy import Column, Text, Integer, Boolean, String, SmallInteger, DateTime, func
+from sqlalchemy import Column, Text, Integer, Boolean, String, DateTime, func, Enum
 from sqlalchemy.orm import relationship
 
 from FMD3.core.database import Base
@@ -8,7 +8,8 @@ from FMD3.core.database import Base
 
 class SeriesStatus(enum.Enum):
     ONGOING = 0
-    FULLY_DOWNLOADED = 1
+    FINISHED = 1
+    FINISHED_AND_DOWNLOADED = 2
 
 
 class Series(Base):
@@ -20,7 +21,7 @@ class Series(Base):
     favourited = Column(Boolean, default=False)
     source_id = Column(String(255),  nullable=False)  # Used
     title = Column(Text, nullable=False)  # Used
-    status = Column(SmallInteger)  # Used
+    status = Column(Enum(SeriesStatus))  # Used
 
     save_to = Column(Text)  # will be used
 

@@ -39,6 +39,16 @@ class App(BaseUI):
         self.var_series_search_entry.trace_add('write', self.on_series_search_entry_input)
         self.var_series_saveto_seriesfolder.trace_add("write", self.on_series_saveto_seriesfolder_updated)
 
+        """
+        Favourites tab initialization
+        """
+        """Dictionary storing the current series and chapter childs shown in fav treeview"""
+        self.fav_tree_loaded_parents = {}
+        self.widget_favourites_treeview.tag_bind('lazy', '<<TreeviewOpen>>', self.child_opened_fav_treeview)
+        self.widget_favourites_treeview.bind('<Button-1>', self.child_opened_fav_treeview)
+        self.widget_favourites_treeview.tag_configure('favourites_child_chapters', background='#B6B7B7')
+        self.on_favourites_refresh()
+        self._detached_fav_filter = set()
     """
     #########################
     Series Tab implementation
@@ -239,11 +249,22 @@ class App(BaseUI):
         match action:
             case "Download Selected":
                 chapter_ids = self.widget_series_chapter_treeview.selection()
-                api.download_chapters(source_id=source_id, series_id=series_id, chapter_ids=chapter_ids,output_path=output_path)
+                api.download_chapters(source_id=source_id, series_id=series_id, chapter_ids=chapter_ids,
+                                      output_path=output_path)
             case "Download All":
-                ...
+                api.download_chapters(source_id=source_id, series_id=series_id, chapter_ids="all",
+                                      output_path=output_path)
 
-
+    def on_series_chapters_actionmenu_favourite(self, action):
+        series_id = self.last_search_selected_item
+        source_id = self.selected_source_id
+        output_path = self.var_series_saveto_final_path.get()
+        if action == "Add to fav":
+            api.add_fav_series(source_id=source_id, series_id=series_id, output_path=output_path)
+        elif action == 'Add to fav & add to download queue':
+            api.download_chapters(source_id=source_id, series_id=series_id, chapter_ids="all",
+                                  output_path=output_path, enable_series=True, fav_series=True)
+        self.on_favourites_refresh()
 
     """
     #########################
@@ -353,3 +374,36 @@ class App(BaseUI):
 
     def on_settings_save_pressed(self, *_):
         api.update_settings(json.dumps(self.settings))
+
+    """
+    #########################
+    FAVOURITES TAB IMPLEMENTATION
+    #########################
+    """
+
+    def on_favourites_refresh(self, *_):
+        tree = self.widget_favourites_treeview
+        self.fav_tree_loaded_parents = {}
+        tree.delete(*tree.get_children())
+        series_list = api.get_fav_series(sort="dateadded", order="desc")
+
+        for series in series_list:
+            if series.get("series_id") not in self.fav_tree_loaded_parents:
+                source = api.get_source(source_id=series.get("source_id"))
+                if source:
+                    source_name = source.get("name")
+                else:
+                    source_name = "Unknown(Not Loaded)"
+                item_id = self.widget_favourites_treeview.insert('', 'end', series.get("series_id"),
+                                                                 text=series.get("title"),
+                                                                 values=(series.get("max_chapter"),
+                                                                         source_name,
+                                                                         series.get("save_to"),
+                                                                         series.get("dateadded"),
+                                                                         series.get("status"),
+                                                                         series.get("datelastchecked"),
+                                                                         series.get("datelastupdated"),
+                                                                         series.get("source_id")))
+                # self.favourites_treeview.insert('', 'end', f"{series.series_id}.chapters", values=(series.title, series.currentchapter))
+                self.fav_tree_loaded_parents[item_id] = False
+        # self.fav_sort_date_added()

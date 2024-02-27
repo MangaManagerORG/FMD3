@@ -26,6 +26,7 @@ class Api(ApiInterface):
     """
 
     get_fav_series = staticmethod(get_fav_series)
+    add_fav_series = staticmethod(add_series_favourite)
     get_series_info = staticmethod(get_series_info)
     query_series = staticmethod(query_series)
     get_series_folder_name = staticmethod(get_series_folder_name)

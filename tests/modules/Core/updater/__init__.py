@@ -24,7 +24,7 @@ class TestScanHangingTasks(unittest.TestCase):
 
         # create a hanging task
         c = DLDChapters()
-        c.status = DLDChaptersStatus.ADDED_TO_QUEUE.value
+        c.status = DLDChaptersStatus.ADDED_TO_QUEUE_SCANNER.value
         c.series_id = s.series_id
         c.chapter_id = "sAcha_1"
         c.number = 5

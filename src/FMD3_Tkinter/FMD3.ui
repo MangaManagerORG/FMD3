@@ -1079,10 +1079,19 @@ Selected</property>
                     </layout>
                   </object>
                 </child>
+                <child>
+                  <object class="customtkinter.CTkButton" id="ctkbutton1">
+                    <property name="command" type="command" cbtype="simple">on_favourites_refresh</property>
+                    <property name="text" translatable="yes">Refresh list</property>
+                    <layout manager="pack">
+                      <property name="side">top</property>
+                    </layout>
+                  </object>
+                </child>
               </object>
             </child>
             <child>
-              <object class="ttk.Treeview" id="favourites_treeview" named="True">
+              <object class="ttk.Treeview" id="widget_favourites_treeview" named="True">
                 <property name="padding">10</property>
                 <property name="selectmode">none</property>
                 <bind sequence="&lt;&lt;TreeviewOpen&gt;&gt;" handler="child_opened_fav_treeview" add="" />

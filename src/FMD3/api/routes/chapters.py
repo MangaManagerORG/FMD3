@@ -1,4 +1,5 @@
 import logging
+from typing import Literal
 
 from FMD3 import get_source as sup_get_source
 from FMD3.core import database as db
@@ -8,6 +9,7 @@ from FMD3.models.chapter import Chapter
 from FMD3.models.ddl_chapter_status import DLDChaptersStatus
 
 logging.getLogger()
+
 
 def get_chapters(series_id):
     chapters = [
@@ -27,7 +29,7 @@ def get_chapters(series_id):
     return chapters
 
 
-def get_source_chapters(source_id, series_id, filter_ = None):
+def get_source_chapters(source_id, series_id, filter_=None):
     """
     Returns the chapters from the source. Will only return sources bigger than filter number
     Args:

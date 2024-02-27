@@ -13,7 +13,12 @@ class ApiInterface:
 
     @staticmethod
     @abstractmethod
-    def get_series(sort=None, order: Literal["asc", "desc"] = "desc", limit=None) -> list[SearchResult]:
+    def get_fav_series(sort=None, order: Literal["asc", "desc"] = "desc", limit=None):
+        ...
+
+    @staticmethod
+    @abstractmethod
+    def add_fav_series(source_id: str, series_id: str, output_path=None):
         ...
 
     @staticmethod
@@ -53,7 +58,8 @@ class ApiInterface:
 
     @staticmethod
     @abstractmethod
-    def download_chapters(source_id: str, series_id: str, chapter_ids: list[str] = None, output_path: str = None):
+    def download_chapters(source_id: str, series_id: str, chapter_ids: list[str]|Literal["all"] = None, output_path: str = None,
+                          enable_series: bool=False, fav_series:bool=False):
         ...
 
     @staticmethod

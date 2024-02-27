@@ -4,7 +4,7 @@ from . import SettingKeys, SettingControl, SettingType
 
 
 class Keys(SettingKeys):
-    LIBRARY_PATH = "default_downloads_path"
+    LIBRARY_PATH = "default_download_path"
     LANGUAGE = "language"
     ACTION_AFTER_DOWNLOAD = "action_after_download"
     NEW_MANGA_BASED_ON_UPDATE_TIME = "new_manga_based_on_its_update_time"

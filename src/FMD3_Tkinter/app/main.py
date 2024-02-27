@@ -25,7 +25,7 @@ class App(BaseUI):
         """Stores keypair values of libraries"""
         self.settings = json.loads(api.get_settings())
         self.settings_saveto_libraries = {}
-        self.init_settings_saveto_libraries()
+        self.init_settings()
         self.task_manager = TaskManager()
 
         """Dictionary storing the series object identified by the series id"""
@@ -320,7 +320,7 @@ class App(BaseUI):
     CUSTOM LIBRARIES
     """
 
-    def init_settings_saveto_libraries(self):
+    def init_settings(self):
         # I'll be saving these settings in the UI category. I don't feel they fit in the core section as all this
         # custom lib thingy is a helper for users to comfortab  ly choose where to download
         if self.settings.get("UI", None) is None:
@@ -328,29 +328,40 @@ class App(BaseUI):
                 "user_libraries": {
                     "key": "user_libraries",
                     "name": "User defined libraries",
-                    "value": [],
+                    "value": None,
+                    "values":[],
                     "type": 1,
                     "tooltip": "",
                     "def_value": [],
                 }
             }
         items = []
-        for library in self.settings["UI"].get("user_libraries", )["value"]:
+
+        # Load default download library
+
+        default_lib = self.settings["UI"].get("user_libraries",None)["value"]
+        id_ = id(default_lib)
+        self.settings_saveto_libraries[id_] = {"alias": default_lib["alias"], "path": default_lib["path"]}
+        self.widget_settings_saveto_libraries_treeview.insert('', 'end', id_,
+                                                              values=(default_lib["alias"], default_lib["path"]))
+        def_keypair = KeyPair(self.settings_saveto_libraries[id_]["alias"], str(id_))
+        self.var_settings_saveto_lib_default.set(def_keypair)
+
+        # fill def download library comboboxes
+        self.widget_settings_saveto_libraries_default_optionmenu.set(def_keypair)
+        self.widget_series_saveto_library_optionmenu.set(def_keypair)
+        self.on_series_saveto_library_selected()
+
+        # Load the rest of user-defined libraries
+
+        for library in self.settings["UI"].get("user_libraries",None)["values"]:
+            if library == default_lib:
+                continue
             id_ = id(library)
             self.settings_saveto_libraries[id_] = {"alias": library["alias"], "path": library["path"]}
             # items.append(KeyPair(library["alias"], id_))
             self.widget_settings_saveto_libraries_treeview.insert('', 'end', id_,
                                                                   values=(library["alias"], library["path"]))
-
-        # self.settings["UI"]["user_libraries"] = {
-        #     "key": "user_libraries",
-        #     "name": "User defined libraries",
-        #     "value": [],
-        #     "type": 1,
-        #     "tooltip": "",
-        #     "def_value": [],
-        #     "values": []
-        # }
 
     """
     Settings SaveTo
@@ -383,7 +394,7 @@ class App(BaseUI):
         # Fetch and insert lib in treeview
 
         # Append to settings
-        self.settings["UI"]["user_libraries"]["value"].append({"alias": alias, "path": path})
+        self.settings["UI"]["user_libraries"]["values"].append({"alias": alias, "path": path})
 
         # Clear entries
         path_var.set("")
@@ -395,8 +406,9 @@ class App(BaseUI):
         :param _:
         :return:
         """
-        new_path = self.settings_saveto_libraries[int(keypair.value)]["path"]
-        self.settings["Core"]["default_download_path"]["value"] = new_path
+        keypair_ = self.settings_saveto_libraries[int(keypair.value)]
+        self.settings["UI"]["user_libraries"]["value"] = {"alias": keypair_["alias"], "path": keypair_["path"]}
+        self.settings["Core"]["default_download_path"]["value"] = keypair_["path"]
 
         # TODO: Add call to update settings
 

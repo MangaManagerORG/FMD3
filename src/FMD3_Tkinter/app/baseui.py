@@ -44,6 +44,7 @@ class BaseUI:
         self.widget_settings_saveto_libraries_treeview = self.builder.get_object("widget_settings_saveto_libraries_treeview")
 
         self.widget_settings_saveto_libraries_default_optionmenu = self.builder.get_object("widget_settings_saveto_libraries_default_optionmenu")
+
         # Tasks
         self.widget_tasks_treeview:Treeview = self.builder.get_object("widget_tasks_treeview")
 

@@ -101,3 +101,20 @@ class ApiInterface:
     @abstractmethod
     def get_series_from_url(url: str):
         ...
+    @staticmethod
+    @abstractmethod
+    def get_hanging_tasks():
+        """
+        Returns: List of tasks that are not in the current processing queue
+
+        """
+        ...
+
+    @staticmethod
+    @abstractmethod
+    def get_active_tasks():
+        """
+
+        Returns: List of tasks that are currently in the processing queue
+
+        """

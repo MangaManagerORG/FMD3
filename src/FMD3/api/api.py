@@ -3,6 +3,7 @@ from .routes.chapters import *
 from .routes.series import *
 from .routes.sources import *
 from .routes.settings import *
+from .routes.tasks import *
 from FMD3.__version__ import __version__
 
 
@@ -46,6 +47,15 @@ class Api(ApiInterface):
     """
     Settings definitions
     """
+
     get_settings = staticmethod(get_settings)
     update_settings = staticmethod(update_settings)
     update_settings_save_to = staticmethod(update_save_to)
+
+
+    """
+    Tasks definition
+    """
+
+    get_active_tasks = staticmethod(get_active_tasks)
+    get_hanging_tasks = staticmethod(get_hanging_tasks)

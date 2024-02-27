@@ -30,7 +30,6 @@ class App(BaseUI):
 
         """Dictionary storing the series object identified by the series id"""
         self.data_series_search_results: dict[str, SearchResult] = {}
-
         self.last_search_selected_item = None  # Stores the last selected item to later check and not reload a loaded series on double click
 
         """Initialization of values"""
@@ -38,6 +37,12 @@ class App(BaseUI):
         """Track variables to them callbacks"""
         self.var_series_search_entry.trace_add('write', self.on_series_search_entry_input)
         self.var_series_saveto_seriesfolder.trace_add("write", self.on_series_saveto_seriesfolder_updated)
+
+        self.widget_tasks_treeview.hanging = self.widget_tasks_treeview.insert("", "end", iid="active", text="Active",
+                                                                               open=True)
+        self.widget_tasks_treeview.hanging = self.widget_tasks_treeview.insert("", "end", iid="hanging", text="Hanging")
+        self.fill_hanging_tasks()
+        self.refresh_active_tasks()
 
         """
         Favourites tab initialization
@@ -49,6 +54,45 @@ class App(BaseUI):
         self.widget_favourites_treeview.tag_configure('favourites_child_chapters', background='#B6B7B7')
         self.on_favourites_refresh()
         self._detached_fav_filter = set()
+
+    def fill_hanging_tasks(self):
+        tree = self.widget_tasks_treeview
+        tasks = api.get_hanging_tasks()
+        for task in tasks:
+            tree.insert("hanging", "end", iid=task.chapter_id,
+                        text=f"Vol.{task.volume} Ch.{task.number} - {task.chapter_id}",
+                        values=("Hanging", None, task.path, str(task.downloaded_at), task.series_id))
+
+    # def fill_active_tasks(self):
+    #     tree = self.widget_tasks_treeview
+    #     tree.insert("", "end", iid="active", text="Active", open=True)
+    #
+    #     tasks = api.get_active_tasks()
+    #     if tasks is None:
+    #         return
+    #
+    #     for task in tasks:
+    #         tree.insert("active", "end", iid=task.chapter_id,
+    #                     text=f"Vol.{task.volume} Ch.{task.number} - {task.chapter_id}",
+    #                     values=("Hanging", None, task.path, str(task.downloaded_at), task.series_id),
+    #                     )
+
+    def refresh_active_tasks(self):
+        logging.getLogger().info("Refreshing active tasks")
+        tree = self.widget_tasks_treeview
+        tasks = api.get_active_tasks()
+        active_ids = [chapter.chapter_id for chapter, status in tasks]
+        delete_ids = [chapter_id for chapter_id in tree.get_children("hanging") if chapter_id in active_ids]
+        tree.delete(*delete_ids)
+        tree.delete(*tree.get_children("active"))
+
+        for task, task_status in tasks:
+            tree.insert("active", "end", iid=task.chapter_id,
+                        text=f"Vol.{task.volume} Ch.{task.number} - {task.chapter_id}",
+                        values=(task_status, None, task.path, str(task.downloaded_at), task.series_id),
+                        )
+        self.mainwindow.after(3000, self.refresh_active_tasks)
+
     """
     #########################
     Series Tab implementation

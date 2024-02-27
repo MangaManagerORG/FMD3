@@ -175,7 +175,7 @@ class BaseUI:
         ...
 
     def filter_favourites_treeview(self):
-        tree = self.builder.get_object("favourites_treeview")
+        tree = self.widget_series_chapter_treeview
         # Get the filter text from the entry widget
         filter_text = self.builder.get_object("favourites_tab_filter_entry").get().lower()
 
@@ -195,12 +195,12 @@ class BaseUI:
                 tree.detach(item_id)
 
     def child_opened_fav_treeview(self, *_):
-        tree = self.builder.get_object("widget_favourites_treeview")
+        tree = self.widget_favourites_treeview
         series_id = tree.focus()
         if not series_id:
             return
         # Check if the item has been loaded
-        if not tree.get(series_id, False):
+        if not self.fav_tree_loaded_parents.get(series_id, False):
             # Load the children of the parent item
             self.load_children(series_id, )
             # Mark the parent as loaded
@@ -208,7 +208,7 @@ class BaseUI:
     def load_children(self, parent_id):
         # Simulate loading children from a data source
         for chapter in sorted(api.get_chapters(parent_id), key=lambda x: x.get("number")):
-            child_id = self.favourites_treeview.insert(parent_id, 'end', text=chapter.get("title") or "",
+            child_id = self.widget_favourites_treeview.insert(parent_id, 'end', text=chapter.get("title") or "",
                                                        values=(
                                                            f'Ch.{chapter["number"]} Vol.{chapter["volume"]}', "",
                                                            chapter.get("path"),

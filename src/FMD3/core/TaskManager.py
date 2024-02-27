@@ -15,7 +15,7 @@ from FMD3.core.downloader.downloader import download_images_for_chapter
 
 logger = logging.getLogger(__name__)
 print_once_process_exception = False
-
+lock = threading.Lock()
 
 class TaskManager:
     __instance = None
@@ -28,6 +28,12 @@ class TaskManager:
             TaskManager.__instance.active_tasks = set()
             TaskManager.__instance.tasks_statuses = {}
         return cls.__instance
+
+    def _pre_update_status(self, task_id, func, *args):
+        with lock:
+            self.tasks_statuses[task_id] = "downloading"
+        return func(*args)
+
 
     def submit_series_chapter(self, source, series_id, chapter, path, cinfo, manual_download, *args, **kwargs):
         """
@@ -45,9 +51,10 @@ class TaskManager:
         Returns:
 
         """
+        task_id = f"{series_id}/{chapter.chapter_id}"
         # Check chapter is not fully downloaded
         # Check if chapter is not in active tasks
-        if f"{series_id}/{chapter.chapter_id}" not in self.active_tasks:
+        if task_id not in self.active_tasks:
             if not chapter_exists(series_id, chapter.chapter_id):
                 ret = database.DLDChapters()
                 ret.chapter_id = chapter.chapter_id
@@ -70,14 +77,14 @@ class TaskManager:
                     return
 
         logging.getLogger(__name__).info(f"Adding download task for {series_id} . Ch.{chapter.number}")
-        self.active_tasks.add(f"{series_id}/{chapter.chapter_id}")
-        self.tasks_statuses[f"{series_id}/{chapter.chapter_id}"] = "downloading"
+        self.active_tasks.add(task_id)
+        self.tasks_statuses[task_id] = "Waiting"
         dl_obj = DownloadTask(source, series_id, chapter, path, cinfo)
         if analyze_archive(dl_obj.output_path, series_id, chapter):
             self.on_process_done(dl_obj)
             return
 
-        thread_future = self.__DPE.submit(download_images_for_chapter, dl_obj)
+        thread_future = self.__DPE.submit(self._pre_update_status,task_id, download_images_for_chapter, dl_obj)
         thread_future.add_done_callback(lambda future: self.on_thread_done(thread_future))
 
     def on_thread_done(self, thread_future):

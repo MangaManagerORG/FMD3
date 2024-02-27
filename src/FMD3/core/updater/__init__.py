@@ -2,7 +2,7 @@ import logging
 import time
 from datetime import timedelta, datetime
 
-from sqlalchemy import and_
+from sqlalchemy import and_, or_
 
 from FMD3.core.TaskManager import TaskManager
 from FMD3.core.database import Series, DLDChapters, Session, SeriesCache
@@ -16,7 +16,7 @@ from FMD3.extensions.sources import get_sources_list, ISource, get_source_by_id
 logger = logging.getLogger(__name__)
 
 
-def create_download_task(source: ISource, series: Series, chapters: list[Chapter]):
+def create_download_task(source: ISource, series: Series, chapters: list[Chapter], is_user_task=False):
     """
     Downloads and saves a list of chapters from a given source to the user's preferred location,
     only if the chapters do not already exist in the database.
@@ -44,18 +44,26 @@ def create_download_task(source: ISource, series: Series, chapters: list[Chapter
         output_file_path = make_output_path(series, chapter)
         # output_file_path = series.save_to
         # todo: get outputfile path from db series
-        TaskManager().submit_series_chapter(source, series.series_id, chapter, output_file_path, cinfo)
+        TaskManager().submit_series_chapter(source, series.series_id, chapter, output_file_path, cinfo,
+                                            manual_download=is_user_task)
 
 
 def scan_hanging_tasks():
+    logger.debug("Starting hanging tasks")
     sources_series_group = {}
 
     # Query the database for relevant chapters
     for chapterDlD in Session.query(DLDChapters).filter(
+        or_(
             and_(
-                DLDChapters.status == DLDChaptersStatus.ADDED_TO_QUEUE.value,
+                DLDChapters.status == DLDChaptersStatus.ADDED_TO_QUEUE_SCANNER.value,
                 DLDChapters.downloaded_at + timedelta(hours=3) < datetime.now()
+            ),
+            and_(
+                DLDChapters.status == DLDChaptersStatus.ADDED_TO_QUEUE_USER.value,
+                # DLDChapters.downloaded_at + timedelta(hours=3) < datetime.now()
             )
+        )
     ).all():
         source_id = chapterDlD.series.source_id
         series_id = chapterDlD.series_id
@@ -98,7 +106,9 @@ def scan_new_chapters():
         # get all series in favourites that are from this extension
         s = Session()
         logger.debug(f"Found source: {source.NAME}")
-        series_list: list[Series] = s.query(Series).filter_by(source_id=source.ID,favourited=True,enabled=True).filter(Series.status is not SeriesStatus.FULLY_DOWNLOADED.value).all()
+        series_list: list[Series] = s.query(Series).filter_by(source_id=source.ID, favourited=True,
+                                                              enabled=True).filter(
+            Series.status is not SeriesStatus.FULLY_DOWNLOADED.value).all()
         for series in series_list:
             if series.datelastchecked:
                 if series.datelastchecked + timedelta(hours=23) > datetime.now():

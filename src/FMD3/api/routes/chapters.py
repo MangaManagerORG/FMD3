@@ -57,9 +57,13 @@ def get_source_chapters(source_id, series_id, filter_ = None):
         for chapter in chapters]
 
 
-def download_chapters(source_id: str, series_id: str, chapter_ids: list[str], output_path=None,enable_series: bool=False, fav_series:bool=False) -> list[Chapter]:
+def download_chapters(source_id: str, series_id: str, chapter_ids: list[str]|Literal["all"], output_path=None,
+                      enable_series: bool = False, fav_series: bool = False) -> list[Chapter]:
     source = sup_get_source(source_id=source_id)
-    chapters = source.get_queried_chapters(series_id, chapter_ids)
+    if chapter_ids == "all":
+        chapters = source.get_chapters(series_id)
+    else:
+        chapters = source.get_queried_chapters(series_id, chapter_ids)
     if not chapters:
         return
     series = db.Session.query(db.Series).filter_by(series_id=series_id).one_or_none()
@@ -68,7 +72,7 @@ def download_chapters(source_id: str, series_id: str, chapter_ids: list[str], ou
         try:
             series = db.Series(series_id=data.id, title=data.title)  # todo add missing data
             series.enabled = enable_series
-            series.fav_series = fav_series
+            series.favourited = fav_series
             series.save_to = output_path if output_path is not None else get_series_folder_name(manga=series.title)
             series.source_id = source_id
             db.Session().add(series)
@@ -77,4 +81,4 @@ def download_chapters(source_id: str, series_id: str, chapter_ids: list[str], ou
         except:
             logging.getLogger().exception("Error creating series")
             db.Session().rollback()
-    create_download_task(source, series, chapters)
+    create_download_task(source, series, chapters, True)

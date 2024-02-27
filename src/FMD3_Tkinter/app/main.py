@@ -24,7 +24,7 @@ class App(BaseUI):
         self.settings = {}
         """Stores keypair values of libraries"""
         self.settings = json.loads(api.get_settings())
-        self.settings_saveto_libraries= {}
+        self.settings_saveto_libraries = {}
         self.init_settings_saveto_libraries()
         self.task_manager = TaskManager()
 
@@ -54,7 +54,6 @@ class App(BaseUI):
     @property
     def selected_source_id(self):
         return self.var_series_selected_source.get().value
-
 
     """
     Series search implementation
@@ -179,7 +178,7 @@ class App(BaseUI):
     On output library selected
     """
 
-    def pre_series_saveto_library_selected(self,*_):
+    def pre_series_saveto_library_selected(self, *_):
         """
         Fills the OptionMenu with the current loaded libraries
         :return:
@@ -191,12 +190,13 @@ class App(BaseUI):
 
         widget.configure(values=libs)
 
-    def on_series_saveto_library_selected(self,*args):
+    def on_series_saveto_library_selected(self, *args):
         self.cb__update_series_saveto_final_path()
 
-    def on_series_saveto_seriesfolder_updated(self,*args):
+    def on_series_saveto_seriesfolder_updated(self, *args):
         self.cb__update_series_saveto_final_path()
-    def cb__update_series_saveto_final_path(self,*_,data=None):
+
+    def cb__update_series_saveto_final_path(self, *_, data=None):
 
         if data:
             folder_name = data.get("title")
@@ -212,7 +212,6 @@ class App(BaseUI):
         else:
             lib_path = "."
 
-
         series_path_or_modifie = folder_name
 
         sanitized_download_lib_path = get_sanitized_download(lib_path, manga=series_path_or_modifie)
@@ -227,6 +226,24 @@ class App(BaseUI):
         self.widget_series_saveto_library_optionmenu.configure(state="readonly")
         self.var_series_saveto_final_path.set(str(sanitized_download_lib_path.resolve()))
 
+    """
+    Download options
+    """
+
+    def on_series_chapters_actionmenu_download(self, action):
+        ...
+        print("sada")
+        series_id = self.last_search_selected_item
+        source_id = self.selected_source_id
+        output_path = self.var_series_saveto_final_path.get()
+        match action:
+            case "Download Selected":
+                chapter_ids = self.widget_series_chapter_treeview.selection()
+                api.download_chapters(source_id=source_id, series_id=series_id, chapter_ids=chapter_ids,output_path=output_path)
+            case "Download All":
+                ...
+
+
 
     """
     #########################
@@ -240,7 +257,7 @@ class App(BaseUI):
 
     def init_settings_saveto_libraries(self):
         # I'll be saving these settings in the UI category. I don't feel they fit in the core section as all this
-        # custom lib thingy is a helper for users to comfortably choose where to download
+        # custom lib thingy is a helper for users to comfortab  ly choose where to download
         if self.settings.get("UI", None) is None:
             self.settings["UI"] = {
                 "user_libraries": {
@@ -255,11 +272,10 @@ class App(BaseUI):
         items = []
         for library in self.settings["UI"].get("user_libraries", )["value"]:
             id_ = id(library)
-            self.settings_saveto_libraries[id_] = {"alias":library["alias"], "path":library["path"]}
+            self.settings_saveto_libraries[id_] = {"alias": library["alias"], "path": library["path"]}
             # items.append(KeyPair(library["alias"], id_))
-            self.widget_settings_saveto_libraries_treeview.insert('', 'end', id_, values=(library["alias"], library["path"]))
-
-
+            self.widget_settings_saveto_libraries_treeview.insert('', 'end', id_,
+                                                                  values=(library["alias"], library["path"]))
 
         # self.settings["UI"]["user_libraries"] = {
         #     "key": "user_libraries",
@@ -286,8 +302,8 @@ class App(BaseUI):
             return
         lib = {"alias": alias, "path": path}
 
-
-        filter_alias = [id_ for id_ in self.settings_saveto_libraries if alias == self.settings_saveto_libraries[id_]["alias"]]
+        filter_alias = [id_ for id_ in self.settings_saveto_libraries if
+                        alias == self.settings_saveto_libraries[id_]["alias"]]
 
         tree = self.builder.get_object("widget_settings_saveto_libraries_treeview")
 
@@ -335,10 +351,5 @@ class App(BaseUI):
     Save settings
     """
 
-    def on_settings_save_pressed(self,*_):
+    def on_settings_save_pressed(self, *_):
         api.update_settings(json.dumps(self.settings))
-
-
-
-
-

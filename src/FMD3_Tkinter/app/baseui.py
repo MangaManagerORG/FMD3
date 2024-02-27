@@ -134,7 +134,7 @@ class BaseUI:
             case "Select":
                 self.on_series_chapters_actionmenu_select(value)
             case "Download":
-                self.on_series_chapters_actionmenu_select(value)
+                self.on_series_chapters_actionmenu_download(value)
             case "Favourite":
                 self.on_series_chapters_actionmenu_favourite(value)
 
@@ -145,8 +145,11 @@ class BaseUI:
         if value == "All":
             tree.check_all()
 
-    def on_series_chapters_actionmenu_download(self, action):
-        ...
+
+
+
+
+
         # if value == "All":
         #     return
         #

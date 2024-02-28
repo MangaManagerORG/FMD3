@@ -1,6 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <interface version="1.3">
   <object class="customtkinter.CTk" id="ctk1">
+    <property name="title" translatable="yes">FMD3 - Free Manga Downloader 3 - by ThePromidius</property>
     <property name="width">1024</property>
     <child>
       <object class="customtkinter.CTkTabview" id="ctktabview1">
@@ -1248,31 +1249,31 @@ Selected</property>
                 </child>
                 <child>
                   <object class="ttk.Treeview.Column" id="column28">
-                    <property name="column_anchor">w</property>
+                    <property name="column_anchor">center</property>
                     <property name="heading_anchor">center</property>
-                    <property name="minwidth">20</property>
+                    <property name="minwidth">60</property>
                     <property name="stretch">true</property>
                     <property name="text" translatable="yes">Status</property>
                     <property name="tree_column">false</property>
                     <property name="visible">true</property>
-                    <property name="width">20</property>
+                    <property name="width">60</property>
                   </object>
                 </child>
                 <child>
                   <object class="ttk.Treeview.Column" id="column3">
-                    <property name="column_anchor">w</property>
+                    <property name="column_anchor">center</property>
                     <property name="heading_anchor">center</property>
                     <property name="minwidth">20</property>
                     <property name="stretch">true</property>
                     <property name="text" translatable="yes">Website</property>
                     <property name="tree_column">false</property>
                     <property name="visible">true</property>
-                    <property name="width">170</property>
+                    <property name="width">90</property>
                   </object>
                 </child>
                 <child>
                   <object class="ttk.Treeview.Column" id="column4">
-                    <property name="column_anchor">w</property>
+                    <property name="column_anchor">center</property>
                     <property name="heading_anchor">center</property>
                     <property name="minwidth">20</property>
                     <property name="stretch">true</property>
@@ -1284,39 +1285,27 @@ Selected</property>
                 </child>
                 <child>
                   <object class="ttk.Treeview.Column" id="column27" named="True">
-                    <property name="column_anchor">w</property>
+                    <property name="column_anchor">center</property>
                     <property name="command" type="command" cbtype="simple">fav_sort_date_added</property>
                     <property name="heading_anchor">center</property>
-                    <property name="minwidth">20</property>
+                    <property name="minwidth">30</property>
                     <property name="stretch">true</property>
                     <property name="text" translatable="yes">Date added</property>
                     <property name="tree_column">false</property>
                     <property name="visible">true</property>
-                    <property name="width">20</property>
+                    <property name="width">35</property>
                   </object>
                 </child>
                 <child>
-                  <object class="ttk.Treeview.Column" id="column30">
-                    <property name="column_anchor">w</property>
-                    <property name="heading_anchor">w</property>
-                    <property name="minwidth">20</property>
+                  <object class="ttk.Treeview.Column" id="column2">
+                    <property name="column_anchor">center</property>
+                    <property name="heading_anchor">center</property>
+                    <property name="minwidth">30</property>
                     <property name="stretch">true</property>
-                    <property name="text" translatable="yes">Last updated date</property>
+                    <property name="text" translatable="yes">Date downloaded</property>
                     <property name="tree_column">false</property>
                     <property name="visible">true</property>
-                    <property name="width">20</property>
-                  </object>
-                </child>
-                <child>
-                  <object class="ttk.Treeview.Column" id="column31">
-                    <property name="column_anchor">w</property>
-                    <property name="heading_anchor">w</property>
-                    <property name="minwidth">20</property>
-                    <property name="stretch">true</property>
-                    <property name="text" translatable="yes">source_id</property>
-                    <property name="tree_column">false</property>
-                    <property name="visible">false</property>
-                    <property name="width">20</property>
+                    <property name="width">35</property>
                   </object>
                 </child>
               </object>

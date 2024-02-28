@@ -56,12 +56,12 @@ def scan_hanging_tasks():
     for chapterDlD in Session.query(DLDChapters).filter(
         or_(
             and_(
-                DLDChapters.status == DLDChaptersStatus.ADDED_TO_QUEUE_SCANNER.value,
-                DLDChapters.downloaded_at + timedelta(hours=3) < datetime.now()
+                DLDChapters.status == DLDChaptersStatus.ADDED_TO_QUEUE_SCANNER,
+                DLDChapters.added_at + timedelta(hours=3) < datetime.now()
             ),
             and_(
-                DLDChapters.status == DLDChaptersStatus.ADDED_TO_QUEUE_USER.value,
-                # DLDChapters.downloaded_at + timedelta(hours=3) < datetime.now()
+                DLDChapters.status == DLDChaptersStatus.ADDED_TO_QUEUE_USER,
+                # DLDChapters.added_at + timedelta(hours=3) < datetime.now()
             )
         )
     ).all():

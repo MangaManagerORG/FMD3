@@ -1,6 +1,6 @@
 import enum
 
-from sqlalchemy import Column, String, ForeignKey, SmallInteger, Text, Integer, DateTime, func
+from sqlalchemy import Column, String, ForeignKey, SmallInteger, Text, Integer, DateTime, func, Enum
 
 from ...database import Base
 from FMD3.models.chapter import Chapter
@@ -16,9 +16,10 @@ class DLDChapters(Base):
     number = Column(SmallInteger)
     volume = Column(SmallInteger)
     title = Column(Text)
-    status = Column(Integer, default=_DLDChaptersStatus.NOT_DOWNLOADED.value)
+    status = Column(Enum(_DLDChaptersStatus), default=_DLDChaptersStatus.NOT_DOWNLOADED)
     path = Column(Text)
-    downloaded_at = Column(DateTime, server_default=func.now())
+    added_at = Column(DateTime, server_default=func.now())
+    downloaded_at = Column(DateTime)
 
     # series = relationship("Series",back_populates="DLDChapters")
 

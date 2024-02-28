@@ -118,3 +118,12 @@ class ApiInterface:
         Returns: List of tasks that are currently in the processing queue
 
         """
+
+    @staticmethod
+    @abstractmethod
+    def get_recent_tasks():
+        """
+
+        Returns: List of tasks that are currently in the processing queue
+
+        """

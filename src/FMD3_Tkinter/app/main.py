@@ -1,9 +1,6 @@
 import json
 import logging
-from pathlib import Path
-
 from FMD3.extensions.sources.SearchResult import SearchResult
-from .utils import get_sanitized_download
 
 from .baseui import BaseUI
 from .taskmanager import TaskManager
@@ -41,6 +38,7 @@ class App(BaseUI):
         self.widget_tasks_treeview.hanging = self.widget_tasks_treeview.insert("", "end", iid="active", text="Active",
                                                                                open=True)
         self.widget_tasks_treeview.hanging = self.widget_tasks_treeview.insert("", "end", iid="hanging", text="Hanging")
+        self.widget_tasks_treeview.recent = self.widget_tasks_treeview.insert("", "end", iid="recent", text="Recent")
         self.fill_hanging_tasks()
         self.refresh_active_tasks()
 
@@ -61,21 +59,7 @@ class App(BaseUI):
         for task in tasks:
             tree.insert("hanging", "end", iid=task.chapter_id,
                         text=f"Vol.{task.volume} Ch.{task.number} - {task.chapter_id}",
-                        values=("Hanging", None, task.path, str(task.downloaded_at), task.series_id))
-
-    # def fill_active_tasks(self):
-    #     tree = self.widget_tasks_treeview
-    #     tree.insert("", "end", iid="active", text="Active", open=True)
-    #
-    #     tasks = api.get_active_tasks()
-    #     if tasks is None:
-    #         return
-    #
-    #     for task in tasks:
-    #         tree.insert("active", "end", iid=task.chapter_id,
-    #                     text=f"Vol.{task.volume} Ch.{task.number} - {task.chapter_id}",
-    #                     values=("Hanging", None, task.path, str(task.downloaded_at), task.series_id),
-    #                     )
+                        values=("Hanging", None, task.path, str(task.added_at), task.series_id))
 
     def refresh_active_tasks(self):
         logging.getLogger().info("Refreshing active tasks")
@@ -85,13 +69,19 @@ class App(BaseUI):
         delete_ids = [chapter_id for chapter_id in tree.get_children("hanging") if chapter_id in active_ids]
         tree.delete(*delete_ids)
         tree.delete(*tree.get_children("active"))
-
+        tree.delete(*tree.get_children("recent"))
         for task, task_status in tasks:
             tree.insert("active", "end", iid=task.chapter_id,
                         text=f"Vol.{task.volume} Ch.{task.number} - {task.chapter_id}",
-                        values=(task_status, None, task.path, str(task.downloaded_at), task.series_id),
+                        values=(task_status, None, task.path, str(task.added_at), task.series_id),
                         )
-        self.mainwindow.after(3000, self.refresh_active_tasks)
+
+        tasks = api.get_recent_tasks()
+        for task in tasks:
+            tree.insert("recent", "end", iid=task.chapter_id,
+                        text=f"{task.title} - Vol.{task.volume} Ch.{task.number}",
+                        values=(task.status.name, task.source_id, task.path, str(task.added_at), str(task.downloaded_at)))
+        self.mainwindow.after(12000, self.refresh_active_tasks)
 
     """
     #########################
@@ -175,7 +165,8 @@ class App(BaseUI):
             # Disable both inputs as there is already one saved in the db
             self.enable_series_saveto_inputs(False)
             self.var_series_saveto_seriesfolder.set("")
-            self.var_series_saveto_final_path.set(Path(data.get("save_to")).resolve())
+            path = data.get("save_to")
+            self.var_series_saveto_final_path.set(str(path))
         else:
             parent = self.settings["Core"].get("default_download_path", "")["value"]
             website = None
@@ -186,7 +177,7 @@ class App(BaseUI):
             sanitized_folder_name = api.get_series_folder_name(website=website, manga=manga, author=author,
                                                                artist=artist)
             self.var_series_saveto_seriesfolder.set(sanitized_folder_name)
-            final_path = Path(parent, sanitized_folder_name).resolve()
+            final_path = parent + "/" + sanitized_folder_name
             self.enable_series_saveto_inputs(True)
             self.var_series_saveto_final_path.set(str(final_path))
 
@@ -262,13 +253,13 @@ class App(BaseUI):
         # lib_path = self.settings_libraries.get(self.default_series_downloads_path.get(), '.')
         keypair = self.var_series_saveto_library.get()
         if keypair.is_label() is False:
-            lib_path = Path(self.settings_saveto_libraries[int(keypair.value)]["path"]).resolve()
+            lib_path = self.settings_saveto_libraries[int(keypair.value)]["path"]
         else:
-            lib_path = Path(".").resolve()
+            lib_path = "."
 
         series_path_or_modifie = folder_name
 
-        sanitized_download_lib_path = Path(lib_path,series_path_or_modifie)
+        sanitized_download_lib_path =lib_path + "/" + series_path_or_modifie
         if data:
             if data.get("save_to", None) is not None:
                 self.widget_series_saveto_seriesfolder_entry.configure(state="disabled")
@@ -278,7 +269,7 @@ class App(BaseUI):
                 return
         self.widget_series_saveto_seriesfolder_entry.configure(state="normal")
         self.widget_series_saveto_library_optionmenu.configure(state="readonly")
-        self.var_series_saveto_final_path.set(str(sanitized_download_lib_path.resolve()))
+        self.var_series_saveto_final_path.set(sanitized_download_lib_path)
 
     """
     Download options

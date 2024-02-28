@@ -52,12 +52,12 @@ class TestChapters(unittest.TestCase):
     def test_get_chapters(self, session, *args, **kwargs):
 
         c = DLDChapters()
-        c.status = DLDChaptersStatus.DOWNLOADED.value
+        c.status = DLDChaptersStatus.DOWNLOADED
         c.series_id = sb.series_id
         c.chapter_id = "sBcha_1"
         c.number = 5
         c.volume = 1
-        c.downloaded_at = datetime.now() - timedelta(hours=3)
+        c.added_at = datetime.now() - timedelta(hours=3)
 
         session().add(c)
 

@@ -21,7 +21,7 @@ def get_chapters(series_id):
             "title": chapter.title,
             "status": DLDChaptersStatus(chapter.status).as_name(),
             "path": chapter.path,
-            "download_date": chapter.downloaded_at
+            "download_date": chapter.added_at
         }
         for chapter in db.Session.query(db.DLDChapters).filter_by(series_id=series_id).all()
     ]

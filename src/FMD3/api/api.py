@@ -58,4 +58,5 @@ class Api(ApiInterface):
     """
 
     get_active_tasks = staticmethod(get_active_tasks)
+    get_recent_tasks = staticmethod(get_recent_tasks)
     get_hanging_tasks = staticmethod(get_hanging_tasks)

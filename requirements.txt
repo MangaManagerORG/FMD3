@@ -1,6 +1,5 @@
 pygubu~=0.32
 sqlalchemy~=2.0.25
-sv_ttk
 ComicInfo~=0.0.0.dev0
 requests~=2.31.0
 pillow~=10.2.0

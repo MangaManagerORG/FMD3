@@ -24,12 +24,12 @@ class TestScanHangingTasks(unittest.TestCase):
 
         # create a hanging task
         c = DLDChapters()
-        c.status = DLDChaptersStatus.ADDED_TO_QUEUE_SCANNER.value
+        c.status = DLDChaptersStatus.ADDED_TO_QUEUE_SCANNER
         c.series_id = s.series_id
         c.chapter_id = "sAcha_1"
         c.number = 5
         c.volume = 1
-        c.downloaded_at = datetime.now() - timedelta(hours=3)
+        c.added_at = datetime.now() - timedelta(hours=3)
         mock_Session.add(c)
         mock_Session.commit()
 
@@ -118,12 +118,12 @@ class TestNewChapterFinder(unittest.TestCase):
         mock_session().commit()
         # Make chapter as if it were downloaded
         c = DLDChapters()
-        c.status = DLDChaptersStatus.DOWNLOADED.value
+        c.status = DLDChaptersStatus.DOWNLOADED
         c.series_id = s.series_id
         c.chapter_id = "sBcha_1"
         c.number = 5
         c.volume = 1
-        c.downloaded_at = datetime.now() - timedelta(hours=3)
+        c.added_at = datetime.now() - timedelta(hours=3)
         mock_session.add(c)
         mock_session.commit()
 
@@ -150,12 +150,12 @@ class TestNewChapterFinder(unittest.TestCase):
         mock_session().commit()
         # Make chapter as if it were downloaded
         c = DLDChapters()
-        c.status = DLDChaptersStatus.DOWNLOADED.value
+        c.status = DLDChaptersStatus.DOWNLOADED
         c.series_id = s.series_id
         c.chapter_id = "sBcha_1"
         c.number = 5
         c.volume = 1
-        c.downloaded_at = datetime.now() - timedelta(hours=3)
+        c.added_at = datetime.now() - timedelta(hours=3)
         mock_session.add(c)
         mock_session.commit()
 

@@ -25,7 +25,7 @@ def chapter_exists(series_id, chapter_id, session=Session, ):
                 # Only allow if added more than 30 minutes ago. Changed for active list in task manager
                 # and_(
                 #     DLDChapters.status == 2,
-                #     DLDChapters.downloaded_at + timedelta(minutes=30) < datetime.now()
+                #     DLDChapters.added_at + timedelta(minutes=30) < datetime.now()
                 # )
             )
     ).all())

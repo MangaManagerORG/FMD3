@@ -62,7 +62,7 @@ class TaskManager:
                 ret.number = chapter.number
                 ret.title = chapter.title
                 ret.volume = chapter.volume
-                ret.status = (DDLCS.ADDED_TO_QUEUE_USER if manual_download else DDLCS.ADDED_TO_QUEUE_SCANNER).value
+                ret.status = DDLCS.ADDED_TO_QUEUE_USER if manual_download else DDLCS.ADDED_TO_QUEUE_SCANNER
                 ret.path = str(path)
                 database.Session().add(ret)
                 database.Session().commit()
@@ -115,13 +115,16 @@ class TaskManager:
 
         if task.status == DDLCS.DOWNLOADED:
             logger.info(f"Processing done for {task.chapter}")
-        if task.status == DDLCS.SKIPPED:
+        elif task.status == DDLCS.SKIPPED:
             logger.warning(f"Processing skipped for {task.chapter}")
         else:
-            logger.error(f"Process failed for {task.chapter}")
+            logger.error(f"Process failed for {task.chapter} - status: '{task.status.name}'")
 
         database.Session().query(database.DLDChapters).filter(DLDChapters.chapter_id == task.chapter.chapter_id,
-                                                              DLDChapters.series_id == task.series_id).one().status = task.status.value
+                                                              DLDChapters.series_id == task.series_id).one().status = task.status
         database.Session().commit()
         self.active_tasks.remove(f"{task.series_id}/{task.chapter.chapter_id}")
-        del self.tasks_statuses[f"{task.series_id}/{task.chapter.chapter_id}"]
+        try:
+            del self.tasks_statuses[f"{task.series_id}/{task.chapter.chapter_id}"]
+        except:
+            ...

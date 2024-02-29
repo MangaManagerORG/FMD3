@@ -1,4 +1,4 @@
-from sqlalchemy import or_, and_
+from sqlalchemy import or_, and_, desc
 
 from FMD3.core import database as db
 from FMD3.core.TaskManager import TaskManager
@@ -45,7 +45,7 @@ def get_recent_tasks() -> list[HangingTaskResponse]:
         ).join(db.Series).filter(and_(
             db.DLDChapters.status != DDLCS.ADDED_TO_QUEUE_SCANNER,
             db.DLDChapters.status != DDLCS.ADDED_TO_QUEUE_USER,
-        )).order_by(db.DLDChapters.downloaded_at).limit(200).all()
+        )).order_by(desc(db.DLDChapters.added_at)).limit(200).all()
     data = [
         HangingTaskResponse(**row._mapping)
         for row in tasks

@@ -78,9 +78,13 @@ class App(BaseUI):
                             text=f"Vol.{task.volume} Ch.{task.number} - {task.chapter_id}",
                             values=(task_status, None, task.path, str(task.added_at), task.series_id),
                             )
-
+        else:
+            tree.delete(*tree.get_children("active"))
         tasks = api.get_recent_tasks()
+        recent_ids = [chapter_id for chapter_id in tree.get_children("recent")]
         for task in tasks:
+            if task.chapter_id in recent_ids:
+                continue
             tree.insert("recent", "end", iid=task.chapter_id,
                         text=f"{task.title} - Vol.{task.volume} Ch.{task.number}",
                         values=(

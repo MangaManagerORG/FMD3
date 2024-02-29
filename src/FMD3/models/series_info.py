@@ -34,14 +34,14 @@ class SeriesInfo:
         self.title: str = None
         self.alt_titles: list = None
         self.description: str = None
-        self.authors: list[str] = None
-        self.artists: list[str] = None
+        self.authors: list[str] = []
+        self.artists: list[str] = []
         self.cover_url: str = None
-        self.genres: list[str] = None
+        self.genres: list[str] = []
         self.demographic: str = None
         self.rating: str = None
         self.status: SeriesInfoStatus = None
-        self.chapters: list[Chapter] = None
+        self.chapters: list[Chapter] = []
         self.url: str = None
 
     def to_comicinfo(self) -> ComicInfo:

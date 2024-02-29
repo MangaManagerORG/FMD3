@@ -14,7 +14,7 @@ from .sources import get_source_from_url
 logger = logging.getLogger(__name__)
 
 
-def get_fav_series(sort=_NoArg.NO_ARG, order: Literal["asc", "desc"] = "desc", limit=None) -> list[db.Series]:
+def get_fav_series(sort=_NoArg.NO_ARG, order: Literal["asc", "desc"] = "desc", limit=None):
     order = desc if order == "desc" else asc
     q = db.Session().query(db.Series).filter_by(favourited=True)
     if sort != _NoArg.NO_ARG:

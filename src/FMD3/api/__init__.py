@@ -1,6 +1,7 @@
 from abc import abstractmethod
 from typing import Literal
 
+from FMD3.core.database import Series
 from FMD3.extensions.sources import ISource
 from FMD3.extensions.sources.SearchResult import SearchResult
 
@@ -11,9 +12,15 @@ class ApiInterface:
     def api_version():
         ...
 
+    """
+    #########
+    SERIES
+    #########
+    """
+
     @staticmethod
     @abstractmethod
-    def get_fav_series(sort=None, order: Literal["asc", "desc"] = "desc", limit=None):
+    def get_fav_series(sort=None, order: Literal["asc", "desc"] = "desc", limit=None) -> list[Series]:
         ...
 
     @staticmethod
@@ -28,7 +35,7 @@ class ApiInterface:
 
     @staticmethod
     @abstractmethod
-    def get_series_folder_name(website=None, manga=None, author=None, artist=None) -> str:
+    def get_series_from_url(url: str):
         ...
 
     @staticmethod
@@ -38,12 +45,18 @@ class ApiInterface:
 
     @staticmethod
     @abstractmethod
-    def get_sources() -> list[ISource]:
+    def get_series_folder_name(website=None, manga=None, author=None, artist=None) -> str:
         ...
+
+    """
+    #########
+    CHAPTERS
+    #########
+    """
 
     @staticmethod
     @abstractmethod
-    def get_source(source_id: str):
+    def get_chapters(series_id: str):
         ...
 
     @staticmethod
@@ -53,28 +66,24 @@ class ApiInterface:
 
     @staticmethod
     @abstractmethod
-    def get_chapters(series_id: str):
-        ...
-
-    @staticmethod
-    @abstractmethod
     def download_chapters(source_id: str, series_id: str, chapter_ids: list[str]|Literal["all"] = None, output_path: str = None,
                           enable_series: bool=False, fav_series:bool=False):
         ...
 
+    """
+    #########
+    SOURCES
+    #########
+   """
+
     @staticmethod
     @abstractmethod
-    def get_settings():
+    def get_sources() -> list[ISource]:
         ...
 
     @staticmethod
     @abstractmethod
-    def update_settings(settings):
-        ...
-
-    @staticmethod
-    @abstractmethod
-    def update_settings_save_to(series_id: str, save_to: str):
+    def get_source(source_id: str):
         ...
 
     @staticmethod
@@ -97,10 +106,33 @@ class ApiInterface:
     def check_source_updates():
         ...
 
+    """
+    #########
+    SETTINGS
+    #########
+    """
+
     @staticmethod
     @abstractmethod
-    def get_series_from_url(url: str):
+    def get_settings():
         ...
+
+    @staticmethod
+    @abstractmethod
+    def update_settings(settings):
+        ...
+
+    @staticmethod
+    @abstractmethod
+    def update_settings_save_to(series_id: str, save_to: str):
+        ...
+
+    """
+    #########
+    TASKS
+    #########
+    """
+
     @staticmethod
     @abstractmethod
     def get_hanging_tasks():

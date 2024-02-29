@@ -2,12 +2,12 @@ from typing import Literal
 
 import requests
 
-from FMD3.core.database import Series
+from FMD3.api.models.series import SeriesResponse
 from FMD3.api import ApiInterface
 from FMD3.extensions.sources import ISource
 from FMD3.extensions.sources.SearchResult import SearchResult
 from FMD3.models.ddl_chapter_status import DLDChaptersStatus
-from FMD3_API.app.models.tasks import HangingTaskResponse
+from FMD3.api.models.tasks import HangingTaskResponse
 from FMD3_Tkinter.client_settings import Settings
 
 session = requests.Session()
@@ -33,13 +33,16 @@ class Api(ApiInterface):
     """
 
     @staticmethod
-    def get_fav_series(sort=None, order: Literal["asc", "desc"] = "desc", limit=None) -> list[Series]:
-        response = session.get(host_url()+f"/series?sort={sort}&order={order}{f'&limit={limit}' if limit is not None else ''}")
+    def get_fav_series(sort=None, order: Literal["asc", "desc"] = "desc", limit=None) -> list[SeriesResponse]:
+        response = session.get(
+            host_url() + f"/series?sort={sort}&order={order}{f'&limit={limit}' if limit is not None else ''}")
+
         if response.status_code == 200:
-            return response.json()
+            return [SeriesResponse(**item)
+                    for item in response.json()]
         else:
             # Handle errors if necessary
-            return None
+            return []
 
     @staticmethod
     def add_fav_series(source_id: str, series_id: str, output_path=None):
@@ -190,7 +193,7 @@ class Api(ApiInterface):
 
     @staticmethod
     def get_recent_tasks():
-        response = session.get(host_url() + "/tasks/hanging")
+        response = session.get(host_url() + "/tasks/recent")
         hanging_tasks = [
             HangingTaskResponse(
                 number=item['number'],

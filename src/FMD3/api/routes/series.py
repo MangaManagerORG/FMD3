@@ -10,6 +10,7 @@ from FMD3.core import database as db
 from FMD3.core.database.predefined import get_column_from_str
 from FMD3.core.utils import get_series_folder_name as sup_get_series_folder_name
 from .sources import get_source_from_url
+from ..models.series import SeriesInfoResponse, SeriesResponse
 
 logger = logging.getLogger(__name__)
 
@@ -22,18 +23,18 @@ def get_fav_series(sort=_NoArg.NO_ARG, order: Literal["asc", "desc"] = "desc", l
     if limit:
         q = q.limit(limit)
     return [
-        {
-            "series_id": series.series_id,
-            "enabled": series.enabled,
-            "source_id": series.source_id,
-            "title": series.title,
-            "status": series.status,
-            "max_chapter": -1,
-            "save_to": series.save_to,
-            "dateadded": series.dateadded,
-            "datelastchecked": series.datelastchecked,
-            "datelastupdated": series.datelastupdated
-        }
+        SeriesResponse(
+            series_id=series.series_id,
+            enabled=series.enabled,
+            source_id=series.source_id,
+            title=series.title,
+            status=series.status,
+            max_chapter=-1,
+            save_to=series.save_to,
+            dateadded=series.dateadded,
+            datelastchecked=series.datelastchecked,
+            datelastupdated=series.datelastupdated
+        )
         for series in q.all()
     ]
 

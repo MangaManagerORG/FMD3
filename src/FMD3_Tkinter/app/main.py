@@ -450,22 +450,22 @@ class App(BaseUI):
         series_list = api.get_fav_series(sort="dateadded", order="desc")
 
         for series in series_list:
-            if series.get("series_id") not in self.fav_tree_loaded_parents:
-                source = api.get_source(source_id=series.get("source_id"))
+            if series.series_id not in self.fav_tree_loaded_parents:
+                source = api.get_source(source_id=series.source_id)
                 if source:
                     source_name = source.get("name")
                 else:
                     source_name = "Unknown(Not Loaded)"
-                item_id = self.widget_favourites_treeview.insert('', 'end', series.get("series_id"),
-                                                                 text=series.get("title"),
-                                                                 values=(series.get("max_chapter"),
+                item_id = self.widget_favourites_treeview.insert('', 'end', series.series_id,
+                                                                 text=series.title,
+                                                                 values=(series.max_chapter,
                                                                          source_name,
-                                                                         series.get("save_to"),
-                                                                         series.get("dateadded"),
-                                                                         series.get("status"),
-                                                                         series.get("datelastchecked"),
-                                                                         series.get("datelastupdated"),
-                                                                         series.get("source_id")))
+                                                                         series.save_to,
+                                                                         series.dateadded,
+                                                                         series.status,
+                                                                         series.datelastchecked,
+                                                                         series.datelastupdated,
+                                                                         series.source_id))
                 # self.favourites_treeview.insert('', 'end', f"{series.series_id}.chapters", values=(series.title, series.currentchapter))
                 self.fav_tree_loaded_parents[item_id] = False
         # self.fav_sort_date_added()

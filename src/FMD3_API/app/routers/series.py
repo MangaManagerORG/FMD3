@@ -1,21 +1,22 @@
 from typing import Literal, List
 
-import jsonpickle
 from fastapi import APIRouter
 from fastapi.encoders import jsonable_encoder
 from fastapi.responses import JSONResponse
-from FMD3.api.api import Api
+
 from FMD3.api import ApiInterface
+
 from FMD3.extensions.sources.SearchResult import SearchResult
-from FMD3_API.app.models.series import SeriesInfoResponse
+from FMD3.api.models.series import SeriesInfoResponse, SeriesResponse
+from FMD3.api.api import Api
 
 Api: ApiInterface
 router = APIRouter(prefix="/series", tags=["series"])
 
 
-@router.get("/", response_model=SeriesInfoResponse)
+@router.get("/", response_model=List[SeriesResponse])
 async def get_fav_series(sort=None, order: Literal["asc", "desc"] = "desc", limit=None):
-    return Api.get_fav_series(sort=sort, order= order, limit=limit)
+    return JSONResponse(jsonable_encoder(Api.get_fav_series(sort=sort, order= order, limit=limit)))
 
 
 @router.get("/info", response_model=SeriesInfoResponse)

@@ -1,7 +1,7 @@
 from abc import abstractmethod
-from typing import Literal
+from typing import Literal, List
 
-from FMD3.core.database import Series
+from FMD3.api.models.series import SeriesInfoResponse, SeriesResponse
 from FMD3.extensions.sources import ISource
 from FMD3.extensions.sources.SearchResult import SearchResult
 
@@ -20,7 +20,7 @@ class ApiInterface:
 
     @staticmethod
     @abstractmethod
-    def get_fav_series(sort=None, order: Literal["asc", "desc"] = "desc", limit=None) -> list[Series]:
+    def get_fav_series(sort=None, order: Literal["asc", "desc"] = "desc", limit=None) -> List[SeriesResponse]:
         ...
 
     @staticmethod

@@ -1,6 +1,6 @@
 
 from fastapi import FastAPI
-from .routers import series, settings,tasks#, sources, chapters
+from .routers import series, settings,tasks, sources, chapters
 from ..__version__ import __version__
 
 app = FastAPI()
@@ -11,5 +11,5 @@ async def root():
 app.include_router(series.router)
 app.include_router(settings.router)
 app.include_router(tasks.router)
-# app.include_router(sources.router)
-# app.include_router(chapters.router)
+app.include_router(sources.router)
+app.include_router(chapters.router)

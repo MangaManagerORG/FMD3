@@ -1,7 +1,9 @@
 from abc import abstractmethod
 from typing import Literal, List
 
+from FMD3.api.models.chapters import SourceChapterResponse, DownloadChapterForm
 from FMD3.api.models.series import SeriesInfoResponse, SeriesResponse
+from FMD3.api.models.sources import SourcesResponse
 from FMD3.extensions.sources import ISource
 from FMD3.extensions.sources.SearchResult import SearchResult
 
@@ -61,13 +63,12 @@ class ApiInterface:
 
     @staticmethod
     @abstractmethod
-    def get_source_chapters(source_id: str, series_id: str, get_from: int = None):
+    def get_source_chapters(source_id: str, series_id: str, get_from: int = None) -> List[SourceChapterResponse]:
         ...
 
     @staticmethod
     @abstractmethod
-    def download_chapters(source_id: str, series_id: str, chapter_ids: list[str]|Literal["all"] = None, output_path: str = None,
-                          enable_series: bool=False, fav_series:bool=False):
+    def download_chapters(item:DownloadChapterForm):
         ...
 
     """
@@ -78,13 +79,13 @@ class ApiInterface:
 
     @staticmethod
     @abstractmethod
-    def get_sources() -> list[ISource]:
+    def get_sources() -> List[SourcesResponse]:
         ...
 
-    @staticmethod
-    @abstractmethod
-    def get_source(source_id: str):
-        ...
+    # @staticmethod
+    # @abstractmethod
+    # def get_source(source_id: str) -> SourcesResponse:
+    #     ...
 
     @staticmethod
     @abstractmethod

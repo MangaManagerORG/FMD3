@@ -37,7 +37,7 @@ class Api(ApiInterface):
     Sources definitions
     """
     get_sources = staticmethod(get_sources)
-    get_source = staticmethod(get_source)
+    # get_source = staticmethod(get_source)
     get_source_from_url = staticmethod(get_source_from_url)
     get_available_sources = staticmethod(get_available_sources)
     update_source = staticmethod(update_source)

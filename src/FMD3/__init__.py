@@ -44,7 +44,7 @@ def setup_logging(log_file_path, level=DEBUG):
     stream_handler = StreamHandler(sys.stdout)
     stream_handler.setLevel(level)
     basicConfig(level=DEBUG,
-                format='%(asctime)s - %(name)20s - %(levelname)8s - %(message)s',
+                format='%(asctime)s - [%(process)5s-%(thread)5s] - %(name)20s - %(levelname)8s - %(message)s',
                 handlers=[stream_handler, rotating_file_handler, umpumped_handler]
                 # filename='/tmp/myapp.log'
                 )

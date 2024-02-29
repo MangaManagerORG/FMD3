@@ -10,6 +10,7 @@ import pygubu
 
 import customtkinter
 
+from FMD3.api.models.chapters import ChapterResponse
 from .widgets.custom_tk_variables import KeyPairVar, KeyPair
 from .styles import setup_ttk_styles
 from . import widgets
@@ -130,13 +131,14 @@ class BaseUI:
         self.builder.get_object("widget_series_saveto_seriesfolder_entry").configure(
             state="normal" if value else "disabled")
 
-    def list_chapters_treeview(self,widget, chapter_list: list, tags: tuple[str]):
+    @staticmethod
+    def list_chapters_treeview(widget, chapter_list: list[ChapterResponse], tags: tuple[str]):
         for chapter in chapter_list:
             try:
-                widget.insert('', 'end', chapter.get("chapter_id"),
-                              values=(chapter.get("volume"), chapter.get("number"), chapter.get("title")), tags=tags)
+                widget.insert('', 'end', chapter.chapter_id,
+                              values=(chapter.volume, chapter.number, chapter.title), tags=tags)
             except Exception as e:
-                logging.getLogger().error(f"Unhandled exception inserting one chapter: '{e} - {chapter.get('number')}  {chapter.get('title')}'")
+                logging.getLogger().error(f"Unhandled exception inserting one chapter: '{e} - {chapter.number}  {chapter.title}'")
 
     def on_series_chapters_actionmenu(self, menu, value):
         match menu:

@@ -1,5 +1,7 @@
 import json
 import logging
+
+from FMD3.api import DownloadChapterForm
 from FMD3.extensions.sources.SearchResult import SearchResult
 
 from .baseui import BaseUI
@@ -81,7 +83,8 @@ class App(BaseUI):
         for task in tasks:
             tree.insert("recent", "end", iid=task.chapter_id,
                         text=f"{task.title} - Vol.{task.volume} Ch.{task.number}",
-                        values=(task.status.name, task.source_id, task.path, str(task.added_at), str(task.downloaded_at)))
+                        values=(
+                        task.status.name, task.source_id, task.path, str(task.added_at), str(task.downloaded_at)))
         self.mainwindow.after(12000, self.refresh_active_tasks)
 
     """
@@ -198,11 +201,11 @@ class App(BaseUI):
         if dld_chapters := api.get_chapters(series_id):
             has_chapters = True
             self.widget_series_chapter_nochapters_frame.lower()
-            last_in_db = max(dld_chapters, key=lambda x: x["number"])
+            last_in_db = max(dld_chapters, key=lambda x: x.number)
             # Add chapters with "downloaded" tag
             self.list_chapters_treeview(self.widget_series_chapter_treeview, dld_chapters, ("downloaded",))
             # Prepare query to get the rest of chapters
-            args = (self.selected_source_id, series_id, last_in_db.get("number"))
+            args = (self.selected_source_id, series_id, last_in_db.number)
         else:
             # Prepare query to get all chapters
             args = (data["source_id"], series_id)
@@ -260,7 +263,7 @@ class App(BaseUI):
 
         series_path_or_modifie = folder_name
 
-        sanitized_download_lib_path =lib_path + "/" + series_path_or_modifie
+        sanitized_download_lib_path = lib_path + "/" + series_path_or_modifie
         if data:
             if data.get("save_to", None) is not None:
                 self.widget_series_saveto_seriesfolder_entry.configure(state="disabled")
@@ -277,7 +280,6 @@ class App(BaseUI):
     """
 
     def on_series_chapters_actionmenu_download(self, action):
-        ...
         print("sada")
         series_id = self.last_search_selected_item
         source_id = self.selected_source_id
@@ -285,12 +287,25 @@ class App(BaseUI):
         match action:
             case "Download Selected":
                 chapter_ids = self.widget_series_chapter_treeview.selection()
-                api.download_chapters(source_id=source_id, series_id=series_id, chapter_ids=chapter_ids,
-                                      output_path=output_path)
-            case "Download All":
-                api.download_chapters(source_id=source_id, series_id=series_id, chapter_ids="all",
-                                      output_path=output_path)
+                data = DownloadChapterForm(**{
+                    "source_id": source_id,
+                    "series_id": series_id,
+                    "chapter_ids": chapter_ids,
+                    "output_path": output_path,
+                    "enable_series": False,
+                    "fav_series": False
+                })
 
+            case "Download All":
+                data = DownloadChapterForm(**{
+                    "source_id": source_id,
+                    "series_id": series_id,
+                    "chapter_ids": "all",
+                    "output_path": output_path,
+                    "enable_series": False,
+                    "fav_series": False
+                })
+        api.download_chapters(data)
     def on_series_chapters_actionmenu_favourite(self, action):
         series_id = self.last_search_selected_item
         source_id = self.selected_source_id
@@ -298,8 +313,15 @@ class App(BaseUI):
         if action == "Add to fav":
             api.add_fav_series(source_id=source_id, series_id=series_id, output_path=output_path)
         elif action == 'Add to fav & add to download queue':
-            api.download_chapters(source_id=source_id, series_id=series_id, chapter_ids="all",
-                                  output_path=output_path, enable_series=True, fav_series=True)
+            data = DownloadChapterForm(**{
+                "source_id": source_id,
+                "series_id": series_id,
+                "chapter_ids": "all",
+                "output_path": output_path,
+                "enable_series": True,
+                "fav_series": True
+            })
+            api.download_chapters(data)
         self.on_favourites_refresh()
 
     """
@@ -321,7 +343,7 @@ class App(BaseUI):
                     "key": "user_libraries",
                     "name": "User defined libraries",
                     "value": None,
-                    "values":[],
+                    "values": [],
                     "type": 1,
                     "tooltip": "",
                     "def_value": [],
@@ -344,10 +366,9 @@ class App(BaseUI):
             self.widget_settings_saveto_libraries_default_optionmenu.set(def_keypair)
             self.widget_series_saveto_library_optionmenu.set(def_keypair)
 
-
         # Load the rest of user-defined libraries
 
-        for library in self.settings["UI"].get("user_libraries",None)["values"]:
+        for library in self.settings["UI"].get("user_libraries", None)["values"]:
             if library == default_lib:
                 continue
             id_ = id(library)
@@ -357,13 +378,13 @@ class App(BaseUI):
                                                                   values=(library["alias"], library["path"]))
         core = self.settings["Core"]
 
-        self.var_settings_saveto_dogenerate_manga_folder.set(core["generate_series_folder"].get("value",core["series_folder_name"]["def_value"]))
-        self.var_settings_saveto_mangafolder_name.set(core["series_folder_name"].get("value",core["series_folder_name"]["def_value"]))
-        self.var_settings_saveto_chapter_name.set(core["chapter_name"].get("value",core["chapter_name"]["def_value"]))
+        self.var_settings_saveto_dogenerate_manga_folder.set(
+            core["generate_series_folder"].get("value", core["series_folder_name"]["def_value"]))
+        self.var_settings_saveto_mangafolder_name.set(
+            core["series_folder_name"].get("value", core["series_folder_name"]["def_value"]))
+        self.var_settings_saveto_chapter_name.set(core["chapter_name"].get("value", core["chapter_name"]["def_value"]))
         self.on_series_saveto_library_selected()
         self.on_series_saveto_seriesfolder_updated()
-
-
 
     """
     Settings SaveTo
@@ -434,7 +455,6 @@ class App(BaseUI):
         chapter_name = self.var_settings_saveto_chapter_name.get()
         self.settings["Core"]["chapter_name"]["value"] = chapter_name
 
-
         api.update_settings(json.dumps(self.settings))
 
     """
@@ -451,9 +471,9 @@ class App(BaseUI):
 
         for series in series_list:
             if series.series_id not in self.fav_tree_loaded_parents:
-                source = api.get_source(source_id=series.source_id)
+                source = list(filter(lambda x: x.ID == series.source_id, sources))
                 if source:
-                    source_name = source.get("name")
+                    source_name = source[0].NAME
                 else:
                     source_name = "Unknown(Not Loaded)"
                 item_id = self.widget_favourites_treeview.insert('', 'end', series.series_id,

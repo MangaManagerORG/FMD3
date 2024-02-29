@@ -1,9 +1,10 @@
-from typing import Literal
+from typing import Literal, List
 
 import requests
 
+from FMD3.api.models.chapters import ChapterResponse, SourceChapterResponse, DownloadChapterForm
 from FMD3.api.models.series import SeriesResponse
-from FMD3.api import ApiInterface
+from FMD3.api import ApiInterface, SourcesResponse
 from FMD3.extensions.sources import ISource
 from FMD3.extensions.sources.SearchResult import SearchResult
 from FMD3.models.ddl_chapter_status import DLDChaptersStatus
@@ -96,16 +97,29 @@ class Api(ApiInterface):
 
     @staticmethod
     def get_chapters(series_id: str):
-        ...
+        response = session.get(
+            host_url() + f"/chapters/{series_id}")
+        if response.status_code == 200:
+            return [ChapterResponse(**item)
+                    for item in response.json()]
+        else:
+            return None
 
     @staticmethod
-    def download_chapters(source_id: str, series_id: str, chapter_ids: list[str] | Literal["all"] = None,
-                          output_path: str = None, enable_series: bool = False, fav_series: bool = False):
-        pass
+    def download_chapters(item:DownloadChapterForm):
+        response = session.post(host_url() + f"/chapters/download",json=item.dict())
+        if response.status_code == 200:
+            return True
 
     @staticmethod
-    def get_source_chapters(source_id: str, series_id: str, get_from: int = None):
-        pass
+    def get_source_chapters(source_id: str, series_id: str, get_from: int = -1) -> List[SourceChapterResponse]:
+        response = session.get(
+            host_url() + f"/sources/{source_id}/{series_id}?get_from={get_from}")
+        if response.status_code == 200:
+            return [SourceChapterResponse(**item)
+                    for item in response.json()]
+        else:
+            return None
 
     """
     #########
@@ -114,8 +128,14 @@ class Api(ApiInterface):
     """
 
     @staticmethod
-    def get_sources() -> list[ISource]:
-        pass
+    def get_sources() -> List[SourcesResponse]:
+        response = session.get(
+            host_url() + f"/sources")
+        if response.status_code == 200:
+            return [SourcesResponse(**item)
+                    for item in response.json()]
+        else:
+            return None
 
     @staticmethod
     def get_source(source_id: str):

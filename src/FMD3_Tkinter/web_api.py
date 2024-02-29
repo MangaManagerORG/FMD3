@@ -6,6 +6,8 @@ from FMD3.core.database import Series
 from FMD3.api import ApiInterface
 from FMD3.extensions.sources import ISource
 from FMD3.extensions.sources.SearchResult import SearchResult
+from FMD3.models.ddl_chapter_status import DLDChaptersStatus
+from FMD3_API.app.models.tasks import HangingTaskResponse
 from FMD3_Tkinter.client_settings import Settings
 
 session = requests.Session()
@@ -32,7 +34,7 @@ class Api(ApiInterface):
 
     @staticmethod
     def get_fav_series(sort=None, order: Literal["asc", "desc"] = "desc", limit=None) -> list[Series]:
-        response = session.get(host_url() + "/series?sort=" + sort + "&order=" + order + "" + "&limit=" + limit)
+        response = session.get(host_url()+f"/series?sort={sort}&order={order}{f'&limit={limit}' if limit is not None else ''}")
         if response.status_code == 200:
             return response.json()
         else:
@@ -140,7 +142,12 @@ class Api(ApiInterface):
 
     @staticmethod
     def get_settings():
-        pass
+        response = session.get(host_url() + "/settings")
+        if response.status_code == 200:
+            return response.json()
+        else:
+            # Handle errors if necessary
+            return None
 
     @staticmethod
     def update_settings(settings):
@@ -158,7 +165,24 @@ class Api(ApiInterface):
 
     @staticmethod
     def get_hanging_tasks():
-        pass
+        response = session.get(host_url() + "/tasks/hanging")
+        hanging_tasks = [
+            HangingTaskResponse(
+                number=item['number'],
+                volume=item['volume'],
+                title=item['title'],
+                status=DLDChaptersStatus(item['status']),  # Replace YourEnum with the actual Enum class
+                path=item['path'],
+                added_at=item['added_at'],
+                downloaded_at=item['downloaded_at']
+            )
+            for item in response.json()
+        ]
+        if response.status_code == 200:
+            return hanging_tasks
+        else:
+            # Handle errors if necessary
+            return None
 
     @staticmethod
     def get_active_tasks():
@@ -166,4 +190,21 @@ class Api(ApiInterface):
 
     @staticmethod
     def get_recent_tasks():
-        pass
+        response = session.get(host_url() + "/tasks/hanging")
+        hanging_tasks = [
+            HangingTaskResponse(
+                number=item['number'],
+                volume=item['volume'],
+                title=item['title'],
+                status=DLDChaptersStatus(item['status']),  # Replace YourEnum with the actual Enum class
+                path=item['path'],
+                added_at=item['added_at'],
+                downloaded_at=item['downloaded_at']
+            )
+            for item in response.json()
+        ]
+        if response.status_code == 200:
+            return hanging_tasks
+        else:
+            # Handle errors if necessary
+            return None

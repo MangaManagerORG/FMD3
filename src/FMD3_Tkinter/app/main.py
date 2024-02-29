@@ -65,16 +65,17 @@ class App(BaseUI):
         logging.getLogger().info("Refreshing active tasks")
         tree = self.widget_tasks_treeview
         tasks = api.get_active_tasks()
-        active_ids = [chapter.chapter_id for chapter, status in tasks]
-        delete_ids = [chapter_id for chapter_id in tree.get_children("hanging") if chapter_id in active_ids]
-        tree.delete(*delete_ids)
-        tree.delete(*tree.get_children("active"))
-        tree.delete(*tree.get_children("recent"))
-        for task, task_status in tasks:
-            tree.insert("active", "end", iid=task.chapter_id,
-                        text=f"Vol.{task.volume} Ch.{task.number} - {task.chapter_id}",
-                        values=(task_status, None, task.path, str(task.added_at), task.series_id),
-                        )
+        if tasks:
+            active_ids = [chapter.chapter_id for chapter, status in tasks]
+            delete_ids = [chapter_id for chapter_id in tree.get_children("hanging") if chapter_id in active_ids]
+            tree.delete(*delete_ids)
+            tree.delete(*tree.get_children("active"))
+            tree.delete(*tree.get_children("recent"))
+            for task, task_status in tasks:
+                tree.insert("active", "end", iid=task.chapter_id,
+                            text=f"Vol.{task.volume} Ch.{task.number} - {task.chapter_id}",
+                            values=(task_status, None, task.path, str(task.added_at), task.series_id),
+                            )
 
         tasks = api.get_recent_tasks()
         for task in tasks:

@@ -1,5 +1,8 @@
 import argparse
 from FMD3_Tkinter.run_local import run_local
+from FMD3_Tkinter.run_web_client import run_web
+
+
 # from FMD3_Tkinter.run_web_client import run_web
 
 
@@ -10,8 +13,8 @@ def main():
     args = parser.parse_args()
 
     if args.web:
-        # run_web()
-        pass
+        run_web()
+        # pass
     else:
         run_local()
 

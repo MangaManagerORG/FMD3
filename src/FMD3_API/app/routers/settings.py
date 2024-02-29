@@ -1,20 +1,22 @@
-from fastapi import APIRouter
-from FMD3.api.settings import get_settings as sup_get_settings, update_settings as sup_update_settings, \
-    update_save_to as sup_update_save_to
+from fastapi import APIRouter, Body
+from fastapi.responses import JSONResponse
+from FMD3.api.api import Api
 
-router = APIRouter()
+router = APIRouter(prefix="/settings", tags=["settings"])
 
 
-@router.get("/settings/")
+@router.get("/")
 async def get_settings():
-    return sup_get_settings()
+    res = JSONResponse(Api.get_settings())
+    return res
 
 
 @router.post("/settings/update/")
-async def update_settings(settings: dict):
-    return sup_update_settings(settings)
-
-
-@router.post("/settings/update/save_to")
-async def update_settings_save_to(series_id: str, save_to: str):
-    return sup_update_save_to(series_id, save_to)
+async def update_settings(data: str = Body(...)):
+    Api.update_settings(data)
+    return {"message": "Received JSON data successfully"}
+#
+#
+# @router.post("/settings/update/save_to")
+# async def update_settings_save_to(series_id: str, save_to: str):
+#     return sup_update_save_to(series_id, save_to)

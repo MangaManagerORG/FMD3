@@ -19,7 +19,7 @@ def append_cinfo(cbz_path: Path | str, cinfo: ComicInfo):
         )
 
 
-def analyze_archive(output_file_path, series_id, chapter:Chapter) -> bool:
+def analyze_archive(output_file_path, series_id, chapter: Chapter) -> bool:
     """
         Analyzes an archive file to determine if it exists and has the correct number of files.
 
@@ -39,12 +39,16 @@ def analyze_archive(output_file_path, series_id, chapter:Chapter) -> bool:
         that the file needs to be processed further.
         """
     if Path(output_file_path).exists():
-
-        with ZipFile(output_file_path, "r") as zf:
-            n_images_and_cinfo = len([file for file in zf.namelist() if
-                                      os.path.splitext(file)[1].lower() in [".webp", ".jpg", ".png", ".xml"]])
-            if n_images_and_cinfo == chapter.pages + 1:
-                logger.warning(
-                    f"File '{output_file_path}' - series '{series_id}' chapter number '{chapter.number}' chapter id '{chapter.chapter_id}' is apparently already downloaded. Skipping with status 4")
-                return True
+        logger.trace("Analyzing file: {}".format(output_file_path))
+        try:
+            with ZipFile(Path(output_file_path), "r") as zf:
+                n_images_and_cinfo = len([file for file in zf.namelist() if
+                                          os.path.splitext(file)[1].lower() in [".webp", ".jpg", ".png", ".xml"]])
+                if n_images_and_cinfo == chapter.pages + 1:
+                    logger.warning(
+                        f"File '{output_file_path}' - series '{series_id}' chapter number '{chapter.number}' chapter id '{chapter.chapter_id}' is apparently already downloaded. Skipping with status 4")
+                    return True
+        except Exception:
+            logger.exception("Unhandled error analyzing file")
+            return False
     return False

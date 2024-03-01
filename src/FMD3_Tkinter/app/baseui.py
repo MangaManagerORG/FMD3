@@ -1,6 +1,8 @@
 #!/usr/bin/python3
 import logging
+import os
 import pathlib
+import signal
 import tkinter
 import tkinter as tk
 from tkinter import END
@@ -9,6 +11,7 @@ from tkinter.ttk import Treeview
 import pygubu
 
 import customtkinter
+import ttkwidgets
 
 from FMD3.api.models.chapters import ChapterResponse
 from .widgets.custom_tk_variables import KeyPairVar, KeyPair
@@ -28,7 +31,7 @@ class BaseUI:
         builder.add_from_file(PROJECT_UI)
         # Main widget
         self.mainwindow: customtkinter.CTk = builder.get_object("ctk1", master)
-
+        # self.mainwindow.protocol("WM_DELETE_WINDOW", on_close)
         # builder.connect_callbacks(self)
 
         """
@@ -37,7 +40,7 @@ class BaseUI:
         self.widget_series_source_optionmenu = self.builder.get_object("widget_series_source_optionmenu")
         self.widget_series_search_treeview = self.builder.get_object("widget_series_search_treeview")
         self.widget_series_cover = self.builder.get_object("widget_series_cover")
-        self.widget_series_chapter_treeview = self.builder.get_object("widget_series_chapter_treeview")
+        self.widget_series_chapter_treeview:ttkwidgets.CheckboxTreeview = self.builder.get_object("widget_series_chapter_treeview")
         self.widget_series_chapter_nochapters_frame = self.builder.get_object("widget_series_chapter_nochapters_frame")
         self.widget_series_saveto_library_optionmenu = self.builder.get_object("widget_series_saveto_library_optionmenu")
         self.widget_series_saveto_seriesfolder_entry = self.builder.get_object("widget_series_saveto_seriesfolder_entry")

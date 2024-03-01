@@ -174,6 +174,13 @@ class Api(ApiInterface):
 
     @staticmethod
     def update_settings(settings):
+        response = session.post(host_url() + "/settings/", json=settings)
+        if response.status_code == 200:
+            return response.json()
+        else:
+            # Handle errors if necessary
+            return None
+
         pass
 
     @staticmethod

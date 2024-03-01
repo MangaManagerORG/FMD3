@@ -29,7 +29,7 @@ class SeriesInfoResponse(BaseModel):
     cover_url: str
     genres: List[str]
     demographic: str|None
-    rating: float|None
+    rating: float|str|None
     status: str
     chapters: list|None
     save_to: Optional[str]

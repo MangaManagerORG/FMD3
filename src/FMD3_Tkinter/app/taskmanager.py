@@ -21,3 +21,8 @@ class TaskManager:
         thread_future = self.__DPE.submit(try_func, func, *args, **kwargs)
         if callback is not None:
             thread_future.add_done_callback(callback)
+
+    def shutdown(self,*_):
+        logger.info("Shutting down [Client taskmanager]")
+        self.__DPE.shutdown(wait=False)
+

@@ -290,7 +290,7 @@ class App(BaseUI):
         output_path = self.var_series_saveto_final_path.get()
         match action:
             case "Download Selected":
-                chapter_ids = self.widget_series_chapter_treeview.selection()
+                chapter_ids = self.widget_series_chapter_treeview.get_checked()
                 data = DownloadChapterForm(**{
                     "source_id": source_id,
                     "series_id": series_id,

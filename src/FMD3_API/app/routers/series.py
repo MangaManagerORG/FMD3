@@ -21,7 +21,7 @@ async def get_fav_series(sort=None, order: Literal["asc", "desc"] = "desc", limi
 
 @router.get("/info", response_model=SeriesInfoResponse)
 async def get_series_info(source_id: str, series_id: str):
-    return Api.get_series_info(source_id, series_id)
+    return JSONResponse(jsonable_encoder(Api.get_series_info(source_id, series_id)))
 
 
 @router.get("/url", response_model=SeriesInfoResponse)

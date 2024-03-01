@@ -31,7 +31,6 @@ def trace(self, message, *args, **kws):
 class UmpumpedLogHandler(Handler):
     def emit(self, record):
         umpumped_events.append(record)
-        record.exc_info
 
 
 def setup_logging(log_file_path, level=DEBUG):

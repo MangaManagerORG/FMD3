@@ -11,7 +11,7 @@ async def get_settings():
     return res
 
 
-@router.post("/settings/update/")
+@router.post("/")
 async def update_settings(data: str = Body(...)):
     Api.update_settings(data)
     return {"message": "Received JSON data successfully"}

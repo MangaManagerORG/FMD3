@@ -1,10 +1,11 @@
 import logging
+import signal
 import threading
 
-from concurrent.futures import ProcessPoolExecutor, ThreadPoolExecutor
+from concurrent.futures import ProcessPoolExecutor, ThreadPoolExecutor, Future
 from concurrent.futures.process import BrokenProcessPool
 
-from FMD3.core import database
+from FMD3.core import database, register_termination_handler
 from FMD3.core.database import DLDChapters
 from FMD3.core.database.predefined import chapter_exists
 from FMD3.core.downloader.processing import convert_and_zip
@@ -23,11 +24,20 @@ class TaskManager:
     def __new__(cls, *args, **kwargs):
         if cls.__instance is None:
             TaskManager.__instance = object.__new__(cls)
+
             TaskManager.__instance.__DPE = ThreadPoolExecutor(max_workers=5)  # Download Pool executro
             TaskManager.__instance.__PPE = ProcessPoolExecutor()
+            register_termination_handler(TaskManager.__instance.shutdown)
             TaskManager.__instance.active_tasks = set()
             TaskManager.__instance.tasks_statuses = {}
         return cls.__instance
+
+    def shutdown(self,*_):
+        logger.info("Shutting down [Core taskmanager]")
+        self.__DPE.shutdown(wait=False,cancel_futures=True)
+        logger.info("Shutting down [Core taskmanager] -- Waiting for processes to finish")
+        self.__PPE.shutdown(wait=True,cancel_futures=True)
+        logger.info("Shutting down [Core taskmanager] -- All processes finished")
 
     def _pre_update_status(self, task_id, func, *args):
         with lock:
@@ -97,10 +107,14 @@ class TaskManager:
         process_future.add_done_callback(self.pre_on_process_done)
         self.tasks_statuses[f"{thread_result.series_id}/{thread_result.chapter.chapter_id}"] = "compressing"
 
-    def pre_on_process_done(self,future):
+    def pre_on_process_done(self,future:Future):
         try:
+            print(future.exception())
+            if future.exception():
+                raise future.exception()
             task: DownloadTask = future.result()
-        except BrokenProcessPool:
+        except BrokenProcessPool as e:
+            print(e)
             global print_once_process_exception
             # Main process that excepted raised exceptions.
             # These are just telling one process exited thus provides no info

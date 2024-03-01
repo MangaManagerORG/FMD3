@@ -12,6 +12,7 @@ from FMD3.core.database.predefined import max_chapter_number
 from FMD3.core.utils import make_output_path
 from FMD3.models.chapter import Chapter
 from FMD3.extensions.sources import get_sources_list, ISource, get_source_by_id
+from FMD3.models.series_info import SeriesInfoStatus
 
 logger = logging.getLogger(__name__)
 

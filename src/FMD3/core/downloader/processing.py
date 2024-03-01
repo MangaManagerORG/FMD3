@@ -1,6 +1,7 @@
 import io
 import logging
 import os
+import signal
 from io import BytesIO
 from zipfile import ZipFile
 
@@ -25,7 +26,6 @@ def convert_image(image_data:io.BytesIO) -> io.BytesIO:
         bytes: Converted image data.
     """
     try:
-        logger.info("Converting image")
         image = Image.open(image_data)
         # Check if resizing is needed
         is_grayscale = image.mode in ('L', 'LA') or all(
@@ -51,7 +51,17 @@ def convert_image(image_data:io.BytesIO) -> io.BytesIO:
         raise
 
 
+def sig_cb(*args, **kwargs):
+    """
+    Custom signal handler so pool won't break on sigint
+    """
+
+
 def convert_and_zip(task: DownloadTask):
+    # Register signint so process in pool won't break
+    signal.signal(signal.SIGINT, sig_cb)
+
+    logger.debug(f"Started processing for {task.output_path}")
     try:
         with ZipFile(task.output_path, "w") as zout:
 
@@ -77,9 +87,9 @@ def convert_and_zip(task: DownloadTask):
                 try:
                     zout.writestr(new_filename, image_bytes)
                     task.status = DLDChaptersStatus.DOWNLOADED
-                    logger.info(f"Successfully download at {task.output_path}")
+                    logger.trace(f"Successfully addded '{new_filename}' to {task.series_id} - {task.chapter.number}")
                 except Exception:
-                    logger.exception("Exception writing to zipfile")
+                    logger.exception(f"Exception writing '{new_filename}' to to zipfile {task.series_id} - {task.chapter}")
                     task.status = DLDChaptersStatus.ERRORED
                     break
 
@@ -89,4 +99,5 @@ def convert_and_zip(task: DownloadTask):
     finally:
         # clean so bytes won't be pickled
         task.img_bytes_list = None
+        logger.debug(f"Finished processing for {task.output_path}")
     return task

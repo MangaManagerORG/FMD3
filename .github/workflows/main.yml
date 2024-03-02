@@ -216,12 +216,22 @@ jobs:
           name: 'macOS-latestFMD3-WebClient_BundledFolder--dist'
           path: 'macOS/'
         continue-on-error: true
-
+      - name: make release artifacts folder
+        run: |
+          mkdir release_artifacts
+      - name: Zip windows artifacts
+        run: |
+          mkdir release_artifacts/windows
+          for folder in windows/; do
+            folder=${folder%/}
+            zip -r "release_artifacts/windows/${folder}.zip" "$folder"
+            echo "zipped $folder"
+          done
       - name: Make release
         uses: ncipollo/release-action@v1
         with:
           prerelease: true
-          artifacts: "windows/*"
+          artifacts: "release_artifacts/*/*"
           tag: ${{ steps.vars.outputs.sha_short }}
 
 

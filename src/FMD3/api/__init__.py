@@ -4,7 +4,6 @@ from typing import Literal, List
 from FMD3.api.models.chapters import SourceChapterResponse, DownloadChapterForm
 from FMD3.api.models.series import SeriesInfoResponse, SeriesResponse
 from FMD3.api.models.sources import SourcesResponse
-from FMD3.extensions.sources import ISource
 from FMD3.extensions.sources.SearchResult import SearchResult
 
 

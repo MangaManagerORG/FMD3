@@ -14,7 +14,7 @@ widgets.do_not_clear_import = None
 
 sources = api.get_sources()
 
-
+logger = logging.getLogger(__name__)
 class App(BaseUI):
 
     def __init__(self):
@@ -64,7 +64,7 @@ class App(BaseUI):
                         values=("Hanging", None, task.path, str(task.added_at), task.series_id))
 
     def refresh_active_tasks(self):
-        logging.getLogger().info("Refreshing active tasks")
+        logger.debug("Refreshing active tasks")
         tree = self.widget_tasks_treeview
         tasks = api.get_active_tasks()
         if tasks:

@@ -4,12 +4,6 @@ from PyInstaller.building.api import EXE as EXE_, COLLECT as COLLECT_, PYZ
 from PyInstaller.building.build_main import Analysis as Analysis_
 
 
-ver_path = "src/FMD3_API/__version__.py"
-with open(ver_path, 'r') as version_file:
-    version_globals = {}
-    exec(version_file.read(), version_globals)
-    raw_version = version_globals.get('__version__', "")
-
 datas = []
 binaries = []
 hiddenimports = ["FMD3", "PIL.ImageFont", "PIL.ImageDraw"]

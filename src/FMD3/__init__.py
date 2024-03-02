@@ -2,8 +2,9 @@ import logging
 import sys
 from logging import DEBUG, INFO, Handler, StreamHandler, basicConfig, addLevelName, Logger
 from logging.handlers import RotatingFileHandler
+from pathlib import Path
 
-from FMD3.constants import LOGFILE_PATH
+from FMD3.constants import LOGFILE_PATH, FMD3_PATH, is_development
 from FMD3.core import database
 from FMD3.core.settings import Settings
 from FMD3.extensions.sources import get_source, load_sources
@@ -60,9 +61,16 @@ logging.getLogger("pygubu").setLevel(logging.WARNING)
 Logger.trace = trace
 
 setup_logging(LOGFILE_PATH.joinpath("FMD3.log"), TRACE)
+logger = logging.getLogger(__name__)
+logger.info("Starting FMD3")
+logger.info(f"FMD3 path: {FMD3_PATH.resolve().as_posix()}")
+if is_development:
+    logger.warning(f"Development mode. Extensions will load from '{Path(FMD3_PATH.parent.joinpath('FMD3_Extensions/extensions')).as_posix()}'" if is_development else "")
 settings = Settings()
 load_sources()
 settings.save()
+
+
 
 
 

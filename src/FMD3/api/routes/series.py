@@ -3,7 +3,6 @@ from typing import Literal
 
 from sqlalchemy import desc, asc
 from sqlalchemy.sql.base import _NoArg
-import jsonpickle
 
 from FMD3 import get_source as sup_get_source
 from FMD3.core import database as db

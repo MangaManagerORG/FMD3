@@ -120,8 +120,8 @@ jobs:
       # fail-fast is true by default
       fail-fast: false
       matrix:
-          os: [ubuntu-latest, windows-latest, macOS-latest]
-#          os: [windows-latest]
+#          os: [ubuntu-latest, windows-latest, macOS-latest]
+          os: [windows-latest]
     needs: bump_version
     uses: ./.github/workflows/os_pyinstaller.yaml
     with:
@@ -159,63 +159,63 @@ jobs:
         id: vars
         run: echo "sha_short=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
 
-      - name: Download
+      - name: Download windows API artifact
         uses: actions/download-artifact@v4
         with:
           name: 'windows-latestFMD3-API_BundledFolder--dist'
           path: 'windows/'
         continue-on-error: true
-      - name: Download
+      - name: Download windows bundled client artifact
         uses: actions/download-artifact@v4
         with:
           name: 'windows-latestFMD3-Client_BundledFolder--dist'
           path: 'windows/'
         continue-on-error: true
-      - name: Download
+      - name: Download windows client
         uses: actions/download-artifact@v4
         with:
           name: 'windows-latestFMD3-WebClient_BundledFolder--dist'
           path: 'windows/'
         continue-on-error: true
-      # Linux
-      - name: Download
-        uses: actions/download-artifact@v4
-        with:
-          name: 'ubuntu-latestFMD3-API_BundledFolder--dist'
-          path: 'ubuntu/'
-        continue-on-error: true
-      - name: Download
-        uses: actions/download-artifact@v4
-        with:
-          name: 'ubuntu-latestFMD3-Client_BundledFolder--dist'
-          path: 'ubuntu/'
-        continue-on-error: true
-      - name: Download
-        uses: actions/download-artifact@v4
-        with:
-          name: 'ubuntu-latestFMD3-WebClient_BundledFolder--dist'
-          path: 'ubuntu/'
-        continue-on-error: true
-
-      # Mac
-      - name: Download
-        uses: actions/download-artifact@v4
-        with:
-          name: 'ubuntu-latestFMD3-API_BundledFolder--dist'
-          path: 'ubuntu/'
-        continue-on-error: true
-      - name: Download
-        uses: actions/download-artifact@v4
-        with:
-          name: 'ubuntu-latestFMD3-Client_BundledFolder--dist'
-          path: 'ubuntu/'
-        continue-on-error: true
-      - name: Download
-        uses: actions/download-artifact@v4
-        with:
-          name: 'macOS-latestFMD3-WebClient_BundledFolder--dist'
-          path: 'macOS/'
-        continue-on-error: true
+#      # Linux
+#      - name: Download linux api artifact
+#        uses: actions/download-artifact@v4
+#        with:
+#          name: 'ubuntu-latestFMD3-API_BundledFolder--dist'
+#          path: 'ubuntu/'
+#        continue-on-error: true
+#      - name: Download
+#        uses: actions/download-artifact@v4
+#        with:
+#          name: 'ubuntu-latestFMD3-Client_BundledFolder--dist'
+#          path: 'ubuntu/'
+#        continue-on-error: true
+#      - name: Download
+#        uses: actions/download-artifact@v4
+#        with:
+#          name: 'ubuntu-latestFMD3-WebClient_BundledFolder--dist'
+#          path: 'ubuntu/'
+#        continue-on-error: true
+#
+#      # Mac
+#      - name: Download
+#        uses: actions/download-artifact@v4
+#        with:
+#          name: 'ubuntu-latestFMD3-API_BundledFolder--dist'
+#          path: 'ubuntu/'
+#        continue-on-error: true
+#      - name: Download
+#        uses: actions/download-artifact@v4
+#        with:
+#          name: 'ubuntu-latestFMD3-Client_BundledFolder--dist'
+#          path: 'ubuntu/'
+#        continue-on-error: true
+#      - name: Download
+#        uses: actions/download-artifact@v4
+#        with:
+#          name: 'macOS-latestFMD3-WebClient_BundledFolder--dist'
+#          path: 'macOS/'
+#        continue-on-error: true
       - name: make release artifacts folder
         run: |
           mkdir release_artifacts
@@ -231,7 +231,7 @@ jobs:
         uses: ncipollo/release-action@v1
         with:
           prerelease: true
-          artifacts: "release_artifacts/*/*"
+          artifacts: "release_artifacts/windows/*"
           tag: ${{ steps.vars.outputs.sha_short }}
 
 

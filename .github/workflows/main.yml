@@ -137,19 +137,19 @@ jobs:
       #      - name: Download
       #        uses: actions/download-artifact@v4
       #        with:
-      #          name: 'ubuntu-latestFMD3-API_SingleExe--dist'
+      #          name: 'ubuntu-latestFMD3-API_BundledFolder--dist'
       #          path: 'ubuntu/'
       #        continue-on-error: true
       #      - name: Download
       #        uses: actions/download-artifact@v4
       #        with:
-      #          name: 'ubuntu-latestFMD3-Client_SingleExe--dist'
+      #          name: 'ubuntu-latestFMD3-Client_BundledFolder--dist'
       #          path: 'ubuntu/'
       #        continue-on-error: true
       #      - name: Download
       #        uses: actions/download-artifact@v4
       #        with:
-      #          name: 'ubuntu-latestFMD3-WebClient_SingleExe--dist'
+      #          name: 'ubuntu-latestFMD3-WebClient_BundledFolder--dist'
       #          path: 'ubuntu/'
       #        continue-on-error: true
       # windows artifacts
@@ -162,38 +162,38 @@ jobs:
       - name: Download
         uses: actions/download-artifact@v4
         with:
-          name: 'windows-latestFMD3-API_SingleExe--dist'
+          name: 'windows-latestFMD3-API_BundledFolder--dist'
           path: 'windows/'
         continue-on-error: true
       - name: Download
         uses: actions/download-artifact@v4
         with:
-          name: 'windows-latestFMD3-Client_SingleExe--dist'
+          name: 'windows-latestFMD3-Client_BundledFolder--dist'
           path: 'windows/'
         continue-on-error: true
       - name: Download
         uses: actions/download-artifact@v4
         with:
-          name: 'windows-latestFMD3-WebClient_SingleExe--dist'
+          name: 'windows-latestFMD3-WebClient_BundledFolder--dist'
           path: 'windows/'
         continue-on-error: true
       # Linux
       - name: Download
         uses: actions/download-artifact@v4
         with:
-          name: 'ubuntu-latestFMD3-API_SingleExe--dist'
+          name: 'ubuntu-latestFMD3-API_BundledFolder--dist'
           path: 'ubuntu/'
         continue-on-error: true
       - name: Download
         uses: actions/download-artifact@v4
         with:
-          name: 'ubuntu-latestFMD3-Client_SingleExe--dist'
+          name: 'ubuntu-latestFMD3-Client_BundledFolder--dist'
           path: 'ubuntu/'
         continue-on-error: true
       - name: Download
         uses: actions/download-artifact@v4
         with:
-          name: 'ubuntu-latestFMD3-WebClient_SingleExe--dist'
+          name: 'ubuntu-latestFMD3-WebClient_BundledFolder--dist'
           path: 'ubuntu/'
         continue-on-error: true
 
@@ -201,19 +201,19 @@ jobs:
       - name: Download
         uses: actions/download-artifact@v4
         with:
-          name: 'ubuntu-latestFMD3-API_SingleExe--dist'
+          name: 'ubuntu-latestFMD3-API_BundledFolder--dist'
           path: 'ubuntu/'
         continue-on-error: true
       - name: Download
         uses: actions/download-artifact@v4
         with:
-          name: 'ubuntu-latestFMD3-Client_SingleExe--dist'
+          name: 'ubuntu-latestFMD3-Client_BundledFolder--dist'
           path: 'ubuntu/'
         continue-on-error: true
       - name: Download
         uses: actions/download-artifact@v4
         with:
-          name: 'macOS-latestFMD3-WebClient_SingleExe--dist'
+          name: 'macOS-latestFMD3-WebClient_BundledFolder--dist'
           path: 'macOS/'
         continue-on-error: true
 

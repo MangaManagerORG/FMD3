@@ -25,7 +25,8 @@ class TestTaskManager(unittest.TestCase):
             series_id="series_a",
             chapter=TestSource()._debug_get_chapter("series_a", "sAcha_1"),
             path="output_file_path",
-            cinfo=ComicInfo())
+            cinfo=ComicInfo(),
+            manual_download=True)
         # TaskManager().submit(mocked_commit,
         #     (TestSource, "series_a", TestSource()._debug_get_chapter("series_a", "sAcha_1"), "output_file_path"))
 

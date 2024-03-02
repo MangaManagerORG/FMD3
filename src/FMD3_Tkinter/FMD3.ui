@@ -374,7 +374,7 @@
                         </layout>
                         <child>
                           <object class="customtkinter.CTkLabel" id="ctklabel1">
-                            <property name="text" translatable="yes">Downloaded manga will save to:</property>
+                            <property name="text" translatable="yes">Downloaded manga will save to: (Absolute path)</property>
                             <layout manager="pack">
                               <property name="side">top</property>
                             </layout>
@@ -453,6 +453,18 @@
                                 <layout manager="pack">
                                   <property name="anchor">e</property>
                                   <property name="side">right</property>
+                                </layout>
+                              </object>
+                            </child>
+                            <child>
+                              <object class="customtkinter.CTkButton" id="widget_settings_saveto_librarypath_dialog_button" named="True">
+                                <property name="command" type="command" cbtype="simple">on_settings_saveto_library_path_dialog</property>
+                                <property name="fg_color">dark grey</property>
+                                <property name="hover_color">grey</property>
+                                <property name="text" translatable="yes">...</property>
+                                <property name="width">20</property>
+                                <layout manager="pack">
+                                  <property name="side">top</property>
                                 </layout>
                               </object>
                             </child>

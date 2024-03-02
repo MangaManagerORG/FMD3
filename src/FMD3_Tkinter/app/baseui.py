@@ -21,7 +21,7 @@ from .. import api
 
 PROJECT_PATH = pathlib.Path(__file__).parent.parent
 PROJECT_UI = PROJECT_PATH / "FMD3.ui"
-
+from tkinter.filedialog import askdirectory
 
 
 class BaseUI:
@@ -48,7 +48,7 @@ class BaseUI:
         self.widget_settings_saveto_libraries_treeview = self.builder.get_object("widget_settings_saveto_libraries_treeview")
 
         self.widget_settings_saveto_libraries_default_optionmenu = self.builder.get_object("widget_settings_saveto_libraries_default_optionmenu")
-
+        self.widget_settings_saveto_librarypath_dialog_button = self.builder.get_object("widget_settings_saveto_librarypath_dialog_button")
         # Tasks
         self.widget_tasks_treeview:Treeview = self.builder.get_object("widget_tasks_treeview")
 
@@ -159,9 +159,9 @@ class BaseUI:
         if value == "All":
             tree.check_all()
 
-
-
-
+    def on_settings_saveto_library_path_dialog(self,*_):
+        asl_path = askdirectory(parent=self.mainwindow,title="Select dowload folder to save as library")
+        self.var_settings_saveto_lib_path.set(asl_path)
 
 
         # if value == "All":

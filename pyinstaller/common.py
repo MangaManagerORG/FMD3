@@ -33,7 +33,7 @@ class Analysis(Analysis_):
 
 
 class EXE(EXE_):
-    def __init__(self, a, pyz, name,console=False):
+    def __init__(self, a, pyz, name,console=True):
         super().__init__(
             pyz,
             a.scripts,

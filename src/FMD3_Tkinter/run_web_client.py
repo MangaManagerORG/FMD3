@@ -1,3 +1,5 @@
+import multiprocessing
+
 import FMD3_Tkinter
 from FMD3.core.scheduler import start_scheduler_loop
 
@@ -15,4 +17,5 @@ def run_web():
     app.run()
 
 if __name__ == '__main__':
+    multiprocessing.freeze_support()
     run_web()

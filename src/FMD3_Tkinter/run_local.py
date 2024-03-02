@@ -1,3 +1,4 @@
+import multiprocessing
 import os
 import signal
 
@@ -17,4 +18,5 @@ def run_local():
     app.mainwindow.protocol("WM_DELETE_WINDOW",FMD3.core.execute_termination_handler)
     app.run()
 if __name__ == '__main__':
+    multiprocessing.freeze_support()
     run_local()

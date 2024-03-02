@@ -1,4 +1,6 @@
 import argparse
+import multiprocessing
+
 from FMD3_Tkinter.run_local import run_local
 from FMD3_Tkinter.run_web_client import run_web
 
@@ -20,4 +22,5 @@ def main():
 
 
 if __name__ == "__main__":
+    multiprocessing.freeze_support()
     main()

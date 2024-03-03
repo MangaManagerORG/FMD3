@@ -7,7 +7,7 @@ import tkinter
 import tkinter as tk
 from tkinter import END
 from tkinter.ttk import Treeview
-
+from ttkwidgets import CheckboxTreeview
 import pygubu
 
 import customtkinter
@@ -26,6 +26,7 @@ from tkinter.filedialog import askdirectory
 
 class BaseUI:
     def __init__(self, master=None, translator=None):
+        self.sources = None
         self.builder = builder = pygubu.Builder(translator,on_first_object=setup_ttk_styles)
         builder.add_resource_path(PROJECT_PATH)
         builder.add_from_file(PROJECT_UI)
@@ -40,15 +41,19 @@ class BaseUI:
         self.widget_series_source_optionmenu = self.builder.get_object("widget_series_source_optionmenu")
         self.widget_series_search_treeview = self.builder.get_object("widget_series_search_treeview")
         self.widget_series_cover = self.builder.get_object("widget_series_cover")
-        self.widget_series_chapter_treeview:ttkwidgets.CheckboxTreeview = self.builder.get_object("widget_series_chapter_treeview")
+        self.widget_series_chapter_treeview:CheckboxTreeview = self.builder.get_object("widget_series_chapter_treeview")
         self.widget_series_chapter_nochapters_frame = self.builder.get_object("widget_series_chapter_nochapters_frame")
         self.widget_series_saveto_library_optionmenu = self.builder.get_object("widget_series_saveto_library_optionmenu")
         self.widget_series_saveto_seriesfolder_entry = self.builder.get_object("widget_series_saveto_seriesfolder_entry")
         # Settings
         self.widget_settings_saveto_libraries_treeview = self.builder.get_object("widget_settings_saveto_libraries_treeview")
-
+        # Settings saveto
         self.widget_settings_saveto_libraries_default_optionmenu = self.builder.get_object("widget_settings_saveto_libraries_default_optionmenu")
         self.widget_settings_saveto_librarypath_dialog_button = self.builder.get_object("widget_settings_saveto_librarypath_dialog_button")
+        # Settings sources
+        self.widget_settings_sources_list_installed_treeview:CheckboxTreeview = self.builder.get_object("widget_settings_sources_list_installed_treeview")
+        self.widget_settings_sources_list_not_installed_treeview:CheckboxTreeview = self.builder.get_object("widget_settings_sources_list_not_installed_treeview")
+
         # Tasks
         self.widget_tasks_treeview:Treeview = self.builder.get_object("widget_tasks_treeview")
 
@@ -222,6 +227,64 @@ class BaseUI:
                                                            chapter.get("download_date"),
                                                            chapter.get("status"), "", "", ""),
                                                        tags=("favourites_child_chapters",))
+
+
+
+    """
+    SETTINGS SOURCES LISTING IMPLEMENTATIONS
+    """
+
+    def on_settings_sources_listing_install_source(self):
+        update_source_ids = self.widget_settings_sources_list_installed_treeview.get_checked()
+        install_source_ids = self.widget_settings_sources_list_not_installed_treeview.get_checked()
+        if update_source_ids:
+            api.update_source(update_source_ids)
+        if install_source_ids:
+            api.update_source(install_source_ids)
+        self.sources = api.get_sources()
+        self.on_favourites_refresh()
+
+    # def pre_update_source(self, source_id, button):
+    #     button.configure(state="disabled")
+    #     api.update_source(source_id)
+    #     global sources
+    #     sources = api.get_sources()
+    #     self.update_installed_listing()
+    #
+    # def update_installed_listing(self):
+    #     grid_frame = self.builder.get_object("settings_sources_installed")
+    #     [widget.grid_forget() for row in range(1, grid_frame.grid_size()[1]) for widget in
+    #      grid_frame.grid_slaves(row=row)]
+    #     self.populate_installed()
+    #
+    # def install_source(self, source_id, button):
+    #     button.configure(state="disabled")
+    #     api.update_source(source_id)
+    #     installed_sources.add(source_id)
+    #
+    #     global sources
+    #     sources = api.get_sources()
+    #     self.update_not_installed_listing()
+    #     self.update_installed_listing()
+    #
+    # def update_not_installed_listing(self):
+    #     # Update the not installed sources
+    #     grid_frame = self.builder.get_object("settings_sources_not_installed")
+    #     [widget.grid_forget() for row in range(1, grid_frame.grid_size()[1]) for widget in
+    #      grid_frame.grid_slaves(row=row)]
+    #     self.populate_not_installed()
+    #
+    # def pre_delete_source(self, source_id, button):
+    #     button.configure(state="disabled")
+    #     api.uninstall_source(source_id)
+    #     installed_sources.remove(source_id)
+    #     global sources
+    #     sources = api.get_sources()
+    #     self.update_installed_listing()
+    #     self.update_not_installed_listing()
+    #
+    def on_favourites_refresh(self, *_):
+        ...
 """Helper functions"""
 
 

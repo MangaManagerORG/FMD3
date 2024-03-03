@@ -143,7 +143,7 @@ class Api(ApiInterface):
 
     @staticmethod
     def get_available_sources():
-        pass
+        return requests.get("https://raw.githubusercontent.com/MangaManagerORG/FMD3-Extensions/repo/extensions.json").json()
 
     @staticmethod
     def update_source(source_id):

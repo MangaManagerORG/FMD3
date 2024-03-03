@@ -93,7 +93,15 @@ class ApiInterface:
 
     @staticmethod
     @abstractmethod
-    def update_source(source_id):
+    def update_source(source_id:list["str"]|str):
+        """
+        Installs or updates the source with the given id or ids
+        Args:
+            source_id:
+
+        Returns:
+
+        """
         ...
 
     @staticmethod

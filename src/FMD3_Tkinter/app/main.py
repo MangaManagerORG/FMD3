@@ -12,20 +12,22 @@ from .widgets.custom_tk_variables import KeyPair
 
 widgets.do_not_clear_import = None
 
-sources = api.get_sources()
 
 logger = logging.getLogger(__name__)
 class App(BaseUI):
 
     def __init__(self):
         super().__init__()
-
+        self.sources = api.get_sources()
         self.settings = {}
         """Stores keypair values of libraries"""
         self.settings = json.loads(api.get_settings())
         self.settings_saveto_libraries = {}
         self.init_settings()
         self.task_manager = TaskManager()
+
+        available_sources = {}
+        installed_sources = set()
 
         """Dictionary storing the series object identified by the series id"""
         self.data_series_search_results: dict[str, SearchResult] = {}
@@ -54,6 +56,7 @@ class App(BaseUI):
         self.widget_favourites_treeview.tag_configure('favourites_child_chapters', background='#B6B7B7')
         self.on_favourites_refresh()
         self._detached_fav_filter = set()
+        self.populate_sources()
 
     def fill_hanging_tasks(self):
         tree = self.widget_tasks_treeview
@@ -100,7 +103,7 @@ class App(BaseUI):
     def pre_series_sources_loaded_sources(self, *_):
         # self.widget_series_source_optionmenu
         sources_list = [KeyPair(s.NAME, s.ID)
-                        for s in sources]
+                        for s in self.sources]
         self.widget_series_source_optionmenu.configure(values=sources_list)
 
     @property
@@ -475,7 +478,7 @@ class App(BaseUI):
 
         for series in series_list:
             if series.series_id not in self.fav_tree_loaded_parents:
-                source = list(filter(lambda x: x.ID == series.source_id, sources))
+                source = list(filter(lambda x: x.ID == series.source_id, self.sources))
                 if source:
                     source_name = source[0].NAME
                 else:
@@ -493,3 +496,26 @@ class App(BaseUI):
                 # self.favourites_treeview.insert('', 'end', f"{series.series_id}.chapters", values=(series.title, series.currentchapter))
                 self.fav_tree_loaded_parents[item_id] = False
         # self.fav_sort_date_added()
+
+    def populate_sources(self, *_):
+        global available_sources, installed_sources
+        available_sources = api.get_available_sources()
+        installed_sources = set()
+
+        self.populate_installed()
+        self.populate_not_installed()
+
+    def populate_installed(self):
+        installed_treeview = self.widget_settings_sources_list_installed_treeview
+        for i, source in enumerate(self.sources, start=1):
+            installed_treeview.insert("", "end", iid=source.ID, values=(source.NAME,source.VERSION,source.HAS_UPDATES))
+            installed_sources.add(source.ID)
+
+    def populate_not_installed(self):
+        not_installed_treeview = self.widget_settings_sources_list_not_installed_treeview
+        if available_sources:
+            for source in available_sources.get("sources",[]):
+                if source not in installed_sources:
+                    source_dict = available_sources["sources"][source]
+                    not_installed_treeview.insert("", "end", iid=source,
+                                              values=(source_dict.get("name"), source_dict.get("version")))

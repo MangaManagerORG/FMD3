@@ -52,8 +52,13 @@ def get_available_sources():
     return requests.get("https://raw.githubusercontent.com/MangaManagerORG/FMD3-Extensions/repo/extensions.json").json()
 
 
-def update_source(source_id):
-    sup_update_source(source_id=source_id)
+def update_source(sources_ids:list[str]|str):
+    if isinstance(sources_ids,list):
+        for source_id in sources_ids:
+            sup_update_source(source_id=source_id)
+    else:
+        sup_update_source(source_id=sources_ids)
+    return True
 
 
 def uninstall_source(source_id):

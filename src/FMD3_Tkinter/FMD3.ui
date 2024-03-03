@@ -848,12 +848,14 @@
                                   </object>
                                 </child>
                                 <child>
-                                  <object class="ttkwidgets.CheckboxTreeview" id="installed_sources_treeview" named="True">
+                                  <object class="FMD3_Tkinter.CheckboxTreeview" id="widget_settings_sources_list_installed_treeview" named="True">
                                     <layout manager="pack">
+                                      <property name="fill">x</property>
+                                      <property name="padx">35</property>
                                       <property name="side">top</property>
                                     </layout>
                                     <child>
-                                      <object class="ttk.Treeview.Column" id="column11">
+                                      <object class="ttk.Treeview.Column" id="column29">
                                         <property name="column_anchor">w</property>
                                         <property name="heading_anchor">w</property>
                                         <property name="minwidth">20</property>
@@ -865,7 +867,7 @@
                                       </object>
                                     </child>
                                     <child>
-                                      <object class="ttk.Treeview.Column" id="column7">
+                                      <object class="ttk.Treeview.Column" id="column30">
                                         <property name="column_anchor">w</property>
                                         <property name="heading_anchor">w</property>
                                         <property name="minwidth">20</property>
@@ -877,7 +879,7 @@
                                       </object>
                                     </child>
                                     <child>
-                                      <object class="ttk.Treeview.Column" id="column8">
+                                      <object class="ttk.Treeview.Column" id="column31">
                                         <property name="column_anchor">w</property>
                                         <property name="heading_anchor">w</property>
                                         <property name="minwidth">20</property>
@@ -889,7 +891,7 @@
                                       </object>
                                     </child>
                                     <child>
-                                      <object class="ttk.Treeview.Column" id="column9">
+                                      <object class="ttk.Treeview.Column" id="column32">
                                         <property name="column_anchor">w</property>
                                         <property name="heading_anchor">w</property>
                                         <property name="minwidth">20</property>
@@ -912,12 +914,14 @@
                                   </object>
                                 </child>
                                 <child>
-                                  <object class="ttkwidgets.CheckboxTreeview" id="checkboxtreeview2" named="True">
+                                  <object class="FMD3_Tkinter.CheckboxTreeview" id="widget_settings_sources_list_not_installed_treeview" named="True">
                                     <layout manager="pack">
+                                      <property name="fill">x</property>
+                                      <property name="padx">35</property>
                                       <property name="side">top</property>
                                     </layout>
                                     <child>
-                                      <object class="ttk.Treeview.Column" id="column12">
+                                      <object class="ttk.Treeview.Column" id="column33">
                                         <property name="column_anchor">w</property>
                                         <property name="heading_anchor">w</property>
                                         <property name="minwidth">20</property>
@@ -929,7 +933,7 @@
                                       </object>
                                     </child>
                                     <child>
-                                      <object class="ttk.Treeview.Column" id="column13">
+                                      <object class="ttk.Treeview.Column" id="column34">
                                         <property name="column_anchor">w</property>
                                         <property name="heading_anchor">w</property>
                                         <property name="minwidth">20</property>
@@ -941,24 +945,12 @@
                                       </object>
                                     </child>
                                     <child>
-                                      <object class="ttk.Treeview.Column" id="column14">
+                                      <object class="ttk.Treeview.Column" id="column35">
                                         <property name="column_anchor">w</property>
                                         <property name="heading_anchor">w</property>
                                         <property name="minwidth">20</property>
                                         <property name="stretch">true</property>
-                                        <property name="text" translatable="yes">Current version</property>
-                                        <property name="tree_column">false</property>
-                                        <property name="visible">true</property>
-                                        <property name="width">200</property>
-                                      </object>
-                                    </child>
-                                    <child>
-                                      <object class="ttk.Treeview.Column" id="column15">
-                                        <property name="column_anchor">w</property>
-                                        <property name="heading_anchor">w</property>
-                                        <property name="minwidth">20</property>
-                                        <property name="stretch">true</property>
-                                        <property name="text" translatable="yes">Has updates</property>
+                                        <property name="text" translatable="yes">Version</property>
                                         <property name="tree_column">false</property>
                                         <property name="visible">true</property>
                                         <property name="width">200</property>
@@ -1022,6 +1014,7 @@ selection</property>
                                 </child>
                                 <child>
                                   <object class="customtkinter.CTkButton" id="ctkbutton7">
+                                    <property name="command" type="command" cbtype="simple">on_settings_sources_listing_install_source</property>
                                     <property name="fg_color">green</property>
                                     <property name="text" translatable="yes">Install | Update
 Selected</property>

@@ -9,7 +9,7 @@ with open(ver_path, 'r') as version_file:
     exec(version_file.read(), version_globals)
     raw_version = version_globals.get('__version__', "")
 
-output_name = f'FMD3-WebClient_{raw_version}_{system()}'
+output_name = f'FMD3-Client_{raw_version}_{system()}'
 scripts = ['../src/FMD3_Tkinter/run_web_client.py']
 
 a = Analysis(scripts=scripts)

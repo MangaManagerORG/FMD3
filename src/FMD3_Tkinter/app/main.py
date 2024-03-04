@@ -127,7 +127,7 @@ class App(BaseUI):
     def proc_update_search_list(self, series_list: list[SearchResult]):
         self.widget_series_search_treeview.delete(*self.widget_series_search_treeview.get_children())
         self.search_delay = False
-        logging.debug("updating search list")
+        logger.debug("updating search list")
         tree = self.widget_series_search_treeview
         for series in series_list:
             self.data_series_search_results[series.series_id] = series

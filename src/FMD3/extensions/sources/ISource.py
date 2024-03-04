@@ -28,6 +28,11 @@ class ISource:
 
     _has_updates = False  # Becomes true once the updater has been called if new version avaialble
     _session = None
+    _log = None
+
+    @classmethod
+    def set_logger(cls,value):
+        cls._log = logging.getLogger(f"Extensions.sources.{value}")
 
     @final
     def get_setting(self, setting_key):
@@ -42,11 +47,14 @@ class ISource:
         for source_heading_data in [self.ID, self.NAME, self.ROOT_URL, self.CATEGORY]:
             if source_heading_data is None:
                 raise Exception(f"Failed to load source, missing {source_heading_data=} attribute")
-
+        self.set_logger(self.NAME)
         self.settings: list[SettingControl] | None = []
         self.init_settings()
-
+        self._log.info(f"Initializing settings")
         Settings().load_defaults(self.NAME, self.settings,extension="sources")
+        Settings().save()
+        self._log.info(f"Settings initialized")
+
 
     @property
     def session(self):

@@ -31,7 +31,10 @@ def import_and_register_source(module_info: pkgutil.ModuleInfo):
     try:
         importlib.invalidate_caches()
         module = importlib.import_module(module_path, package="sources")
-        module.load_source()
+        ext_class = module.__getattribute__(module_name)()
+        ext_class.VERSION = module.__version__
+        # module.load_source()
+        add_source(ext_class)
 
         # Now you can access the Source variable from the imported module
         logger.info(f"Source module '{module_info.name}' imported and registered successfully.")
@@ -106,6 +109,7 @@ def add_extension(extension: ISource):
 def add_source(extension: ISource):
     # extension.init_settings()
     sources_factory.append(extension)
+    logger.info(f"Added extension '{extension.NAME}' version '{extension.VERSION}' - ID: {extension.ID}")
 
 
 @abc.abstractmethod

@@ -1,4 +1,5 @@
 import json
+import logging
 import time
 from pathlib import Path
 
@@ -8,7 +9,7 @@ from ...constants import SETTING_FILE_PATH
 from .settings_enums import SettingKeys
 from .setting_control import SettingControl
 
-
+logger = logging.getLogger(__name__)
 class Settings:
     _settings_dict = {}
     __instance = None
@@ -45,8 +46,7 @@ class Settings:
     def check_key(self, section, key, extension=None):
         if not isinstance(key, str):
             key = key.value
-        if self.get_setting_dict_or_extension(extension)[section].get(key,
-                                                                                                       None) is None:
+        if self.get_setting_dict_or_extension(extension)[section].get(key, None) is None:
             raise Exception(f"Setting key not found {extension} '{section}.{key}'")
 
     def check_section(self, section):
@@ -86,6 +86,7 @@ class Settings:
         return self.get_value("Core", key)
 
     def save(self):
+        logger.info("Saving settings")
         with open(self._config_file, "w", encoding='UTF-8') as f:
             json.dump(self._settings_dict, f)
 

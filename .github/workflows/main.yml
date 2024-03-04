@@ -168,7 +168,7 @@ jobs:
       - name: Download windows bundled client artifact
         uses: actions/download-artifact@v4
         with:
-          name: 'windows-latestFMD3-Client_BundledFolder--dist'
+          name: 'windows-latestFMD3_BundledFolder--dist'
           path: 'windows/'
         continue-on-error: true
       - name: Download windows client

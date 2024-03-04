@@ -2,10 +2,8 @@ import json
 import time
 from pathlib import Path
 
-import userpaths
 
-CONFIG_PATH = Path(userpaths.get_local_appdata(), "FMD3", "client_config")
-CONFIG_PATH.mkdir(parents=True, exist_ok=True)
+from FMD3.constants import CONFIG_PATH
 
 _json_file = Path(CONFIG_PATH, "client_settings.json")  # Todo: Change this to a more appropriate location
 
@@ -16,7 +14,7 @@ class Settings:
     def __new__(cls, *args, **kwargs):
         if not Settings.__instance:
             Settings.__instance = object.__new__(cls)
-            Settings.__instance._settings_dict = {"settings_client_host_var": None,"is_dark_mode_enabled":False}
+            Settings.__instance._settings_dict = {"host":None,"settings_client_host_var": None,"is_dark_mode_enabled":False}
             Settings._config_file = _json_file
             if not Settings._config_file.exists():
                 Settings.__instance.save()

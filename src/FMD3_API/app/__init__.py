@@ -7,6 +7,7 @@ from ..__version__ import __version__
 
 app = FastAPI(on_shutdown=[FMD3.core.execute_termination_handler])
 
+
 @app.get("/")
 async def root():
     return {"message": "Successfully running FMD3 API",

@@ -175,7 +175,7 @@ class App(BaseUI):
         if data.get("save_to", None) is not None:
             # Disable both inputs as there is already one saved in the db
             self.enable_series_saveto_inputs(False)
-            self.var_series_saveto_seriesfolder.set("")
+            self.var_series_saveto_seriesfolder.set("<<Using previously downloaded value>>")
             path = data.get("save_to")
             self.var_series_saveto_final_path.set(str(path))
         else:
@@ -273,13 +273,14 @@ class App(BaseUI):
         sanitized_download_lib_path = lib_path + "/" + series_path_or_modifie
         if data:
             if data.get("save_to", None) is not None:
-                self.widget_series_saveto_seriesfolder_entry.configure(state="disabled")
-                self.widget_series_saveto_library_optionmenu.configure(state="disabled")
+                self.enable_series_saveto_inputs(False)
                 self.var_series_saveto_final_path.set(data.get("save_to"))
                 # self.series_destination_path.set(data.get("save_to"))
                 return
-        self.widget_series_saveto_seriesfolder_entry.configure(state="normal")
-        self.widget_series_saveto_library_optionmenu.configure(state="readonly")
+        if self.var_series_saveto_seriesfolder.get().startswith("<<") and self.var_series_saveto_seriesfolder.get().endswith(">>"):
+            ...
+        else:
+            self.enable_series_saveto_inputs(True)
         self.var_series_saveto_final_path.set(sanitized_download_lib_path)
 
     """

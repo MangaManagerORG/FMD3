@@ -134,10 +134,8 @@ class BaseUI:
         series_detail_widget.configure(state="disabled")
 
     def enable_series_saveto_inputs(self, value: bool):
-        self.builder.get_object("widget_series_saveto_library_optionmenu").configure(
-            state="normal" if value else "disabled")
-        self.builder.get_object("widget_series_saveto_seriesfolder_entry").configure(
-            state="normal" if value else "disabled")
+        self.widget_series_saveto_seriesfolder_entry.configure(state="normal" if value else customtkinter.DISABLED)
+        self.widget_settings_saveto_libraries_default_optionmenu.configure(state="normal" if value else "disabled")
 
     @staticmethod
     def list_chapters_treeview(widget, chapter_list: list[ChapterResponse], tags: tuple[str]):

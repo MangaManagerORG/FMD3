@@ -1,12 +1,6 @@
 import argparse
 import multiprocessing
 
-from FMD3_Tkinter.run_local import run_local
-from FMD3_Tkinter.run_web_client import run_web
-
-
-# from FMD3_Tkinter.run_web_client import run_web
-
 
 def main():
     parser = argparse.ArgumentParser(description='Specify API type.')
@@ -15,9 +9,11 @@ def main():
     args = parser.parse_args()
 
     if args.web:
+        from FMD3_Tkinter.run_web_client import run_web
         run_web()
         # pass
     else:
+        from FMD3_Tkinter.run_local import run_local
         run_local()
 
 

@@ -1,7 +1,7 @@
 import logging
 from typing import Literal, List
 
-from FMD3 import get_source as sup_get_source
+from FMD3.extensions.sources import get_source as sup_get_source
 from FMD3.api.models.chapters import ChapterResponse, SourceChapterResponse, DownloadChapterForm
 from FMD3.core import database as db
 from FMD3.core.updater import create_download_task

@@ -4,9 +4,8 @@ import requests
 
 from FMD3.api.models.chapters import ChapterResponse, SourceChapterResponse, DownloadChapterForm
 from FMD3.api.models.series import SeriesResponse
+from FMD3.api.models.sources import SourcesResponse, SearchResult
 from FMD3.api import ApiInterface, SourcesResponse
-from FMD3.extensions.sources import ISource
-from FMD3.extensions.sources.SearchResult import SearchResult
 from FMD3.models.ddl_chapter_status import DLDChaptersStatus
 from FMD3.api.models.tasks import HangingTaskResponse
 from FMD3_Tkinter.client_settings import Settings

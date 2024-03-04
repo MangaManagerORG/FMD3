@@ -2,8 +2,8 @@ from typing import List
 
 import requests
 
-from FMD3 import get_source as sup_get_source
 from FMD3.api import SourcesResponse
+from FMD3.extensions.sources import get_source as sup_get_source
 from FMD3.extensions.sources import get_sources_list, update_source as sup_update_source, reload_sources
 from FMD3.extensions.sources import check_source_updates, uninstall_source as sup_uninstall_source
 

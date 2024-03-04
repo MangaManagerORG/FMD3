@@ -1,7 +1,7 @@
 
 from fastapi import FastAPI
 
-import FMD3
+import FMD3.core
 from .routers import series, settings,tasks, sources, chapters
 from ..__version__ import __version__
 

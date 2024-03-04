@@ -1,6 +1,6 @@
 import json
 
-from FMD3 import Settings
+from FMD3.core.settings import Settings
 from FMD3.core import database as db
 
 

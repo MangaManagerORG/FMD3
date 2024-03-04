@@ -4,7 +4,7 @@ from string import Template
 
 import pathvalidate
 
-from FMD3 import get_source
+from FMD3.extensions.sources import get_source
 from FMD3.models.chapter import Chapter
 from FMD3.core.database import Series
 from FMD3.core.settings import Keys

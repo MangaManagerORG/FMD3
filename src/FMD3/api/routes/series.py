@@ -4,10 +4,11 @@ from typing import Literal
 from sqlalchemy import desc, asc
 from sqlalchemy.sql.base import _NoArg
 
-from FMD3 import get_source as sup_get_source
+
 from FMD3.core import database as db
 from FMD3.core.database.predefined import get_column_from_str
 from FMD3.core.utils import get_series_folder_name as sup_get_series_folder_name
+from FMD3.extensions.sources import get_source as sup_get_source
 from .sources import get_source_from_url
 from ..models.series import SeriesInfoResponse, SeriesResponse
 

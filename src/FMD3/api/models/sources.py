@@ -9,3 +9,10 @@ class SourcesResponse(BaseModel):
     ROOT_URL: str | None
     HAS_UPDATES: bool|str | None
 
+
+class SearchResult(BaseModel):
+    series_id:str
+    title:str
+    loc_title:str|None
+    year:int|None
+    cover_url:str

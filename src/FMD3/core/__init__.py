@@ -17,8 +17,15 @@ def execute_termination_handler(*args,**kwargs):
         handler(*args,**kwargs)
 
     os.kill(os.getpid(), signal.SIGINT)  #
-
-
 signal.signal(signal.SIGINT,execute_termination_handler)
-# from FMD3 import load_sources
-# load_sources()
+
+from FMD3.core import database
+from FMD3.core.settings import Settings
+
+settings = Settings()
+settings.save()
+
+
+from FMD3.extensions.sources import load_sources
+logger.debug("Loading sources")
+load_sources()

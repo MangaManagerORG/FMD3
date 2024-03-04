@@ -2,7 +2,7 @@ import json
 import logging
 
 from FMD3.api import DownloadChapterForm
-from FMD3.extensions.sources.SearchResult import SearchResult
+from FMD3.api.models.sources import SearchResult
 
 from .baseui import BaseUI
 from .taskmanager import TaskManager

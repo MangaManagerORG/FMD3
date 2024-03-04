@@ -36,7 +36,7 @@ class Api(ApiInterface):
     @staticmethod
     def get_fav_series(sort=None, order: Literal["asc", "desc"] = "desc", limit=None) -> list[SeriesResponse]:
         response = session.get(
-            host_url() + f"/series?sort={sort}&order={order}{f'&limit={limit}' if limit is not None else ''}")
+            host_url() + f"/series/?sort={sort}&order={order}{f'&limit={limit}' if limit is not None else ''}")
 
         if response.status_code == 200:
             return [SeriesResponse(**item)
@@ -106,8 +106,8 @@ class Api(ApiInterface):
             return None
 
     @staticmethod
-    def download_chapters(item:DownloadChapterForm):
-        response = session.post(host_url() + f"/chapters/download",json=item.dict())
+    def download_chapters(item: DownloadChapterForm):
+        response = session.post(host_url() + f"/chapters/download", json=item.dict())
         if response.status_code == 200:
             return True
 
@@ -130,7 +130,7 @@ class Api(ApiInterface):
     @staticmethod
     def get_sources() -> List[SourcesResponse]:
         response = session.get(
-            host_url() + f"/sources")
+            host_url() + f"/sources/")
         if response.status_code == 200:
             return [SourcesResponse(**item)
                     for item in response.json()]
@@ -143,15 +143,20 @@ class Api(ApiInterface):
 
     @staticmethod
     def get_available_sources():
-        return requests.get("https://raw.githubusercontent.com/MangaManagerORG/FMD3-Extensions/repo/extensions.json").json()
+        return requests.get(
+            "https://raw.githubusercontent.com/MangaManagerORG/FMD3-Extensions/repo/extensions.json").json()
 
     @staticmethod
-    def update_source(source_id):
-        pass
+    def update_source(sources_id: List[str]):
+        # Make the POST request to the endpoint
+        response = session.post(host_url() + f"/sources/update/", json=sources_id)
+        return response.status_code == 200
 
     @staticmethod
-    def uninstall_source(source_id):
-        pass
+    def uninstall_source(sources_id: List[str]):
+        response = session.post(host_url() + f"/sources/update/", json=sources_id)
+        if response.status_code == 200:
+            return response.json()
 
     @staticmethod
     def check_source_updates():

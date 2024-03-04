@@ -440,7 +440,7 @@ class App(BaseUI):
         self.settings["UI"]["user_libraries"]["value"] = {"alias": keypair_["alias"], "path": keypair_["path"]}
         self.settings["Core"]["default_download_path"]["value"] = keypair_["path"]
 
-        # TODO: Add call to update settings
+        # TODO: Update default value in series_output_def_library
 
     def pre_settings_saveto_libraries_default_optionmenu(self, *_):
         """

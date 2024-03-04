@@ -9,6 +9,7 @@ import sys
 import zipfile
 
 import requests
+from packaging import version
 
 from .ISource import ISource
 from FMD3.constants import SOURCE_PATHS, EXTENSION_PATHS
@@ -16,7 +17,7 @@ from FMD3.constants import SOURCE_PATHS, EXTENSION_PATHS
 """Module with methods related with extensions"""
 
 sources_factory: list[ISource] = []
-
+installed_sources = {}
 logger = logging.getLogger(__name__)
 
 
@@ -116,13 +117,34 @@ def load_source():
     """
 
 
-def update_source(source_id):
+def check_source_updates():
+    for source in sources_factory:
+        installed_sources[source.ID] = {
+            "name": source.NAME,
+            "id": source.ID,
+            "category": source.CATEGORY,
+            "version": version.parse(source.VERSION),
+        }
+
+    r = requests.get("https://raw.githubusercontent.com/MangaManagerORG/FMD3-Extensions/repo/extensions.json")
+    available_sources = r.json()["sources"]
+
+    for source in installed_sources:
+        if source in available_sources:
+            if version.parse(available_sources[source]["version"]) > installed_sources[source]["version"]:
+                logger.warning(
+                    f"New version of {installed_sources[source]['name']} available: {available_sources[source]['version']}")
+                get_source(source_id=source)._has_updates = available_sources[source]['version']
+
+
+def update_source(source_id: str, do_reload_sources=True):
+    logger.debug(f"Updating {source_id}")
     if not os.path.exists(SOURCE_PATHS):
         os.makedirs(SOURCE_PATHS)
 
     # "https://raw.githubusercontent.com/MangaManagerORG/FMD3-Extensions/repo/output"
     r = requests.get(
-        "https://raw.githubusercontent.com/MangaManagerORG/FMD3-Extensions/repo/output/" + source_id + ".zip")
+        "https://raw.githubusercontent.com/MangaManagerORG/FMD3-Extensions/repo/output/sources/" + source_id + ".zip")
 
     # Save the zip file
 
@@ -132,14 +154,17 @@ def update_source(source_id):
         if os.path.exists(source_path := os.path.join(SOURCE_PATHS, top_level_folder)):
             shutil.rmtree(source_path)
         zip_ref.extractall(SOURCE_PATHS)
+    logger.info(f"Successfully updated '{source_id}'")
+    if do_reload_sources:
+        reload_sources()
 
-    reload_sources()
 
-
-def uninstall_source(source_id):
-    for ext in sources_factory:
-        if ext.ID == source_id:
-            sources_factory.remove(ext)
-            if os.path.exists(source_path := os.path.join(SOURCE_PATHS, ext.__class__.__name__)):
-                shutil.rmtree(source_path)
-    reload_sources()
+def uninstall_source(source_id: str, do_reload_sources=True):
+    logger.debug(f"uninstalling source '{source_id}'")
+    source = get_source(source_id=source_id)
+    sources_factory.remove(source)
+    if os.path.exists(source_path := os.path.join(SOURCE_PATHS, source.__class__.__name__)):
+        shutil.rmtree(source_path)
+    logger.info(f"Successfully uninstalled '{source_id}'")
+    if do_reload_sources:
+        reload_sources()

@@ -234,6 +234,14 @@ class BaseUI:
     SETTINGS SOURCES LISTING IMPLEMENTATIONS
     """
 
+    def on_settings_sources_listing_uninstall_source(self):
+        uninstall_source_ids = self.widget_settings_sources_list_installed_treeview.get_checked()
+        if uninstall_source_ids:
+            api.uninstall_source(uninstall_source_ids)
+
+        self.sources = api.get_sources()
+        self.on_favourites_refresh()
+        self.on_update_listing()
     def on_settings_sources_listing_install_source(self):
         update_source_ids = self.widget_settings_sources_list_installed_treeview.get_checked()
         install_source_ids = self.widget_settings_sources_list_not_installed_treeview.get_checked()
@@ -243,48 +251,33 @@ class BaseUI:
             api.update_source(install_source_ids)
         self.sources = api.get_sources()
         self.on_favourites_refresh()
+        self.on_update_listing()
 
-    # def pre_update_source(self, source_id, button):
-    #     button.configure(state="disabled")
-    #     api.update_source(source_id)
-    #     global sources
-    #     sources = api.get_sources()
-    #     self.update_installed_listing()
-    #
-    # def update_installed_listing(self):
-    #     grid_frame = self.builder.get_object("settings_sources_installed")
-    #     [widget.grid_forget() for row in range(1, grid_frame.grid_size()[1]) for widget in
-    #      grid_frame.grid_slaves(row=row)]
-    #     self.populate_installed()
-    #
-    # def install_source(self, source_id, button):
-    #     button.configure(state="disabled")
-    #     api.update_source(source_id)
-    #     installed_sources.add(source_id)
-    #
-    #     global sources
-    #     sources = api.get_sources()
-    #     self.update_not_installed_listing()
-    #     self.update_installed_listing()
-    #
-    # def update_not_installed_listing(self):
-    #     # Update the not installed sources
-    #     grid_frame = self.builder.get_object("settings_sources_not_installed")
-    #     [widget.grid_forget() for row in range(1, grid_frame.grid_size()[1]) for widget in
-    #      grid_frame.grid_slaves(row=row)]
-    #     self.populate_not_installed()
-    #
-    # def pre_delete_source(self, source_id, button):
-    #     button.configure(state="disabled")
-    #     api.uninstall_source(source_id)
-    #     installed_sources.remove(source_id)
-    #     global sources
-    #     sources = api.get_sources()
-    #     self.update_installed_listing()
-    #     self.update_not_installed_listing()
-    #
+    def on_update_listing(self,*_):
+        installed_tree = self.widget_settings_sources_list_installed_treeview
+        not_installed_tree = self.widget_settings_sources_list_not_installed_treeview
+        installed_tree.delete(*installed_tree.get_children())
+        not_installed_tree.delete(*not_installed_tree.get_children())
+        self.populate_sources()
+
     def on_favourites_refresh(self, *_):
-        ...
+        """
+        Refresh the favourites series listing.
+        Args:
+            *_:
+        Returns:
+        """
+    def populate_sources(self, *_):
+        """
+        Called to insert installed/updated and not installed sources into the sources treeview. This expects the treeview to be cleared prior.
+        Args:
+            *_:
+
+        Returns:
+
+        """
+
+
 """Helper functions"""
 
 

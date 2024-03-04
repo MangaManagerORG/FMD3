@@ -93,11 +93,11 @@ class ApiInterface:
 
     @staticmethod
     @abstractmethod
-    def update_source(source_id:list["str"]|str):
+    def update_source(sources_id:list["str"]):
         """
         Installs or updates the source with the given id or ids
         Args:
-            source_id:
+            sources_id:
 
         Returns:
 
@@ -106,7 +106,7 @@ class ApiInterface:
 
     @staticmethod
     @abstractmethod
-    def uninstall_source(source_id):
+    def uninstall_source(sources_id: list[str]):
         ...
 
     @staticmethod

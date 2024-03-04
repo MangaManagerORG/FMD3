@@ -1,5 +1,6 @@
 from typing import List
 
+import fastapi
 from fastapi import APIRouter
 from fastapi.responses import JSONResponse
 from fastapi.encoders import jsonable_encoder
@@ -20,7 +21,7 @@ async def get_sources():
     return JSONResponse(jsonable_encoder(Api.get_sources()))
 
 
-@router.get("/{source_id}/{series_id}",tags=["chapters"],response_model=List[SourceChapterResponse])
+@router.get("/{source_id}/{series_id}", tags=["chapters"], response_model=List[SourceChapterResponse])
 async def get_chapters_from_source(source_id: str, series_id: str, get_from: int = -10):
     """
 
@@ -34,11 +35,19 @@ async def get_chapters_from_source(source_id: str, series_id: str, get_from: int
     """
     return JSONResponse(jsonable_encoder(Api.get_source_chapters(source_id, series_id, get_from)))
 
-# @router.get("/sources/available/")
-# async def get_available_sources():
-#     return sup_get_available_sources()
-#
-#
-# @router.get("/sources/check_updates/")
-# async def check_source_updates():
-#     return sup_check_source_updates()
+
+@router.get("/sources/check_updates/")
+async def check_source_updates():
+    return Api.check_source_updates()
+
+
+@router.post("/update/")
+async def update_sources(source_ids:List[str]):
+    Api.update_source(source_ids)
+    return fastapi.Response("Ok", status_code=200)
+
+
+@router.post("/uninstall/")
+async def uninstall_sources(source_ids: List[str]):
+    Api.uninstall_source(source_ids)
+    return fastapi.Response("Ok", status_code=200)

@@ -1027,6 +1027,7 @@ Selected</property>
                                 </child>
                                 <child>
                                   <object class="customtkinter.CTkButton" id="ctkbutton8">
+                                    <property name="command" type="command" cbtype="simple">on_settings_sources_listing_uninstall_source</property>
                                     <property name="fg_color">red</property>
                                     <property name="hover_color">pink</property>
                                     <property name="text" translatable="yes">Uninstall Selected</property>

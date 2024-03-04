@@ -39,13 +39,14 @@ class Api(ApiInterface):
     get_sources = staticmethod(get_sources)
     # get_source = staticmethod(get_source)
     get_source_from_url = staticmethod(get_source_from_url)
+
     @staticmethod
     def get_available_sources():
         return requests.get(
             "https://raw.githubusercontent.com/MangaManagerORG/FMD3-Extensions/repo/extensions.json").json()
 
     update_source = staticmethod(update_source)
-    uninstall_source = staticmethod(uninstall_source)
+    uninstall_source = staticmethod(uninstall_sources)
     check_source_updates = staticmethod(check_source_updates)
 
     """
@@ -55,7 +56,6 @@ class Api(ApiInterface):
     get_settings = staticmethod(get_settings)
     update_settings = staticmethod(update_settings)
     update_settings_save_to = staticmethod(update_save_to)
-
 
     """
     Tasks definition
